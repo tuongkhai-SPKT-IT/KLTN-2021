@@ -106,6 +106,7 @@ const UpStatus = () => {
           </View>
           <TouchableOpacity
             // onPress={this.test()}
+            onPress={() => AsyncStorage.clear()}
             // onPress={() => _Register()}
             style={[
               styles.appButtonContainer,

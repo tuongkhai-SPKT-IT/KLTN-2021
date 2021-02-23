@@ -49,6 +49,7 @@ const Login = () => {
     if (Account && Password) {
       const info = {user: Account.account, password: Password.password};
       dispatch(Login_Request(info));
+     
     }
   };
   useEffect(() => {
@@ -56,6 +57,9 @@ const Login = () => {
       if (val) history.push('/Home');
     });
   }, []);
+  AsyncStorage.getItem(storeKeys.User_Token).then((val) => {
+    if (val) history.push('/Home');
+  });
   useEffect(() => {
     if (storeState.err_code === 'Phone is not verifed') {
       initRef.current.open();
