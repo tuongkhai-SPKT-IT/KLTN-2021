@@ -1,8 +1,16 @@
 import MainContent from './MainContent';
 import ViewLCS from './ViewLCS';
 import Comment from './Comment';
-import React, { Component } from 'react'
+import React, {Component} from 'react';
 
-export default ContentStatus(){
-    
+const ContentStatus = () => {
+  return (
+    <>
+      <MainContent />
+      <ViewLCS />
+      <Comment />
+    </>
+  );
 };
+
+export default ContentStatus;

@@ -3,7 +3,8 @@ import React, {useEffect} from 'react';
 import {StyleSheet, Text, View, BackHandler, ScrollView} from 'react-native';
 import UpStatus from './UpStatus';
 import {NativeRouter, Route, Link, useHistory} from 'react-router-native';
-import {MainContent, ViewLCS, Comment} from '../ContentStatus';
+import ContentStatus from '../ContentStatus';
+import {useDispatch, useSelector} from 'react-redux';
 const Home = () => {
   const history = useHistory();
   useEffect(() => {
@@ -12,9 +13,13 @@ const Home = () => {
       return true;
     });
   }, []);
+  const dispatch = useDispatch();
+  const storeState = useSelector((state) => state.HomePage);
+  console.log(storeState);
   return (
     <NativeRouter>
-      <UpStatus />
+      {/* <UpStatus /> */}
+      <ContentStatus />
     </NativeRouter>
   );
 };
