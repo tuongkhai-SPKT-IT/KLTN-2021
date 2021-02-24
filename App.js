@@ -10,7 +10,6 @@ import Register from './src/components/Login/Register';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 const App = () => {
   var firstStateAll = store.getState();
-  const khanh = '';
   const [logged, setLogged] = useState(false);
   useEffect(() => {
     AsyncStorage.getItem('logged').then((value) => {
