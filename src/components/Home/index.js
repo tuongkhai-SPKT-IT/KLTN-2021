@@ -32,10 +32,10 @@ const Home = () => {
       liked: false,
       no_sign_profile: 'dotuong.khai.01.02',
       posted_image: [
-        'https://facebook.github.io/react-native/docs/assets/favicon.png',
-        'https://facebook.github.io/react-native/docs/assets/favicon.png',
-        'https://facebook.github.io/react-native/docs/assets/favicon.png',
-        
+        'https://i.ytimg.com/vi/dwWt4RQdQ94/hqdefault.jpg',
+        'http://ae01.alicdn.com/kf/HTB1EMsmB49YBuNjy0Ffq6xIsVXaO.jpg_q50.jpg',
+        'https://i.pinimg.com/originals/d5/5e/fc/d55efcc94b469ad21115c1d7fb9f0631.jpg',
+        'https://i.ytimg.com/vi/BNcxTNrtRdk/maxresdefault.jpg',
       ],
       posted_time: '21/12/2020',
       status_setting: 'pub',
@@ -64,11 +64,18 @@ const Home = () => {
   ];
   return (
     <NativeRouter>
-      {/* <UpStatus /> */}
-      {srcData.map((stt, i) => {
-        return <ContentStatus key={i} srcData={stt} />;
-      })}
-      <Button title="loadStatus" onPress={() => AsyncStorage.clear()} />
+      <ScrollView>
+        {srcData.map((stt, i) => {
+          return (
+            <View key={i} style={{backgroundColor: 'rgba(0,0,0,.3)'}}>
+              <ContentStatus srcData={stt} />
+            </View>
+          );
+        })}
+        {/* <UpStatus /> */}
+
+        <Button title="loadStatus" onPress={() => AsyncStorage.clear()} />
+      </ScrollView>
     </NativeRouter>
   );
 };

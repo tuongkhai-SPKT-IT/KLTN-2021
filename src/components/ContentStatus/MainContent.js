@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,7 +8,10 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Modal,
+  Pressable,
 } from 'react-native';
+import {Tooltip} from 'react-native-elements';
 
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
@@ -27,13 +30,12 @@ const MainContent = (props) => {
         return 'people';
     }
   };
-  
   return (
     <>
       <View>
         <View style={styles.containerInfo}>
           <Image
-            style={{width: 50, height: 50, borderRadius: 100, marginRight: 10}}
+            style={{width: 45, height: 45, borderRadius: 100, marginRight: 10}}
             source={{
               uri: props.srcAvt,
             }}
@@ -51,23 +53,15 @@ const MainContent = (props) => {
                 }}>
                 {props.postedTime}
               </Text>
-              <Button
-                buttonStyle={{flex: 1}}
-                type="clear"
-                icon={
-                  <IoniconsIcon
-                    name={checkSetting(props.statusSetting)}
-                    size={15}
-                    color="rgba(0,0,0,.6)"
-                  />
-                }
-                disabled
-                iconContainerStyle={{background: '#fff'}}
-                onPress={() => alert('click')}
-                titleStyle={{textAlign: 'left'}}
+              <IoniconsIcon
+                style={{padding: 2, marginLeft: 5}}
+                name={checkSetting(props.statusSetting)}
+                size={15}
+                color="rgba(0,0,0,.75)"
               />
             </View>
           </View>
+
           <Button
             buttonStyle={{marginRight: 15, padding: 5}}
             type="clear"
@@ -83,7 +77,7 @@ const MainContent = (props) => {
             titleStyle={{textAlign: 'left'}}
           />
         </View>
-        <Text>{props.caption}</Text>
+        <Text style={styles.captionText}>{props.caption}</Text>
         <ImageGrid srcImage={props.srcImg} />
       </View>
     </>
@@ -93,6 +87,11 @@ const styles = StyleSheet.create({
   containerInfo: {
     flexDirection: 'row',
     marginLeft: 10,
+  },
+  captionText: {
+    fontSize: 18,
+    fontWeight: '400',
+    padding: 10,
   },
 });
 export default MainContent;

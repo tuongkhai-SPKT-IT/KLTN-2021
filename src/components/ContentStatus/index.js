@@ -8,7 +8,13 @@ const ContentStatus = (props) => {
   const {srcData} = props;
   return (
     <>
-      <View style={{marginTop: 10}}>
+      <View
+        style={{
+          marginTop: 10,
+          backgroundColor: 'white',
+          borderWidth: 1,
+          paddingTop: 10,
+        }}>
         <MainContent
           caption={srcData.caption}
           id={srcData.id}
