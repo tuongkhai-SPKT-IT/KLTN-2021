@@ -10,6 +10,8 @@ target 'firstReactNative' do
 
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'firstReactNativeTests' do
     inherit! :complete
     # Pods for testing

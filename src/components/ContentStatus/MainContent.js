@@ -9,30 +9,90 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
+import IoniconsIcon from 'react-native-vector-icons/Ionicons';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import ImageGrid from './ImageGrid';
 import {Button} from 'react-native-elements';
 import {NativeRouter, Route, Link, useHistory} from 'react-router-native';
 
-const UpStatus = () => {
-  const history = useHistory();
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        history.goBack();
-        return true;
-      },
-    );
-    return () => backHandler.remove();
-  }, []);
+const MainContent = (props) => {
+  const checkSetting = (setting) => {
+    switch (setting) {
+      case 'pub':
+        return 'earth';
+      case 'priv':
+        return 'lock-closed';
+      case 'friend':
+        return 'people';
+    }
+  };
+  
   return (
     <>
       <View>
-        <Text>Day là chỗ chưa caption và hình ảnh</Text>
+        <View style={styles.containerInfo}>
+          <Image
+            style={{width: 50, height: 50, borderRadius: 100, marginRight: 10}}
+            source={{
+              uri: props.srcAvt,
+            }}
+          />
+          <View style={{flex: 1}}>
+            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+              {props.userName}
+            </Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text
+                style={{
+                  color: 'black',
+                  fontSize: 15,
+                  fontWeight: '500',
+                }}>
+                {props.postedTime}
+              </Text>
+              <Button
+                buttonStyle={{flex: 1}}
+                type="clear"
+                icon={
+                  <IoniconsIcon
+                    name={checkSetting(props.statusSetting)}
+                    size={15}
+                    color="rgba(0,0,0,.6)"
+                  />
+                }
+                disabled
+                iconContainerStyle={{background: '#fff'}}
+                onPress={() => alert('click')}
+                titleStyle={{textAlign: 'left'}}
+              />
+            </View>
+          </View>
+          <Button
+            buttonStyle={{marginRight: 15, padding: 5}}
+            type="clear"
+            icon={
+              <EntypoIcon
+                name="dots-three-horizontal"
+                size={15}
+                color="rgba(0,0,0,.6)"
+              />
+            }
+            iconContainerStyle={{background: '#fff'}}
+            onPress={() => alert('click')}
+            titleStyle={{textAlign: 'left'}}
+          />
+        </View>
+        <Text>{props.caption}</Text>
+        <ImageGrid srcImage={props.srcImg} />
       </View>
     </>
   );
 };
 const styles = StyleSheet.create({
-
+  containerInfo: {
+    flexDirection: 'row',
+    marginLeft: 10,
+  },
 });
-export default UpStatus;
+export default MainContent;
