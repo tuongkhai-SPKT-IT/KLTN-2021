@@ -2,11 +2,7 @@ import * as types from '../Constant.ActionType';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as myConst from '../../Constants';
 var initState = {
-  srcData: [
-    {
-      first: 'đây là state của Home',
-    },
-  ],
+  srcData: [],
   err_code: '',
 };
 

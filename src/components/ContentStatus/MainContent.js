@@ -11,13 +11,11 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import {Tooltip} from 'react-native-elements';
 
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import ImageGrid from './ImageGrid';
 import {Button} from 'react-native-elements';
-import {NativeRouter, Route, Link, useHistory} from 'react-router-native';
 
 const MainContent = (props) => {
   const checkSetting = (setting) => {
@@ -78,7 +76,7 @@ const MainContent = (props) => {
           />
         </View>
         <Text style={styles.captionText}>{props.caption}</Text>
-        <ImageGrid srcImage={props.srcImg} />
+        <ImageGrid ref={props.ref} srcImage={props.srcImg} />
       </View>
     </>
   );

@@ -23,59 +23,28 @@ const Home = () => {
   }, []);
   const dispatch = useDispatch();
   const storeState = useSelector((state) => state.HomePage);
-  const srcData = [
-    {
-      caption: 'đây là cái hình đầu tiên của cái tài khoản này',
-      created_at: [],
-      id: '6008f10b207d00001e002e26',
-      like_number: 0,
-      liked: false,
-      no_sign_profile: 'dotuong.khai.01.02',
-      posted_image: [
-        'https://i.ytimg.com/vi/dwWt4RQdQ94/hqdefault.jpg',
-        'http://ae01.alicdn.com/kf/HTB1EMsmB49YBuNjy0Ffq6xIsVXaO.jpg_q50.jpg',
-        'https://i.pinimg.com/originals/d5/5e/fc/d55efcc94b469ad21115c1d7fb9f0631.jpg',
-        'https://i.ytimg.com/vi/BNcxTNrtRdk/maxresdefault.jpg',
-      ],
-      posted_time: '21/12/2020',
-      status_setting: 'pub',
-      user_avatar:
-        'https://2sao.vietnamnetjsc.vn/images/2019/02/24/14/18/khanh-vy-2.jpg',
-      user_id: '6008f052207d00001e002e22',
-      user_name: 'Đỗ Tường Khải',
-      who_liked_status: [],
-    },
-    {
-      caption: 'hé lu mọi người ',
-      created_at: [],
-      id: '6008f1f2207d00001e002e2b',
-      like_number: 0,
-      liked: false,
-      no_sign_profile: 'duongco.khanh.01.01',
-      posted_image: [],
-      posted_time: '21/01/2021',
-      status_setting: 'pub',
-      user_avatar:
-        'https://2sao.vietnamnetjsc.vn/images/2019/02/24/14/19/khanh-vy-6.jpg',
-      user_id: '6008f175207d00001e002e27',
-      user_name: 'Dương Cơ1 Khánh',
-      who_liked_status: [],
-    },
-  ];
-  return (
-    <NativeRouter>
-      <ScrollView>
-        {srcData.map((stt, i) => {
+
+  useEffect(() => {
+    dispatch(ReloadHome());
+  }, []);
+  const showstatus = () => {
+    var {srcData} = storeState;
+    // console.log(srcData);
+    if (srcData.length > 0) {
+      {
+        return srcData.map((stt, i) => {
           return (
             <View key={i} style={{backgroundColor: 'rgba(0,0,0,.3)'}}>
               <ContentStatus srcData={stt} />
             </View>
           );
-        })}
-        {/* <UpStatus /> */}
-
-        <Button title="loadStatus" onPress={() => AsyncStorage.clear()} />
-      </ScrollView>
+        });
+      }
+    } else return <></>;
+  };
+  return (
+    <NativeRouter>
+      <ScrollView>{showstatus()}</ScrollView>
     </NativeRouter>
   );
 };
@@ -105,3 +74,44 @@ const styles = StyleSheet.create({
   },
 });
 export default Home;
+
+// const srcData = [
+//   {
+//     caption: 'đây là cái hình đầu tiên của cái tài khoản này',
+//     created_at: [],
+//     id: '6008f10b207d00001e002e26',
+//     like_number: 0,
+//     liked: false,
+//     no_sign_profile: 'dotuong.khai.01.02',
+//     posted_image: [
+//       'https://i.ytimg.com/vi/dwWt4RQdQ94/hqdefault.jpg',
+//       'http://ae01.alicdn.com/kf/HTB1EMsmB49YBuNjy0Ffq6xIsVXaO.jpg_q50.jpg',
+//       'https://i.pinimg.com/originals/d5/5e/fc/d55efcc94b469ad21115c1d7fb9f0631.jpg',
+//       'https://i.ytimg.com/vi/BNcxTNrtRdk/maxresdefault.jpg',
+//       'https://sm.ign.com/ign_ap/gallery/a/avengers-e/avengers-endgame-character-posters-marvel-thailand_9472.jpg',
+//     ],
+//     posted_time: '21/12/2020',
+//     status_setting: 'pub',
+//     user_avatar:
+//       'https://2sao.vietnamnetjsc.vn/images/2019/02/24/14/18/khanh-vy-2.jpg',
+//     user_id: '6008f052207d00001e002e22',
+//     user_name: 'Đỗ Tường Khải',
+//     who_liked_status: [],
+//   },
+//   {
+//     caption: 'hé lu mọi người ',
+//     created_at: [],
+//     id: '6008f1f2207d00001e002e2b',
+//     like_number: 0,
+//     liked: false,
+//     no_sign_profile: 'duongco.khanh.01.01',
+//     posted_image: [],
+//     posted_time: '21/01/2021',
+//     status_setting: 'pub',
+//     user_avatar:
+//       'https://2sao.vietnamnetjsc.vn/images/2019/02/24/14/19/khanh-vy-6.jpg',
+//     user_id: '6008f175207d00001e002e27',
+//     user_name: 'Dương Cơ1 Khánh',
+//     who_liked_status: [],
+//   },
+// ];

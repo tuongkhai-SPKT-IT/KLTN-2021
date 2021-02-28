@@ -49,7 +49,6 @@ const Login = () => {
     if (Account && Password) {
       const info = {user: Account.account, password: Password.password};
       dispatch(Login_Request(info));
-     
     }
   };
   useEffect(() => {
@@ -111,6 +110,7 @@ const Login = () => {
         <Modal
           position="center"
           swipeToClose={false}
+          backdropPressToClose={false}
           style={{
             flexDirection: 'column',
             width: '85%',

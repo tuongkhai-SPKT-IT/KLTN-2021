@@ -1,6 +1,5 @@
 import MainContent from './MainContent';
 import ViewLCS from './ViewLCS';
-import Comment from './Comment';
 import React, {Component} from 'react';
 import {View} from 'react-native';
 
@@ -26,8 +25,11 @@ const ContentStatus = (props) => {
           userName={srcData.user_name}
           userID={srcData.user_id}
         />
-        <ViewLCS />
-        <Comment />
+        <ViewLCS
+          liked={srcData.liked}
+          likeList={srcData.who_liked_status}
+          likeNumber={srcData.like_number}
+        />
       </View>
     </>
   );
