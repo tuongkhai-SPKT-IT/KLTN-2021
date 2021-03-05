@@ -1,15 +1,27 @@
 import MainContent from './MainContent';
-import React, {Component, useRef, useState} from 'react';
+import React, {Component, useRef, useState, useEffect} from 'react';
 import {View, TextInput, StyleSheet, ScrollView, Text} from 'react-native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesome5nIcon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesomenIcon from 'react-native-vector-icons/FontAwesome';
 
-import {Button, Input} from 'react-native-elements';
+import API from '../API/API';
+import {Button} from 'react-native-elements';
 import Modal from 'react-native-modalbox';
-export default function ViewLCS() {
-  const [liked, setLiked] = useState(false);
+import * as keys from '../Constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
+import {checkLike, Like} from '../Redux/Actions/Status.Action';
+export default function ViewLCS(props) {
+  const [listLike, setListLike] = useState(props.likeList);
   const modalRef = useRef(null);
+  const stateLike = useSelector((state) => state.status);
+  var thisProps = props;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log(listLike);
+  }, []);
+
   return (
     <>
       <View
@@ -22,28 +34,41 @@ export default function ViewLCS() {
           borderBottomWidth: 1,
           borderColor: 'rgba(0,0,0,.6)',
         }}>
+        <View>
+          <Text></Text>
+        </View>
         <Button
           buttonStyle={{backgroundColor: 'transparent'}}
           containerStyle={{margin: 5, borderWidth: 1, flex: 1}}
           icon={
-            liked ? (
+            thisProps.liked ? (
               <AntDesignIcon name="like1" size={20} color="blue" />
             ) : (
-              <AntDesignIcon name="like2" size={20} color="rgba(0,0,0,.8)" />
+              <AntDesignIcon name="like2" size={20} color="rgba(0,0,0,.6)" />
             )
           }
-          loadingProps={{animating: true}}
-          loadingStyle={{}}
-          onPress={() => setLiked(!liked)}
-          title="Thích"
-          titleProps={{}}
+          loading={stateLike.loading}
+          loadingProps={{animating: true, color: '#999'}}
+          loadingStyle={{borderColor: 'black'}}
+          onPress={() => {
+            if (thisProps.liked) {
+              dispatch(DisLike(props.likeNumber, props.index));
+              thisProps.likeNumber = props.likeNumber - 1;
+              thisProps.liked = false;
+            } else {
+              dispatch(Like(props.likeNumber, props.index));
+              thisProps.likeNumber = props.likeNumber + 1;
+              thisProps.liked = true;
+            }
+          }}
+          title={'Thích'}
           titleStyle={[
             {
               marginHorizontal: 5,
               fontSize: 18,
               fontWeight: 'bold',
             },
-            liked ? {color: 'blue'} : {color: 'rgba(0,0,0,.6)'},
+            thisProps.liked ? {color: 'blue'} : {color: 'rgba(0,0,0,.6)'},
           ]}
         />
         <Button
@@ -120,16 +145,6 @@ export default function ViewLCS() {
           }}
         />
       </View>
-      <Input
-        containerStyle={{}}
-        disabledInputStyle={{background: '#ddd'}}
-        inputContainerStyle={{}}
-        inputStyle={{}}
-        leftIcon={<FontAwesomenIcon name="send" size={20} />}
-        rightIcon={<AntDesignIcon name="close" size={20} />}
-        rightIconContainerStyle={{}}
-        placeholder="Viết 1 bình luận"
-      />
     </>
   );
 }

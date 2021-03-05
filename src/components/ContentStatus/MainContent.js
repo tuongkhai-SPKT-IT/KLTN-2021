@@ -75,7 +75,9 @@ const MainContent = (props) => {
             titleStyle={{textAlign: 'left'}}
           />
         </View>
-        <Text style={styles.captionText}>{props.caption}</Text>
+        <Text style={styles.captionText}>
+          {props.caption ? props.caption : props.header}
+        </Text>
         <ImageGrid ref={props.ref} srcImage={props.srcImg} />
       </View>
     </>

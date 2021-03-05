@@ -8,3 +8,11 @@ export const Register_Fail = 'Register_Fail';
 
 export const ReloadHome_Failed = 'ReloadHome_Failed';
 export const ReloadHome_Success = 'ReloadHome_Success';
+
+export const Like_Request = 'Like_Request';
+export const Like_Success = 'Like_Success';
+export const Like_Failed = 'Like_Failed';
+
+export const DisLike_Request = 'DisLike_Request';
+export const DisLike_Success = 'DisLike_Success';
+export const DisLike_Failed = 'DisLike_Failed';

@@ -3,7 +3,7 @@ import axios from 'axios';
 class API {
   constructor() {
     //this.domain = 'http://localhost:8000/api/';
-    this.domain = 'http://192.168.1.107:8000/api/';
+    this.domain = 'http://192.168.1.108:8000/api/';
     
   }
   onCallAPI = (method, url, data = {}, params = {}, headers = {}) => {

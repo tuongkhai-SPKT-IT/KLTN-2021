@@ -5,6 +5,7 @@ import {View} from 'react-native';
 
 const ContentStatus = (props) => {
   const {srcData} = props;
+
   return (
     <>
       <View
@@ -15,6 +16,7 @@ const ContentStatus = (props) => {
           paddingTop: 10,
         }}>
         <MainContent
+          header={srcData.header_content}
           caption={srcData.caption}
           id={srcData.id}
           linkProfile={srcData.no_sign_profile}
@@ -26,6 +28,8 @@ const ContentStatus = (props) => {
           userID={srcData.user_id}
         />
         <ViewLCS
+          index={srcData.id}
+          userName={srcData.user_name}
           liked={srcData.liked}
           likeList={srcData.who_liked_status}
           likeNumber={srcData.like_number}

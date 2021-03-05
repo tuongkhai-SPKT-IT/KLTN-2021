@@ -10,29 +10,33 @@ import {
   Dimensions,
 } from 'react-native';
 import Modal from 'react-native-modalbox';
+import FastImage from 'react-native-fast-image';
+
 // import Slideshow from 'react-native-slideshow';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: '100%',
-    height: 450,
+    height: 540,
   },
   fullsize: {width: '100%', height: '100%'},
   boxExtend: {
-    width: '100%',
-    height: '100%',
+    width: '50%',
     backgroundColor: 'rgba(0,0,0,.8)',
     position: 'absolute',
     elevation: 3,
     zIndex: 999,
-    opacity: 0.7,
+    opacity: 0.85,
+    height: 540 / 2,
+    bottom: 0,
+    right: 0,
+    justifyContent: 'center',
   },
   textExtend: {
     fontSize: 50,
     color: 'white',
     textAlign: 'center',
-    paddingVertical: 75,
   },
   centeredView: {
     flex: 1,
@@ -78,20 +82,17 @@ const styles = StyleSheet.create({
 });
 
 const ImageGrid = (props) => {
+  const deviceWidth = Dimensions.get('screen').width;
   const {srcImage} = props;
   if (srcImage.length === 0) {
     return <></>;
   }
   const modalRef = useRef(null);
-  // const [sizeBox, setSizeBox] = useState({});
-  // const widthWindow = Dimensions.get('window').width;
-  // const {height, width} = Dimensions.get('screen');
-  // console.log(height, width);
+  const scrollViewRef = useRef(null);
   const render2Image = (src) => {
     return (
       <View style={styles.container}>
         {src.map((val, i) => {
-          console.log(val);
           return (
             <Pressable
               key={i}
@@ -141,89 +142,79 @@ const ImageGrid = (props) => {
       </View>
     );
   };
-  useEffect(() => {
-    srcImage.map((val) => {
-      Image.getSize(val, (width, height) => console.log(width, height));
-    });
-  }, []);
   const render4PlusImage = (src) => {
-    console.log(src);
     const uri = src.slice(0, 4);
-    const uriImg1 = src.slice(0, 2);
-    uri.shift();
-    uri.shift();
     return (
       <View style={styles.container}>
-        <View style={{flex: 1}}>
-          {uriImg1.map((val, i) => {
-            return (
-              <Pressable
-                key={i}
-                style={{flex: 1}}
-                onPress={() => Alert.alert('hello')}>
-                <Image
-                  source={{uri: val}}
-                  resizeMode="stretch"
-                  style={styles.fullsize}
-                  resizeMethod="resize"
-                />
-              </Pressable>
-            );
-          })}
-        </View>
-        <View style={{flex: 1, position: 'relative'}}>
+        {srcImage.length > 4 ? (
           <Pressable
-            style={{flex: 1}}
-            onPress={() => console.log(scrollViewref)}>
-            <Image
-              source={{uri: uri[0]}}
-              resizeMode="stretch"
-              style={styles.fullsize}
-              resizeMethod="resize"
-            />
+            style={styles.boxExtend}
+            onPress={async () => {
+              await modalRef.current.open();
+              if (scrollViewRef.current) {
+                setTimeout(() => {
+                  scrollViewRef.current.scrollTo({
+                    x: deviceWidth * 3,
+                    animated: false,
+                    y: 0,
+                  });
+                }, 1 * 100);
+              }
+            }}>
+            <Text style={styles.textExtend}>+{srcImage.length - 4}</Text>
           </Pressable>
-          <Pressable style={{flex: 1}} onPress={() => Alert.alert('hello')}>
-            <Image
-              source={{uri: uri[1]}}
-              resizeMode="stretch"
-              style={styles.fullsize}
-            />
-            {srcImage.length > 4 && (
-              <Pressable
-                onPress={() => {
-                  modalRef.current.open();
+        ) : (
+          <></>
+        )}
+        {uri.map((val, i) => {
+          return (
+            <Pressable
+              key={i}
+              style={{
+                width: '50%',
+                height: 540 / 2,
+              }}
+              onPress={async () => {
+                await modalRef.current.open();
+                if (scrollViewRef.current) {
+                  setTimeout(() => {
+                    scrollViewRef.current.scrollTo({
+                      x: deviceWidth * i,
+                      animated: false,
+                      y: 0,
+                    });
+                  }, 1 * 100);
+                }
+              }}>
+              <Image
+                resizeMode="stretch"
+                style={styles.fullsize}
+                source={{
+                  uri: val,
                 }}
-                style={styles.boxExtend}>
-                <Text style={styles.textExtend}>+ {srcImage.length - 4}</Text>
-              </Pressable>
-            )}
-          </Pressable>
-        </View>
+              />
+            </Pressable>
+          );
+        })}
       </View>
     );
   };
-  const [sizeImage, setSizeImage] = useState([]);
-  const deviceWidth = Dimensions.get('screen').width;
-  const deviceHeight = Dimensions.get('screen').height;
-  const getSize = () => {
-    srcImage.map((val) => {
-      Image.getSize(val, (width, height) => {
-        setSizeImage([...sizeImage, {width, height}]);
-      });
-    });
-    console.log(sizeImage[0]);
+
+  const ImageScroll = (item, i) => {
+    return (
+      <Image
+        key={i}
+        source={{uri: item}}
+        resizeMode="contain"
+        style={{width: deviceWidth}}
+      />
+    );
   };
-  var slideImage = [];
-  useEffect(() => {
-    srcImage.map((val) => {
-      slideImage.push({
-        url: val,
-      });
-    });
-  }, [slideImage]);
-  const scrollViewRef = useRef(null);
   return (
     <>
+      {srcImage.length <= 2 && render2Image(srcImage)}
+      {srcImage.length === 3 && render3Image(srcImage)}
+      {srcImage.length >= 4 && render4PlusImage(srcImage)}
       <Modal
         position="center"
         coverScreen
@@ -235,24 +226,12 @@ const ImageGrid = (props) => {
         <ScrollView
           ref={scrollViewRef}
           showsHorizontalScrollIndicator={false}
-          snapToInterval={450}
+          snapToInterval={deviceWidth}
           horizontal
           decelerationRate="fast">
-          {srcImage.map((val, i) => {
-            return (
-              <Image
-                key={i}
-                source={{uri: val}}
-                resizeMode="repeat"
-                style={{width: 450, height: 450, marginTop: 100}}
-              />
-            );
-          })}
+          {srcImage.map(ImageScroll)}
         </ScrollView>
       </Modal>
-      {srcImage.length <= 2 && render2Image(srcImage)}
-      {srcImage.length === 3 && render3Image(srcImage)}
-      {srcImage.length >= 4 && render4PlusImage(srcImage)}
     </>
   );
 };
