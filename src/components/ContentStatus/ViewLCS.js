@@ -10,20 +10,94 @@ import {Button} from 'react-native-elements';
 import Modal from 'react-native-modalbox';
 import * as keys from '../Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
-import {checkLike, Like} from '../Redux/Actions/Status.Action';
 export default function ViewLCS(props) {
   const [listLike, setListLike] = useState(props.likeList);
+  const [likeNumber, setLikeNumber] = useState(props.likeNumber);
+  const userToken = useRef('');
   const modalRef = useRef(null);
-  const stateLike = useSelector((state) => state.status);
-  var thisProps = props;
-  const dispatch = useDispatch();
+  const [liked, setLiked] = useState(props.liked);
+  const [loadding, setLoadding] = useState(false);
   useEffect(() => {
     console.log(listLike);
+    AsyncStorage.getItem(keys.User_Token).then((val) => {
+      if (val) {
+        userToken.current = val;
+      }
+    });
   }, []);
+  const Like = async () => {
+    // console.log(userToken);
+    setLoadding(true);
+    console.log(loadding);
+    if (!liked) {
+      const route = 'status/update-status';
+      const param = {
+        status_id: props.index,
+        like: parseInt(likeNumber) + 1,
+      };
+      const header = {
+        Authorization: 'bearer' + userToken.current,
+      };
+      const api = new API();
+      // console.log(param, route, header);
+      setTimeout(() => {
+        api
+          .onCallAPI('post', route, {}, param, header)
+          .then((res) => {
+            if (res.data.error_code !== 0) {
+              window.alert(res.data.message);
+            } else {
+              console.log(res.data.data);
+              setListLike(res.data.data);
+              setLiked(true);
+              setLoadding(false);
+              setLikeNumber(likeNumber + 1);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, 2 * 1000);
+    } else {
+      const route = 'status/update-status';
+      const param = {
+        status_id: props.index,
+        like: parseInt(likeNumber) - 1,
+        is_unlike: 1,
+      };
+      const header = {
+        Authorization: 'bearer' + userToken.current,
+      };
+      const api = new API();
+      // console.log(param, route, header);
+      setTimeout(() => {
+        api
+          .onCallAPI('post', route, {}, param, header)
+          .then((res) => {
+            if (res.data.error_code !== 0) {
+              window.alert(res.data.message);
+            } else {
+              setListLike(res.data.data);
+              console.log(res.data.data);
+              setLiked(false);
+              setLoadding(false);
+              setLikeNumber(likeNumber - 1);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, 2 * 1000);
+    }
+  };
 
   return (
     <>
+      <View style={{}}>
+        <Text style={{color: 'black', fontSize: 18}}>
+          {listLike.map((val) => val.user_name)}
+        </Text>
+      </View>
       <View
         style={{
           flexDirection: 'row',
@@ -34,33 +108,20 @@ export default function ViewLCS(props) {
           borderBottomWidth: 1,
           borderColor: 'rgba(0,0,0,.6)',
         }}>
-        <View>
-          <Text></Text>
-        </View>
         <Button
           buttonStyle={{backgroundColor: 'transparent'}}
           containerStyle={{margin: 5, borderWidth: 1, flex: 1}}
           icon={
-            thisProps.liked ? (
+            liked ? (
               <AntDesignIcon name="like1" size={20} color="blue" />
             ) : (
               <AntDesignIcon name="like2" size={20} color="rgba(0,0,0,.6)" />
             )
           }
-          loading={stateLike.loading}
+          loading={loadding}
           loadingProps={{animating: true, color: '#999'}}
           loadingStyle={{borderColor: 'black'}}
-          onPress={() => {
-            if (thisProps.liked) {
-              dispatch(DisLike(props.likeNumber, props.index));
-              thisProps.likeNumber = props.likeNumber - 1;
-              thisProps.liked = false;
-            } else {
-              dispatch(Like(props.likeNumber, props.index));
-              thisProps.likeNumber = props.likeNumber + 1;
-              thisProps.liked = true;
-            }
-          }}
+          onPress={() => Like()}
           title={'Thích'}
           titleStyle={[
             {
@@ -68,7 +129,7 @@ export default function ViewLCS(props) {
               fontSize: 18,
               fontWeight: 'bold',
             },
-            thisProps.liked ? {color: 'blue'} : {color: 'rgba(0,0,0,.6)'},
+            liked ? {color: 'blue'} : {color: 'rgba(0,0,0,.6)'},
           ]}
         />
         <Button

@@ -5,7 +5,6 @@ import {View} from 'react-native';
 
 const ContentStatus = (props) => {
   const {srcData} = props;
-
   return (
     <>
       <View
@@ -33,6 +32,8 @@ const ContentStatus = (props) => {
           liked={srcData.liked}
           likeList={srcData.who_liked_status}
           likeNumber={srcData.like_number}
+          userAvatar={srcData.user_avatar}
+          userID={srcData.user_id}
         />
       </View>
     </>

@@ -9,7 +9,7 @@ var initState = {
 var HomeReducer = (state = initState, action) => {
   switch (action.type) {
     case types.ReloadHome_Success: {
-      var {data} = action;
+      const {data} = action;
       return {...state, err_code: '', srcData: data};
     }
     default:

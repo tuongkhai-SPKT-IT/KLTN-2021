@@ -10,7 +10,6 @@ import {
   Dimensions,
 } from 'react-native';
 import Modal from 'react-native-modalbox';
-import FastImage from 'react-native-fast-image';
 
 // import Slideshow from 'react-native-slideshow';
 const styles = StyleSheet.create({
