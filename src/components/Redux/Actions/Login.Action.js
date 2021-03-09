@@ -21,7 +21,7 @@ export const Login_Request = (info) => {
               err: res.data.message,
             });
           } else {
-            console.log(res.data.data);
+            // console.log(res.data.data);
             if (res.data.data.phone_verified) {
               AsyncStorage.setItem(storeKeys.User_Token, res.data.data.token);
               AsyncStorage.setItem(
