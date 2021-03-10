@@ -3,16 +3,16 @@ import React, {Component, useRef, useState, useEffect} from 'react';
 import {
   View,
   TextInput,
-  StyleSheet,
   ScrollView,
   Text,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesome5nIcon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesomenIcon from 'react-native-vector-icons/FontAwesome';
-
 import API from '../API/API';
+import * as styles from './Styles';
 import {Button} from 'react-native-elements';
 import Modal from 'react-native-modalbox';
 import * as keys from '../Constants';
@@ -22,19 +22,41 @@ export default function ViewLCS(props) {
   const [listLike, setListLike] = useState(props.likeList);
   const [likeNumber, setLikeNumber] = useState(props.likeNumber);
   const userToken = useRef('');
+  const userInfo = useRef({});
   const modalRef = useRef(null);
   const [liked, setLiked] = useState(props.liked);
   const [loadding, setLoadding] = useState(false);
+  const [inputCmt, setInputCmt] = useState('');
   const [listComment, setListComment] = useState(props.listComment);
-  const smallCmt = useRef(listComment.slice(listComment.length - 2));
-
+  const [smallCmt, setSmallCmt] = useState(
+    listComment.slice(listComment.length - 2),
+  );
+  const textComment = useRef(null);
   useEffect(() => {
     AsyncStorage.getItem(keys.User_Token).then((val) => {
       if (val) {
         userToken.current = val;
+        userInfo.current = {...userInfo.current, user_token: val};
       }
     });
+    AsyncStorage.getItem(keys.User_Avatar).then((val) => {
+      if (val) {
+        userInfo.current = {...userInfo.current, user_avatar: val};
+      }
+    });
+    AsyncStorage.getItem(keys.User_Name).then((val) => {
+      if (val) {
+        userInfo.current = {...userInfo.current, user_name: val};
+      }
+    });
+    AsyncStorage.getItem(keys.User_ProfLink).then((val) => {
+      if (val) {
+        userInfo.current = {...userInfo.current, user_ProLink: val};
+      }
+    });
+    console.log(listComment);
   }, []);
+
   const Like = async () => {
     // console.log(userToken);
     setLoadding(true);
@@ -107,37 +129,16 @@ export default function ViewLCS(props) {
           modalRef.current.open();
         }}
         key={i}
-        style={{flexDirection: 'row', paddingHorizontal: 5, paddingBottom: 5}}>
+        style={styles.stylesViewLCS.SingleCommentContainer}>
         <Image
           source={{uri: comment.user_avatar}}
-          style={{width: 50, height: 50, borderRadius: 1000}}
+          style={styles.stylesViewLCS.avatarComment}
         />
-        <View
-          style={{
-            marginHorizontal: 8,
-            backgroundColor: 'rgba(0,0,0,.25555)',
-            borderRadius: 10,
-            flex: 1,
-            paddingLeft: 5,
-            paddingTop: 5,
-          }}>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 17,
-              fontWeight: 'bold',
-              paddingHorizontal: 5,
-            }}>
+        <View style={styles.stylesViewLCS.commentBox}>
+          <Text style={styles.stylesViewLCS.commentUserName}>
             {comment.user_name}
           </Text>
-          <Text
-            style={{
-              color: 'black',
-              fontSize: 17,
-              fontWeight: '800',
-              paddingBottom: 10,
-              paddingHorizontal: 5,
-            }}>
+          <Text style={styles.stylesViewLCS.captionText}>
             {comment.comment}
           </Text>
         </View>
@@ -146,47 +147,19 @@ export default function ViewLCS(props) {
   };
   return (
     <>
-      <Pressable
-        onPress={() => {
-          modalRef.current.open();
-        }}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: 10,
-          marginLeft: 10,
-        }}>
-        <View
-          style={{
-            borderRadius: 100,
-            width: 25,
-            height: 25,
-            backgroundColor: 'blue',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <AntDesignIcon name="like1" size={15} color="white" />
-        </View>
-        <Text
-          style={{
-            color: 'rgba(0,0,0,.6)',
-            fontSize: 20,
-            fontWeight: 'bold',
-            marginLeft: 5,
-          }}>
-          {listLike.length}
-        </Text>
-      </Pressable>
-      <View
-        style={{
-          flexDirection: 'row',
-          flex: 1,
-          marginVertical: 10,
-          paddingVertical: 5,
-          borderTopWidth: 1,
-          borderBottomWidth: 1,
-          borderColor: 'rgba(0,0,0,.6)',
-        }}>
+      {listLike.length > 0 && (
+        <Pressable
+          onPress={() => {
+            modalRef.current.open();
+          }}
+          style={styles.stylesViewLCS.iconLike}>
+          <View style={styles.stylesViewLCS.viewIcon}>
+            <AntDesignIcon name="like1" size={15} color="white" />
+          </View>
+          <Text style={styles.stylesViewLCS.likeNumber}>{listLike.length}</Text>
+        </Pressable>
+      )}
+      <View style={styles.stylesViewLCS.viewBtn}>
         <Button
           buttonStyle={{backgroundColor: 'transparent'}}
           containerStyle={{margin: 5, flex: 1}}
@@ -226,7 +199,8 @@ export default function ViewLCS(props) {
           loadingStyle={{}}
           title="Bình luận"
           onPress={() => {
-            modalRef.current.open();
+            // textComment.current.focus();
+            AsyncStorage.clear();
           }}
           titleStyle={{
             marginHorizontal: 5,
@@ -236,69 +210,71 @@ export default function ViewLCS(props) {
           }}
         />
       </View>
-      <View style={{marginVertical: 10}}>
-        {smallCmt.current.map(SingleComment)}
-      </View>
-      <View style={{flex: 1}}>
+      <View style={{marginVertical: 10}}>{smallCmt.map(SingleComment)}</View>
+      <Modal
+        position="center"
+        coverScreen
+        backButtonClose
+        // swipeToClose={false}
+        ref={modalRef}>
+        {listLike.length > 0 && (
+          <Pressable
+            onPress={() => {
+              modalRef.current.open();
+            }}
+            style={[
+              styles.stylesViewLCS.iconLike,
+              styles.stylesViewLCS.extendLike,
+            ]}>
+            <View style={styles.stylesViewLCS.viewIcon}>
+              <AntDesignIcon name="like1" size={15} color="white" />
+            </View>
+            <Text style={styles.stylesViewLCS.likeNumber}>
+              {listLike.length}
+            </Text>
+          </Pressable>
+        )}
+        <View style={{flex: 9}}>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={450}
+            decelerationRate="fast"
+            style={{marginTop: 20}}>
+            {listComment.map(SingleComment)}
+          </ScrollView>
+        </View>
+      </Modal>
+      <ScrollView keyboardShouldPersistTaps="handled" style={{flex: 1}}>
         <TextInput
+          ref={textComment}
+          onChangeText={(e) => setInputCmt(e)}
           placeholder="Viết 1 bình luận"
-          style={{
-            flex: 1,
-            width: '98%',
-            fontSize: 18,
-            borderWidth: 1,
-            borderColor: 'rgba(0,0,0,5)',
-            marginBottom: 10,
-            borderRadius: 16,
-            padding: 10,
-            paddingLeft: 15,
-            paddingRight: 40,
-            marginLeft: 5,
-          }}></TextInput>
-
-        <Button
-          buttonStyle={{backgroundColor: 'transparent'}}
-          containerStyle={{
-            position: 'absolute',
-            top: 6,
-            right: 10,
-            height: '100%',
-          }}
-          loading={false}
-          loadingProps={{animating: true}}
-          icon={<FontAwesomenIcon name="send" size={20} />}
-          titleStyle={{
-            marginHorizontal: 5,
-            color: 'rgba(0,0,0,.6)',
-            fontSize: 18,
-            fontWeight: 'bold',
-          }}
+          style={styles.stylesViewLCS.textCmt}
         />
-        <Modal
-          position="center"
-          coverScreen
-          backButtonClose
-          // swipeToClose={false}
-          ref={modalRef}>
-          <View>
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              snapToInterval={450}
-              decelerationRate="fast"
-              style={{marginTop: 20}}>
-              {listComment.map(SingleComment)}
-            </ScrollView>
-          </View>
-        </Modal>
-      </View>
+
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            top: 10,
+            height: '100%',
+            right: 15,
+          }}
+          onPress={() => {
+            if (inputCmt.trim() !== '') {
+              listComment.push({
+                comment: inputCmt,
+                linkProfile: userInfo.current.user_ProLink,
+                user_avatar: userInfo.current.user_avatar,
+                user_name: userInfo.current.user_name,
+              });
+              setSmallCmt(listComment.slice(listComment.length - 2));
+              textComment.current.clear();
+              setInputCmt('');
+            }
+          }}>
+          <FontAwesomenIcon name="send" size={25} color="rgba(0,0,0,.8)" />
+        </TouchableOpacity>
+      </ScrollView>
     </>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    width: '100%',
-    height: 450,
-  },
-});

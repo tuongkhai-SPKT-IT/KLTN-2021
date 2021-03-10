@@ -12,74 +12,7 @@ import {
 import Modal from 'react-native-modalbox';
 
 // import Slideshow from 'react-native-slideshow';
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    width: '100%',
-    height: 540,
-  },
-  fullsize: {width: '100%', height: '100%'},
-  boxExtend: {
-    width: '50%',
-    backgroundColor: 'rgba(0,0,0,.8)',
-    position: 'absolute',
-    elevation: 3,
-    zIndex: 999,
-    opacity: 0.85,
-    height: 540 / 2,
-    bottom: 0,
-    right: 0,
-    justifyContent: 'center',
-  },
-  textExtend: {
-    fontSize: 50,
-    color: 'white',
-    textAlign: 'center',
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-});
-
+import * as styles from './Styles';
 const ImageGrid = (props) => {
   const deviceWidth = Dimensions.get('screen').width;
   const {srcImage} = props;
@@ -90,7 +23,7 @@ const ImageGrid = (props) => {
   const scrollViewRef = useRef(null);
   const render2Image = (src) => {
     return (
-      <View style={styles.container}>
+      <View style={styles.stylesImageGrid.container}>
         {src.map((val, i) => {
           return (
             <Pressable
@@ -100,7 +33,7 @@ const ImageGrid = (props) => {
               <Image
                 source={{uri: val}}
                 resizeMode="stretch"
-                style={styles.fullsize}
+                style={styles.stylesImageGrid.fullsize}
               />
             </Pressable>
           );
@@ -112,13 +45,13 @@ const ImageGrid = (props) => {
     const uriImg1 = src[0];
     src.shift();
     return (
-      <View style={styles.container}>
+      <View style={styles.stylesImageGrid.container}>
         <Pressable style={{flex: 1}} onPress={() => Alert.alert('hello')}>
           <Image
             source={{uri: uriImg1}}
             resizeMode="stretch"
             resizeMethod="auto"
-            style={styles.fullsize}
+            style={styles.stylesImageGrid.fullsize}
           />
         </Pressable>
         <View style={{flex: 1}}>
@@ -132,7 +65,7 @@ const ImageGrid = (props) => {
                   source={{uri: val}}
                   resizeMode="stretch"
                   resizeMethod="auto"
-                  style={styles.fullsize}
+                  style={styles.stylesImageGrid.fullsize}
                 />
               </Pressable>
             );
@@ -144,10 +77,10 @@ const ImageGrid = (props) => {
   const render4PlusImage = (src) => {
     const uri = src.slice(0, 4);
     return (
-      <View style={styles.container}>
+      <View style={styles.stylesImageGrid.container}>
         {srcImage.length > 4 ? (
           <Pressable
-            style={styles.boxExtend}
+            style={styles.stylesImageGrid.boxExtend}
             onPress={async () => {
               await modalRef.current.open();
               if (scrollViewRef.current) {
@@ -160,7 +93,7 @@ const ImageGrid = (props) => {
                 }, 1 * 100);
               }
             }}>
-            <Text style={styles.textExtend}>+{srcImage.length - 4}</Text>
+            <Text style={styles.stylesImageGrid.textExtend}>+{srcImage.length - 4}</Text>
           </Pressable>
         ) : (
           <></>
@@ -187,7 +120,7 @@ const ImageGrid = (props) => {
               }}>
               <Image
                 resizeMode="stretch"
-                style={styles.fullsize}
+                style={styles.stylesImageGrid.fullsize}
                 source={{
                   uri: val,
                 }}
