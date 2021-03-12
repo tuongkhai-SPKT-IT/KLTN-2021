@@ -81,12 +81,18 @@ export const stylesImageGrid = StyleSheet.create({
 });
 
 export const stylesViewLCS = StyleSheet.create({
+  containerContent: {flex: 1},
+  Modal: {
+    backgroundColor: 'white',
+    marginTop: 0,
+  },
   extendLike: {
+    flex: 1,
     borderBottomWidth: 1,
     marginLeft: 0,
     paddingLeft: 10,
     marginTop: 0,
-    paddingVertical: 5
+    paddingVertical: 10,
   },
   iconLike: {
     flexDirection: 'row',
@@ -95,6 +101,7 @@ export const stylesViewLCS = StyleSheet.create({
     marginLeft: 10,
   },
   SingleCommentContainer: {
+    flex: 1,
     flexDirection: 'row',
     paddingHorizontal: 5,
     paddingBottom: 5,
@@ -147,15 +154,21 @@ export const stylesViewLCS = StyleSheet.create({
   },
   textCmt: {
     flex: 1,
-    width: '98%',
     fontSize: 18,
+    paddingLeft: 10,
+  },
+  inputcmtContainer: {
+    marginHorizontal: 5,
+    flexDirection: 'row',
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,5)',
     marginBottom: 10,
     borderRadius: 16,
-    padding: 10,
-    paddingLeft: 15,
-    paddingRight: 40,
-    marginLeft: 5,
+  },
+  btnComment: {
+    height: 50,
+    justifyContent: 'center',
+    width: 38,
+    alignItems: 'center',
   },
 });

@@ -152,8 +152,8 @@ const ImageGrid = (props) => {
         coverScreen
         backButtonClose
         // swipeToClose={false}
-        swipeThreshold={100}
-        swipeArea={100}
+        // swipeThreshold={1}
+        swipeArea={500}
         ref={modalRef}>
         <ScrollView
           ref={scrollViewRef}
