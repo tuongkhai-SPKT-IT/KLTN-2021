@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import {NativeRouter, Route, Link, useHistory} from 'react-router-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const UpStatus = () => {
   const history = useHistory();

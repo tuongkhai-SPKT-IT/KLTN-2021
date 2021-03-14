@@ -1,9 +1,10 @@
 import axios from 'axios';
-import {API_URL} from '../../../env';
+import ENV from '../../../env';
 
 class API {
   constructor() {
-    this.domain = API_URL;
+    this.domain = 'http://192.168.1.185:8000/api/';
+    // alert(ENV.API_URL)
   }
   onCallAPI = (method, url, data = {}, params = {}, headers = {}) => {
     return axios({
