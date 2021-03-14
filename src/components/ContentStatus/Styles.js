@@ -10,6 +10,7 @@ export const stylesIndex = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     paddingTop: 10,
+    marginBottom: 10,
   },
 });
 export const stylesImageGrid = StyleSheet.create({

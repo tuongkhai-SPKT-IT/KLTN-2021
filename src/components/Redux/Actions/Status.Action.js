@@ -40,7 +40,6 @@ export const DisLike = (likeNumber, index) => {
                 } else {
                   console.log(res.data.data);
                   dispatch({type: types.DisLike_Success, err});
-                  console.log(1);
                 }
               })
               .catch((err) => {

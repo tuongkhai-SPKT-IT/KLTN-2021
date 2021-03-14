@@ -22,6 +22,7 @@ export default function ViewLCS(props) {
   const [listLike, setListLike] = useState(props.likeList);
   const [likeNumber, setLikeNumber] = useState(props.likeNumber);
   const scrollRef = useRef(null);
+  const textComment = useRef(null);
   const userInfo = useRef({});
   const [visible, setVisible] = useState(false);
   const [liked, setLiked] = useState(props.liked);
@@ -31,7 +32,6 @@ export default function ViewLCS(props) {
   const [smallCmt, setSmallCmt] = useState(
     listComment.slice(listComment.length - 2),
   );
-  const textComment = useRef(null);
 
   useEffect(() => {
     AsyncStorage.getItem(keys.User_Token).then((val) => {
@@ -146,6 +146,11 @@ export default function ViewLCS(props) {
                 setSmallCmt(listComment.slice(listComment.length - 2));
                 if (textComment.current) textComment.current.clear();
                 setInputCmt('');
+                if (scrollRef.current) {
+                  setTimeout(() => {
+                    scrollRef.current.scrollToEnd();
+                  }, 1 * 100);
+                }
               }
             }}
             name="send"
@@ -189,12 +194,9 @@ export default function ViewLCS(props) {
       for (i = 0; i < list.length; i++) {
         if (i + 1 < list.length)
           listWho = list[i].user_name + ', ' + list[i + 1].user_name;
+        else listWho = list[i].user_name;
       }
     return listWho;
-  };
-
-  const toggleOverlay = () => {
-    setVisible(false);
   };
   return (
     <>
@@ -295,8 +297,8 @@ export default function ViewLCS(props) {
           loadingProps={{animating: true}}
           title="Bình luận"
           onPress={() => {
-            if (textComment.current) textComment.current.focus();
-            // AsyncStorage.clear();
+            // if (textComment.current) textComment.current.focus();
+            AsyncStorage.clear();
           }}
           titleStyle={{
             marginHorizontal: 5,

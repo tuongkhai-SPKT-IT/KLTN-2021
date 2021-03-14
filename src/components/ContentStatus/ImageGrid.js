@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Modal from 'react-native-modalbox';
+import SwipeDownModal from 'react-native-swipe-down';
 
 // import Slideshow from 'react-native-slideshow';
 import * as styles from './Styles';
@@ -29,7 +30,9 @@ const ImageGrid = (props) => {
             <Pressable
               key={i}
               style={{flex: 1}}
-              onPress={() => Alert.alert('hello')}>
+              onPress={() => {
+                if (modalRef.current) modalRef.current.open();
+              }}>
               <Image
                 source={{uri: val}}
                 resizeMode="stretch"
@@ -43,10 +46,24 @@ const ImageGrid = (props) => {
   };
   const render3Image = (src) => {
     const uriImg1 = src[0];
-    src.shift();
+    const srcImage1 = [src[1], src[2]];
+
     return (
       <View style={styles.stylesImageGrid.container}>
-        <Pressable style={{flex: 1}} onPress={() => Alert.alert('hello')}>
+        <Pressable
+          style={{flex: 1}}
+          onPress={async () => {
+            await modalRef.current.open();
+            if (scrollViewRef.current) {
+              setTimeout(() => {
+                scrollViewRef.current.scrollTo({
+                  x: 0,
+                  animated: false,
+                  y: 0,
+                });
+              }, 1 * 100);
+            }
+          }}>
           <Image
             source={{uri: uriImg1}}
             resizeMode="stretch"
@@ -55,12 +72,23 @@ const ImageGrid = (props) => {
           />
         </Pressable>
         <View style={{flex: 1}}>
-          {src.map((val, i) => {
+          {srcImage1.map((val, i) => {
             return (
               <Pressable
                 key={i}
                 style={{flex: 1}}
-                onPress={() => Alert.alert('hello')}>
+                onPress={async () => {
+                  await modalRef.current.open();
+                  if (scrollViewRef.current) {
+                    setTimeout(() => {
+                      scrollViewRef.current.scrollTo({
+                        x: deviceWidth * (i + 1),
+                        animated: false,
+                        y: 0,
+                      });
+                    }, 1 * 100);
+                  }
+                }}>
                 <Image
                   source={{uri: val}}
                   resizeMode="stretch"
@@ -93,7 +121,9 @@ const ImageGrid = (props) => {
                 }, 1 * 100);
               }
             }}>
-            <Text style={styles.stylesImageGrid.textExtend}>+{srcImage.length - 4}</Text>
+            <Text style={styles.stylesImageGrid.textExtend}>
+              +{srcImage.length - 4}
+            </Text>
           </Pressable>
         ) : (
           <></>
@@ -144,6 +174,7 @@ const ImageGrid = (props) => {
   };
   return (
     <>
+      {console.log(srcImage.length)}
       {srcImage.length <= 2 && render2Image(srcImage)}
       {srcImage.length === 3 && render3Image(srcImage)}
       {srcImage.length >= 4 && render4PlusImage(srcImage)}

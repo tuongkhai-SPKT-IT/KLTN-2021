@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,19 +14,22 @@ import ContentStatus from '../ContentStatus';
 import {useDispatch, useSelector} from 'react-redux';
 import {ReloadHome} from '../Redux/Actions/Home.Action';
 const Home = () => {
-  const history = useHistory();
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      history.goBack();
-      return true;
-    });
-  }, []);
   const dispatch = useDispatch();
   const storeState = useSelector((state) => state.HomePage);
+  const history = useHistory();
+  // const [backHandlerCount, setBackHandlerCount] = useState(0);
 
   useEffect(() => {
     dispatch(ReloadHome());
   }, []);
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+    const paddingToBottom = 20;
+    return (
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom
+    );
+  };
+
   const showstatus = () => {
     var {srcData} = storeState;
     // console.log(srcData);
@@ -44,7 +47,15 @@ const Home = () => {
   };
   return (
     <NativeRouter>
-      <ScrollView>{showstatus()}</ScrollView>
+      <ScrollView
+        onScroll={({nativeEvent}) => {
+          if (isCloseToBottom(nativeEvent)) {
+            console.log(1);
+          }
+        }}
+        scrollEventThrottle={400}>
+        {showstatus()}
+      </ScrollView>
     </NativeRouter>
   );
 };
