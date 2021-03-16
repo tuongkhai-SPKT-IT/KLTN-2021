@@ -3,7 +3,7 @@ import ENV from '../../../env';
 
 class API {
   constructor() {
-    this.domain = 'http://192.168.1.185:8000/api/';
+    this.domain = 'http://172.16.31.13:8000/api/';
     // alert(ENV.API_URL)
   }
   onCallAPI = (method, url, data = {}, params = {}, headers = {}) => {

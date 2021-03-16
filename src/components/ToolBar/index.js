@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { StyleSheet, Text, TextInput, View, Button, Pressable, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
+import React, { useRef, useState, useEffect } from 'react'
+import { StyleSheet, Text, TextInput, View, Button, Pressable, TouchableOpacity,Dimensions, SafeAreaView, ScrollView } from 'react-native'
 import Avatar from '../Avatar'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
@@ -14,9 +14,7 @@ export default function ToolBar() {
     const [enablePost, setEnablePost] = useState(false);
     const [status,setStatus] = useState('');
     const [option,setOption] = useState('pub');
-
     const initRef = useRef(null);
-
     const popUpStatusModal = () => {
         initRef.current.open();
     }
@@ -59,7 +57,9 @@ export default function ToolBar() {
                 >
                     <ScrollView>
                         <View style={styles.popupStatus}>
-                            <View style={styles.popupStatusHeader}>
+                            <View style={[styles.popupStatusHeader,{
+                                position: "relative"
+                            }]}>
                                 <View style={styles.popupStatusHeaderBack}>
                                     <Ionicons name="arrow-back" color="black" size={22} onPress={()=>{
                                         initRef.current.close();
@@ -87,6 +87,7 @@ export default function ToolBar() {
                                     </TouchableOpacity>
                                 </View>
                             </View>
+                            <View style={styles.divider}></View>
                             <View style={styles.popupStatusContent}>
                                 <View style={styles.popupStatusUser}>
                                     <View style={styles.avatarBlock}>
@@ -118,27 +119,22 @@ export default function ToolBar() {
                                         </View>
                                     </View>
                                 </View>
-                                <View style={styles.popupStatusMainContent}>
-                                    <Textarea
-                                        placeholder={'Bạn đang nghĩ gì?'}
-                                        placeholderTextColor={'#c7c7c7'}
-                                        underlineColorAndroid={'transparent'}
-                                        onChangeText={
-                                            setStatus
-                                        }
+                                <View style={[styles.popupStatusMainContent]}>
+                                    <TextInput
+                                        placeholder="Bạn đang nghĩ gì?"
+                                        multiline={true}
+                                        style={{
+                                            height: 530,
+                                            textAlign:"justify",
+                                            textAlignVertical:"top",
+                                            fontSize: 17
+                                        }}
                                         value={status}
+                                        onChangeText={setStatus}
                                     />
                                 </View>
                             </View>
-                            <View style={styles.popupStatusFooter}>
-                                <View style={{
-                                    flex: 1,
-                                    height: "100%"
-                                }}>
-                                    <Text>ABC</Text>
-                                </View>
-                            </View>
-                            <Button style={{ backgroundColor: 'red' }} onPress={() => { initRef.current.close(); setStatus('') }} title="Close" />
+                            {/* <Button style={{ backgroundColor: 'red' }} onPress={() => { initRef.current.close(); setStatus('') }} title="Close" /> */}
                         </View>
                     </ScrollView>
                     
@@ -178,8 +174,9 @@ const styles = StyleSheet.create({
     },
     divider: {
         width: "100%",
-        height: 0.5,
-        backgroundColor: "#F0F0F0"
+        height: 1,
+        backgroundColor: "#f0f0f0",
+        marginTop: 10
     },
     menu: {
         flex: 1,
@@ -216,8 +213,8 @@ const styles = StyleSheet.create({
         marginTop: "auto"
     },
     popupStatusFooter:{
-        flex: 6,
-        backgroundColor: "gray"
+        flex: 1,
+        backgroundColor: "red"
     },
     popupStatusHeaderBack:{
         flex: 1,
@@ -275,5 +272,5 @@ const styles = StyleSheet.create({
     },
     statusOption:{
         flex:1,
-    },
+    }
 })
