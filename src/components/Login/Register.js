@@ -768,7 +768,7 @@ const Register = ({match}) => {
           </View>
 
           <View
-            style={{
+            style={{ 
               width: '100%',
               alignItems: 'center',
               position: 'absolute',

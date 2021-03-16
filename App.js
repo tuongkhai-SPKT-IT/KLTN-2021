@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Login, Home} from './src/components';
 import store from './src/components/Redux/Store';
 import * as myConst from './src/components/Constants';
-import Register from './src/components/Login/Register';
+import Register1 from './src/components/Login/Register1';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 const App = () => {
   var firstStateAll = store.getState();
@@ -31,7 +31,6 @@ const App = () => {
             <Route exact path="/Home" component={Home} />
 
             {/* <Route path="/" component={Home} /> */}
-            <Route exact path="/Register" component={Register} />
           </View>
         </NativeRouter>
       </StoreProvider>

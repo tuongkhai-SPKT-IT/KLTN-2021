@@ -40,6 +40,7 @@ const ContentStatus = (props) => {
       linkProfile: 'facebook.com/tuongkhai191999',
     },
   ];
+  
   return (
     <>
       <View style={styles.stylesIndex.container1}>

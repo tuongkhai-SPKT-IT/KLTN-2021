@@ -10,6 +10,7 @@ export const stylesIndex = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     paddingTop: 10,
+    marginBottom: 10,
   },
 });
 export const stylesImageGrid = StyleSheet.create({
@@ -164,6 +165,7 @@ export const stylesViewLCS = StyleSheet.create({
     borderColor: 'rgba(0,0,0,5)',
     marginBottom: 10,
     borderRadius: 16,
+    alignItems: 'center',
   },
   btnComment: {
     height: 50,
