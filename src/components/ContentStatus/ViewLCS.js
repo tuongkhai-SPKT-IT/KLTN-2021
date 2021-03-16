@@ -126,10 +126,11 @@ export default function ViewLCS(props) {
       // <ScrollView keyboardShouldPersistTaps="handled" style={{flex: 1}}>
       <View style={styles.stylesViewLCS.inputcmtContainer}>
         <TextInput
+          multiline
           ref={textComment}
           onChangeText={(e) => setInputCmt(e)}
           placeholder="Viết 1 bình luận"
-          style={[styles.stylesViewLCS.textCmt]}
+          style={[styles.stylesViewLCS.textCmt, {maxHeight: 100}]}
           value={inputCmt}
         />
 
@@ -202,7 +203,6 @@ export default function ViewLCS(props) {
     <>
       <SwipeDownModal
         modalVisible={visible}
-        //if you don't pass HeaderContent you should pass marginTop in view of ContentModel to Make modal swipeable
         ContentModal={
           <View style={styles.stylesViewLCS.containerContent}>
             {listLike.length > 0 && (
@@ -297,8 +297,8 @@ export default function ViewLCS(props) {
           loadingProps={{animating: true}}
           title="Bình luận"
           onPress={() => {
-            // if (textComment.current) textComment.current.focus();
-            AsyncStorage.clear();
+            if (textComment.current) textComment.current.focus();
+            // AsyncStorage.clear();
           }}
           titleStyle={{
             marginHorizontal: 5,

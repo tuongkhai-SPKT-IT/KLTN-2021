@@ -4,6 +4,7 @@ class API {
   constructor() {
     //this.domain = 'http://localhost:8000/api/';
     this.domain = 'http://192.168.1.109:8000/api/';
+    // this.domain = 'http://192.168.1.109:8000/api/'; //ip  cho ở trường 
   }
   onCallAPI = (method, url, data = {}, params = {}, headers = {}) => {
     return axios({

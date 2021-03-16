@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useRef, useState} from 'react';
+import React, { Component, useEffect, useRef, useState } from 'react';
 import {
   View,
   Image,
@@ -9,14 +9,22 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
+import { Button } from 'react-native-elements';
 import Modal from 'react-native-modalbox';
 import SwipeDownModal from 'react-native-swipe-down';
-
+import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 // import Slideshow from 'react-native-slideshow';
 import * as styles from './Styles';
 const ImageGrid = (props) => {
+  // useEffect(() => {
+  //   modalRef.current.open();
+  // }, []);
   const deviceWidth = Dimensions.get('screen').width;
-  const {srcImage} = props;
+  const deviceHeight = Dimensions.get('screen').height;
+  // const [paging, setPaging] = useState(0);
+  // console.log(paging);
+  const paging = useRef(0);
+  const { srcImage } = props;
   if (srcImage.length === 0) {
     return <></>;
   }
@@ -29,12 +37,12 @@ const ImageGrid = (props) => {
           return (
             <Pressable
               key={i}
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               onPress={() => {
                 if (modalRef.current) modalRef.current.open();
               }}>
               <Image
-                source={{uri: val}}
+                source={{ uri: val }}
                 resizeMode="stretch"
                 style={styles.stylesImageGrid.fullsize}
               />
@@ -51,7 +59,7 @@ const ImageGrid = (props) => {
     return (
       <View style={styles.stylesImageGrid.container}>
         <Pressable
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           onPress={async () => {
             await modalRef.current.open();
             if (scrollViewRef.current) {
@@ -65,18 +73,18 @@ const ImageGrid = (props) => {
             }
           }}>
           <Image
-            source={{uri: uriImg1}}
+            source={{ uri: uriImg1 }}
             resizeMode="stretch"
             resizeMethod="auto"
             style={styles.stylesImageGrid.fullsize}
           />
         </Pressable>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           {srcImage1.map((val, i) => {
             return (
               <Pressable
                 key={i}
-                style={{flex: 1}}
+                style={{ flex: 1 }}
                 onPress={async () => {
                   await modalRef.current.open();
                   if (scrollViewRef.current) {
@@ -90,7 +98,7 @@ const ImageGrid = (props) => {
                   }
                 }}>
                 <Image
-                  source={{uri: val}}
+                  source={{ uri: val }}
                   resizeMode="stretch"
                   resizeMethod="auto"
                   style={styles.stylesImageGrid.fullsize}
@@ -112,6 +120,7 @@ const ImageGrid = (props) => {
             onPress={async () => {
               await modalRef.current.open();
               if (scrollViewRef.current) {
+                paging.current = 3;
                 setTimeout(() => {
                   scrollViewRef.current.scrollTo({
                     x: deviceWidth * 3,
@@ -139,6 +148,8 @@ const ImageGrid = (props) => {
               onPress={async () => {
                 await modalRef.current.open();
                 if (scrollViewRef.current) {
+                  paging.current = i;
+                  console.log(paging.current);
                   setTimeout(() => {
                     scrollViewRef.current.scrollTo({
                       x: deviceWidth * i,
@@ -166,18 +177,19 @@ const ImageGrid = (props) => {
     return (
       <Image
         key={i}
-        source={{uri: item}}
+        source={{ uri: item }}
         resizeMode="contain"
-        style={{width: deviceWidth}}
+        style={{ width: deviceWidth }}
       />
     );
   };
   return (
     <>
-      {console.log(srcImage.length)}
+      {/* {console.log(srcImage.length)} */}
       {srcImage.length <= 2 && render2Image(srcImage)}
       {srcImage.length === 3 && render3Image(srcImage)}
       {srcImage.length >= 4 && render4PlusImage(srcImage)}
+
       <Modal
         position="center"
         coverScreen
@@ -186,8 +198,42 @@ const ImageGrid = (props) => {
         // swipeThreshold={1}
         swipeArea={500}
         ref={modalRef}>
+        {console.log(paging.current)}
+        {paging.current > 0 && <Button
+          buttonStyle={{ width: 50, backgroundColor: 'rgba(0,0,0,1)', height: 50, }}
+          containerStyle={{ margin: 5, position: 'absolute', top: deviceHeight / 2 - 50, left: 0, zIndex: 999 }}
+          icon={<AntDesignIcon name="caretleft" size={25} color="rgba(255,255,255,.5)" />}
+          onPress={() => {
+            console.log(paging.current);
+            paging.current <= 0 ? paging.current = 0 : paging.current--;
+            if (scrollViewRef.current) {
+              scrollViewRef.current.scrollTo({
+                x: deviceWidth * paging.current,
+                animated: false,
+                y: 0,
+              });
+            }
+          }}
+        />}
+        <Button
+          buttonStyle={{ width: 50, backgroundColor: 'rgba(0,0,0,1)', height: 50, }}
+          containerStyle={{ margin: 5, position: 'absolute', top: deviceHeight / 2 - 50, right: 0, zIndex: 999 }}
+          icon={<AntDesignIcon name="caretright" size={25} color="rgba(255,255,255,.5)" />}
+          onPress={() => {
+            console.log(paging.current);
+            paging.current >= srcImage.length - 1 ? paging.current = srcImage.length - 1 : paging.current++;
+            if (scrollViewRef.current) {
+              scrollViewRef.current.scrollTo({
+                x: deviceWidth * paging.current,
+                animated: false,
+                y: 0,
+              });
+            }
+          }}
+        />
         <ScrollView
           ref={scrollViewRef}
+          scrollEnabled={false}
           showsHorizontalScrollIndicator={false}
           snapToInterval={deviceWidth}
           horizontal

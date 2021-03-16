@@ -165,6 +165,7 @@ export const stylesViewLCS = StyleSheet.create({
     borderColor: 'rgba(0,0,0,5)',
     marginBottom: 10,
     borderRadius: 16,
+    alignItems: 'center',
   },
   btnComment: {
     height: 50,
