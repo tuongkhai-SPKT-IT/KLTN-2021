@@ -40,7 +40,7 @@ const ContentStatus = (props) => {
       linkProfile: 'facebook.com/tuongkhai191999',
     },
   ];
-  
+
   return (
     <>
       <View style={styles.stylesIndex.container1}>
@@ -49,7 +49,7 @@ const ContentStatus = (props) => {
           caption={srcData.caption}
           id={srcData.id}
           linkProfile={srcData.no_sign_profile}
-          srcImg={srcData.posted_image}
+          srcImg={srcData.file_uploaded}
           postedTime={srcData.posted_time}
           statusSetting={srcData.status_setting}
           srcAvt={srcData.user_avatar}

@@ -54,13 +54,10 @@ export default function ViewLCS(props) {
         userInfo.current = {...userInfo.current, user_ProLink: val};
       }
     });
-    // console.log(listComment);
   }, []);
   const Like = async () => {
-    // console.log(userToken);
     setLoadding(true);
     if (!liked) {
-      console.log('like nha');
       const route = 'status/update-status';
       const param = {
         status_id: props.index,
@@ -70,7 +67,6 @@ export default function ViewLCS(props) {
         Authorization: 'bearer' + userInfo.current.user_token,
       };
       const api = new API();
-      // console.log(param, route, header);
       setTimeout(() => {
         api
           .onCallAPI('post', route, {}, param, header)
@@ -78,7 +74,6 @@ export default function ViewLCS(props) {
             if (res.data.error_code !== 0) {
               window.alert(res.data.message);
             } else {
-              // console.log(res.data.data);
               setListLike(res.data.data);
               setLiked(true);
               setLoadding(false);
@@ -100,7 +95,6 @@ export default function ViewLCS(props) {
         Authorization: 'bearer' + userInfo.current.user_token,
       };
       const api = new API();
-      // console.log(param, route, header);
       setTimeout(() => {
         api
           .onCallAPI('post', route, {}, param, header)
@@ -109,7 +103,6 @@ export default function ViewLCS(props) {
               window.alert(res.data.message);
             } else {
               setListLike(res.data.data);
-              // console.log(res.data.data);
               setLiked(false);
               setLoadding(false);
               setLikeNumber(likeNumber - 1);

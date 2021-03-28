@@ -82,10 +82,12 @@ export const stylesImageGrid = StyleSheet.create({
 });
 
 export const stylesViewLCS = StyleSheet.create({
-  containerContent: {flex: 1},
+  containerContent: {
+    flex: 1,
+  },
   Modal: {
-    backgroundColor: 'white',
-    marginTop: 0,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
   extendLike: {
     flex: 1,

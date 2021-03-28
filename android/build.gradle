@@ -17,9 +17,7 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-project.ext {
-    excludeAppGlideModule = true
-}
+
 allprojects {
     repositories {
         mavenLocal()
