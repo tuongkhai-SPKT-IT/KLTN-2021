@@ -1,24 +1,48 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ToolBar from '../ToolBar';
 
 export default function AppBar() {
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.row}>
-                    <View style={styles.appName}>
-                        <Text style={styles.appName}>facebook</Text>
+                <View style={styles.containerHeader}>
+                    <View style={styles.row}>
+                        <View style={styles.appName}>
+                            <Text style={styles.appName}>facebook</Text>
+                        </View>
+                        <TouchableOpacity style={styles.button}>
+                            <Feather name="search" size={30} color="black" />
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.button}>
-                        <Feather name="search" size={30} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <MaterialCommunityIcons name="facebook-messenger" size={30} color="black" />
-                    </TouchableOpacity>
+                </View>
+                <View style={styles.containerBody}>
+                    <ScrollView style={styles.scrollView}>
+                        <ToolBar />
+                        <View style={styles.divider}></View>
+                        <ScrollView>
+                            <View style={[styles.statusField, { backgroundColor: "red" }]}></View>
+                            <View style={styles.divider}></View>
+
+                            <View style={{ flex: 1, backgroundColor: "green", width: "100%", height: 300 }}></View>
+                            <View style={styles.divider}></View>
+
+                            <View style={{ flex: 1, backgroundColor: "yellow", width: "100%", height: 300 }}></View>
+                            <View style={styles.divider}></View>
+
+                            <View style={{ flex: 1, backgroundColor: "gray", width: "100%", height: 300 }}></View>
+                            <View style={styles.divider}></View>
+
+                            <View style={{ flex: 1, backgroundColor: "brown", width: "100%", height: 300 }}></View>
+                        </ScrollView>
+
+                    </ScrollView>
                 </View>
             </View>
+            {/* <ToolBar/> */}
         </>
     )
 }
@@ -26,6 +50,14 @@ export default function AppBar() {
 const styles = StyleSheet.create({
     row: {
         flexDirection: 'row'
+    },
+    scrollView:{
+        marginHorizontal:-10
+    },
+    divider: {
+        width: "100%",
+        height: 15,
+        backgroundColor: "#CCCCD2",
     },
     container: {
         width: '100%',
@@ -37,6 +69,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex:1,
         justifyContent: 'space-between',
+        backgroundColor: "#fff"
+    },
+    containerHeader:{
+        flex: 1, width:"100%", backgroundColor: "#fff"
+    },
+    containerBody:{
+        flex: 14, width: "100%" ,backgroundColor: "#fff"
     },
     appName:{
         color: '#3a86e9',
@@ -53,5 +92,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 16
+    },
+    statusField:{
+        flex:1, width: "100%",height: 300
     }
 })

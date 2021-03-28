@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import {NativeRouter, Route, Link, useHistory} from 'react-router-native';
 import React, {Component, useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
@@ -8,6 +9,11 @@ import store from './src/components/Redux/Store';
 import * as myConst from './src/components/Constants';
 import Register from './src/components/Login/Register';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+
+const Tab = createMaterialBottomTabNavigator();
+
 const App = () => {
   var firstStateAll = store.getState();
   const [logged, setLogged] = useState(false);
@@ -22,6 +28,12 @@ const App = () => {
   }, []);
 
   return (
+    // <NavigationContainer>
+    //   <Tab.Navigator>
+    //     <Tab.Screen name="Home" component={HomeScreen} />
+    //     <Tab.Screen name="Settings" component={SettingsScreen} />
+    //   </Tab.Navigator>
+    // </NavigationContainer>
     <SafeAreaProvider>
       <StoreProvider store={store}>
         <NativeRouter>

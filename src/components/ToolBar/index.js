@@ -8,7 +8,7 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import Modal from 'react-native-modalbox';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import DropDownPicker from 'react-native-dropdown-picker';
-import Textarea from 'react-native-textarea';
+import * as StatusServices from '../../services/status';
 
 export default function ToolBar() {
     const [enablePost, setEnablePost] = useState(false);
@@ -18,6 +18,9 @@ export default function ToolBar() {
     const popUpStatusModal = () => {
         initRef.current.open();
     }
+    useEffect(()=>{
+        StatusServices.PostStatus('ssfroms Toolbar async')
+    },[])
     return (
         <View style={styles.container}>
             <View style={styles.row}>
