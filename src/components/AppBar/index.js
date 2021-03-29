@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     scrollView: {
-        marginHorizontal: -10
+        marginHorizontal: -10,
+        flex: 1
     },
     divider: {
         width: "100%",
@@ -99,10 +100,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff"
     },
     containerHeader: {
-        flex: 1, width: "100%", backgroundColor: "#fff"
+        flex: 1, width: "100%", backgroundColor: "#fff",marginBottom: 25
     },
     containerBody: {
-        flex: 14, width: "100%", backgroundColor: "#fff"
+        flex: 18, width: "100%", backgroundColor: "#fff"
     },
     appName: {
         color: '#3a86e9',
