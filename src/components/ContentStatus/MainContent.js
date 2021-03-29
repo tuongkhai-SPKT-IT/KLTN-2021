@@ -28,6 +28,7 @@ const MainContent = (props) => {
         return 'people';
     }
   };
+  console.log(props.srcImg);
   return (
     <>
       <View>

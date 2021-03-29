@@ -1,10 +1,10 @@
 import axios from 'axios';
+import ENV from '../../../env';
 
 class API {
   constructor() {
-    //this.domain = 'http://localhost:8000/api/';
-    this.domain = 'http://192.168.1.109:8000/api/';
-    // this.domain = 'http://192.168.1.109:8000/api/'; //ip  cho ở trường 
+    this.domain = 'http://api.facebook-kltn.alphawolf.io/api/';
+    // alert(ENV.API_URL)
   }
   onCallAPI = (method, url, data = {}, params = {}, headers = {}) => {
     return axios({
