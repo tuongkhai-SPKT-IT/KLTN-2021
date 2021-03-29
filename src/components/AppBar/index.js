@@ -1,11 +1,42 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ToolBar from '../ToolBar';
+import ContentStatus from '../ContentStatus';
+import { useDispatch, useSelector } from 'react-redux';
+import { ReloadHome } from '../Redux/Actions/Home.Action';
 
 export default function AppBar() {
+    const dispatch = useDispatch();
+    const storeState = useSelector((state) => state.HomePage);
+
+    useEffect(() => {
+        dispatch(ReloadHome());
+    }, []);
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 20;
+        return (
+            layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom
+        );
+    };
+    const showstatus = () => {
+        var { srcData } = storeState;
+        // console.log(srcData);
+        if (srcData.length > 0) {
+            {
+                return srcData.map((stt, i) => {
+                    return (
+                        <View key={i} style={{ backgroundColor: 'rgba(0,0,0,.3)' }}>
+                            <ContentStatus srcData={stt} />
+                        </View>
+                    );
+                });
+            }
+        } else console.log(srcData);
+    };
     return (
         <>
             <View style={styles.container}>
@@ -23,20 +54,16 @@ export default function AppBar() {
                     <ScrollView style={styles.scrollView}>
                         <ToolBar />
                         <View style={styles.divider}></View>
-                        <ScrollView>
-                            <View style={[styles.statusField, { backgroundColor: "red" }]}></View>
-                            <View style={styles.divider}></View>
+                        <ScrollView
+                            onScroll={({ nativeEvent }) => {
+                                if (isCloseToBottom(nativeEvent)) {
+                                    console.log(1);
+                                }
+                            }}
+                            scrollEventThrottle={400}
+                        >
+                            {showstatus()}
 
-                            <View style={{ flex: 1, backgroundColor: "green", width: "100%", height: 300 }}></View>
-                            <View style={styles.divider}></View>
-
-                            <View style={{ flex: 1, backgroundColor: "yellow", width: "100%", height: 300 }}></View>
-                            <View style={styles.divider}></View>
-
-                            <View style={{ flex: 1, backgroundColor: "gray", width: "100%", height: 300 }}></View>
-                            <View style={styles.divider}></View>
-
-                            <View style={{ flex: 1, backgroundColor: "brown", width: "100%", height: 300 }}></View>
                         </ScrollView>
 
                     </ScrollView>
@@ -51,8 +78,8 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row'
     },
-    scrollView:{
-        marginHorizontal:-10
+    scrollView: {
+        marginHorizontal: -10
     },
     divider: {
         width: "100%",
@@ -67,17 +94,17 @@ const styles = StyleSheet.create({
         paddingLeft: 11,
         paddingRight: 11,
         alignItems: 'center',
-        flex:1,
+        flex: 1,
         justifyContent: 'space-between',
         backgroundColor: "#fff"
     },
-    containerHeader:{
-        flex: 1, width:"100%", backgroundColor: "#fff"
+    containerHeader: {
+        flex: 1, width: "100%", backgroundColor: "#fff"
     },
-    containerBody:{
-        flex: 14, width: "100%" ,backgroundColor: "#fff"
+    containerBody: {
+        flex: 14, width: "100%", backgroundColor: "#fff"
     },
-    appName:{
+    appName: {
         color: '#3a86e9',
         fontSize: 30,
         fontWeight: 'bold',
@@ -86,14 +113,14 @@ const styles = StyleSheet.create({
     },
     button: {
         width: 42,
-        height:42,
+        height: 42,
         borderRadius: 21,
         backgroundColor: '#EEEEEE',
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 16
     },
-    statusField:{
-        flex:1, width: "100%",height: 300
+    statusField: {
+        flex: 1, width: "100%", height: 300
     }
 })

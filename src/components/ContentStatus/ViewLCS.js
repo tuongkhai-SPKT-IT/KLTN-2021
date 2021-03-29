@@ -246,7 +246,7 @@ export default function ViewLCS(props) {
           }}
           style={styles.stylesViewLCS.iconLike}>
           <View style={styles.stylesViewLCS.viewIcon}>
-            <AntDesignIcon name="like1" size={15} color="white" />
+            <AntDesignIcon name="like1" size={12} color="white" />
           </View>
           <Text style={styles.stylesViewLCS.likeNumber}>{listLike.length}</Text>
         </Pressable>
@@ -270,8 +270,7 @@ export default function ViewLCS(props) {
           titleStyle={[
             {
               marginHorizontal: 5,
-              fontSize: 18,
-              fontWeight: 'bold',
+              fontSize: 16,
             },
             liked ? {color: 'blue'} : {color: 'rgba(0,0,0,.6)'},
           ]}
@@ -296,8 +295,7 @@ export default function ViewLCS(props) {
           titleStyle={{
             marginHorizontal: 5,
             color: 'rgba(0,0,0,.6)',
-            fontSize: 18,
-            fontWeight: 'bold',
+            fontSize: 16
           }}
         />
       </View>

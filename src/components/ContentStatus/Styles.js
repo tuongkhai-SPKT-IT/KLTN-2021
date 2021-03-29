@@ -88,6 +88,8 @@ export const stylesViewLCS = StyleSheet.create({
   Modal: {
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
+    marginTop: 0,
+    backgroundColor: "#fff"
   },
   extendLike: {
     flex: 1,
@@ -134,25 +136,23 @@ export const stylesViewLCS = StyleSheet.create({
 
   viewIcon: {
     borderRadius: 100,
-    width: 25,
-    height: 25,
+    width: 20,
+    height: 20,
     backgroundColor: 'blue',
     justifyContent: 'center',
     alignItems: 'center',
   },
   likeNumber: {
     color: 'rgba(0,0,0,.6)',
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 16,
     marginLeft: 5,
   },
   viewBtn: {
     flexDirection: 'row',
     flex: 1,
     marginVertical: 10,
-    paddingVertical: 5,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
     borderColor: 'rgba(0,0,0,.6)',
   },
   textCmt: {
