@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, useEffect} from 'react';
 import {
@@ -61,8 +62,7 @@ const Home = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    marginTop: 25,
-    padding: 10,
+    flex: 1,
   },
   header: {
     fontSize: 20,
