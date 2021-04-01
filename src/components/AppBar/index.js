@@ -24,7 +24,6 @@ export default function AppBar() {
     };
     const showstatus = () => {
         var { srcData } = storeState;
-        // console.log(srcData);
         if (srcData.length > 0) {
             {
                 return srcData.map((stt, i) => {
@@ -35,7 +34,12 @@ export default function AppBar() {
                     );
                 });
             }
-        } else console.log(srcData);
+        } else {
+            return (
+                <Text style={{
+                }}>Không có tin tức nào!!</Text>
+            )
+        };
     };
     return (
         <>

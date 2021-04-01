@@ -9,25 +9,60 @@ import Modal from 'react-native-modalbox';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as StatusServices from '../../services/status';
+import { useDispatch, useSelector } from 'react-redux';
+import { ReloadHome } from '../Redux/Actions/Home.Action';
+
 
 export default function ToolBar() {
+    const dispatch = useDispatch();
+    const storeState = useSelector((state) => state.HomePage);
+
     const [enablePost, setEnablePost] = useState(false);
     const [status,setStatus] = useState('');
     const [option,setOption] = useState('pub');
+    const [isReload, setIsReload] = useState(false)
+    const [isPostStatus,setIsPostStatus] = useState(false)
+
     const initRef = useRef(null);
+
+    useEffect(() => {
+        if(isPostStatus === true){
+            dispatch(ReloadHome());
+            setIsReload(false);
+            setIsPostStatus(false);
+        }
+    }, [isReload]);
+
     const popUpStatusModal = () => {
         initRef.current.open();
     }
-    useEffect(()=>{
-        StatusServices.PostStatus('ssfroms Toolbar async')
-    },[])
+
+    const postStatus = async () => {
+        if(status && option){
+            let params = {
+                caption: status,
+                status_setting: option
+            }
+
+            const upStatusResponse = await StatusServices.PostStatus(params);
+
+            if(upStatusResponse.status){
+                setIsPostStatus(true);
+                setIsReload(true);
+                initRef.current.close();
+            }else{
+                alert('Không thể đăng tin!! Vui lòng thử lại sau.')
+            }
+        }
+    }
+    
     return (
         <View style={styles.container}>
             <View style={styles.row}>
                 <View style={{ marginRight: 10 }}>
                     <Avatar
                         isHomePage = {true}
-                        source="https://scontent.fsgn2-1.fna.fbcdn.net/v/t1.0-9/149073172_1859273204249215_4116523381875818269_o.jpg?_nc_cat=107&ccb=3&_nc_sid=09cbfe&_nc_ohc=IDteYGmxQfwAX9agsYE&_nc_ht=scontent.fsgn2-1.fna&oh=844b3a40ff72c2764e1f4f39a8c62e1d&oe=606449C9"
+                        source="http://api.facebook-kltn.alphawolf.io/image/wxfeE5ltE7M33jldQWtB6EmTpjsMi8.jpg"
                     />
                 </View>
                 <Pressable style={styles.input} onPress={()=>popUpStatusModal()}>
@@ -79,6 +114,7 @@ export default function ToolBar() {
                                         style={[styles.submitButton, {
                                             backgroundColor: status === '' ? '#EEEEEE' : '#1058B0'
                                         }]}
+                                        onPress={()=>{postStatus()}}
                                     >
                                         <Text
                                             style={{
@@ -96,7 +132,7 @@ export default function ToolBar() {
                                     <View style={styles.avatarBlock}>
                                         <Avatar
                                             isHomePage={false}
-                                            source="https://scontent.fsgn2-1.fna.fbcdn.net/v/t1.0-9/149073172_1859273204249215_4116523381875818269_o.jpg?_nc_cat=107&ccb=3&_nc_sid=09cbfe&_nc_ohc=IDteYGmxQfwAX9agsYE&_nc_ht=scontent.fsgn2-1.fna&oh=844b3a40ff72c2764e1f4f39a8c62e1d&oe=606449C9"
+                                            source="http://api.facebook-kltn.alphawolf.io/image/wxfeE5ltE7M33jldQWtB6EmTpjsMi8.jpg"
                                         />
                                     </View>
                                     <View style={styles.statusUserRestBlock}>
