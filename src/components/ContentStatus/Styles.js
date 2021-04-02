@@ -19,6 +19,8 @@ export const stylesImageGrid = StyleSheet.create({
     flexWrap: 'wrap',
     width: '100%',
     height: 540,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   fullsize: {width: '100%', height: '100%'},
   boxExtend: {
@@ -89,7 +91,7 @@ export const stylesViewLCS = StyleSheet.create({
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     marginTop: 0,
-    backgroundColor: "#fff"
+    backgroundColor: '#fff',
   },
   extendLike: {
     flex: 1,

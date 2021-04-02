@@ -9,8 +9,8 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
+import Video from 'react-native-video';
 import {Button} from 'react-native-elements';
-// import Video from 'react-native-video';
 import SwipeDownModal from 'react-native-swipe-down';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 // import Slideshow from 'react-native-slideshow';
@@ -38,6 +38,7 @@ const ImageGrid = (props) => {
               key={i}
               style={{flex: 1}}
               onPress={() => {
+                setVisible(true);
                 // if (modalRef.current) modalRef.current.open();
               }}>
               <Image
@@ -47,7 +48,16 @@ const ImageGrid = (props) => {
               />
             </Pressable>
           ) : (
-            <></>
+            <>
+              <Pressable key={i} style={{flex: 1}}>
+                <Video
+                  controls
+                  resizeMode="contain"
+                  source={{uri: val.uri}}
+                  style={styles.stylesImageGrid.fullsize}
+                />
+              </Pressable>
+            </>
           );
         })}
       </View>
@@ -61,8 +71,8 @@ const ImageGrid = (props) => {
       <View style={styles.stylesImageGrid.container}>
         <Pressable
           style={{flex: 1}}
-          
           onPress={async () => {
+            setVisible(true);
             // await modalRef.current.open();
             if (scrollViewRef.current) {
               setTimeout(() => {
@@ -121,7 +131,7 @@ const ImageGrid = (props) => {
             style={styles.stylesImageGrid.boxExtend}
             onPress={async () => {
               // await modalRef.current.open();
-              // setVisible(true);
+              setVisible(true);
               console.log(scrollViewRef.current);
               // console.log(scrollViewRef.current);
               if (scrollViewRef.current) {
