@@ -28,7 +28,7 @@ const MainContent = (props) => {
         return 'people';
     }
   };
-  console.log(props.srcImg);
+  // console.log(props.srcImg);
   return (
     <>
       <View>
@@ -41,7 +41,10 @@ const MainContent = (props) => {
           />
           <View style={{flex: 1}}>
             <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-              {props.userName}
+              {props.userName}&nbsp;
+              <Text style={{fontWeight: 'normal'}}>
+                {props.header ? props.header : ''}
+              </Text>
             </Text>
             <View style={{flexDirection: 'row'}}>
               <Text
@@ -77,7 +80,7 @@ const MainContent = (props) => {
           />
         </View>
         <Text style={styles.captionText}>
-          {props.caption ? props.caption : props.header}
+          {props.caption ? props.caption : ''}
         </Text>
         <ImageGrid ref={props.ref} srcImage={props.srcImg} />
       </View>
