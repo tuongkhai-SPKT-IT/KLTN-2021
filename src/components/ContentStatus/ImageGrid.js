@@ -10,11 +10,16 @@ import {
   Dimensions,
 } from 'react-native';
 import Video from 'react-native-video';
+import VideoPlayer from './Video.Native.js';
 import {Button} from 'react-native-elements';
 import SwipeDownModal from 'react-native-swipe-down';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import Modal from 'react-native-modal';
+
 // import Slideshow from 'react-native-slideshow';
 import * as styles from './Styles';
+import VideoNative from './Video.Native.js';
 const ImageGrid = (props) => {
   // useEffect(() => {
   //   modalRef.current.open();
@@ -32,32 +37,68 @@ const ImageGrid = (props) => {
   const render2File = (src) => {
     return (
       <View style={styles.stylesImageGrid.container}>
-        {src.map((val, i) => {
-          return val.type === 'image' ? (
+        {src.map((media, i) => {
+          return media.type === 'image' ? (
             <Pressable
               key={i}
               style={{flex: 1}}
               onPress={() => {
                 setVisible(true);
-                // if (modalRef.current) modalRef.current.open();
+                setTimeout(() => {
+                  // console.log(scrollViewRef.current);
+                  if (scrollViewRef.current) {
+                    paging.current = i;
+                    scrollViewRef.current.scrollTo({
+                      x: deviceWidth * i,
+                      animated: false,
+                      y: 0,
+                    });
+                  }
+                }, 1 * 10);
               }}>
               <Image
-                source={{uri: val.uri}}
+                source={{uri: media.uri}}
                 resizeMode="stretch"
                 style={styles.stylesImageGrid.fullsize}
               />
             </Pressable>
           ) : (
-            <>
-              <Pressable key={i} style={{flex: 1}}>
-                <Video
-                  controls
-                  resizeMode="contain"
-                  source={{uri: val.uri}}
-                  style={styles.stylesImageGrid.fullsize}
-                />
+            <View style={{flex: 1}} key={i}>
+              <Pressable
+                style={{
+                  backgroundColor: 'red',
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  setVisible(true);
+                  setTimeout(() => {
+                    // console.log(scrollViewRef.current);
+                    if (scrollViewRef.current) {
+                      paging.current = i;
+                      scrollViewRef.current.scrollTo({
+                        x: deviceWidth * i,
+                        animated: false,
+                        y: 0,
+                      });
+                    }
+                  }, 1 * 10);
+                }}>
+                <View
+                  style={{
+                    backgroundColor: 'rgba(0,0,0,.7)',
+                    width: 50,
+                    height: 50,
+                    borderRadius: 25,
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                  }}>
+                  <FontAwesomeIcon name="play" size={30} color="white" />
+                </View>
               </Pressable>
-            </>
+            </View>
           );
         })}
       </View>
@@ -69,28 +110,57 @@ const ImageGrid = (props) => {
 
     return (
       <View style={styles.stylesImageGrid.container}>
-        <Pressable
-          style={{flex: 1}}
-          onPress={async () => {
-            setVisible(true);
-            // await modalRef.current.open();
-            if (scrollViewRef.current) {
-              setTimeout(() => {
-                scrollViewRef.current.scrollTo({
-                  x: 0,
-                  animated: false,
-                  y: 0,
-                });
-              }, 1 * 100);
-            }
-          }}>
-          <Image
-            source={{uri: uriImg1.uri}}
-            resizeMode="stretch"
-            resizeMethod="auto"
-            style={styles.stylesImageGrid.fullsize}
-          />
-        </Pressable>
+        {uriImg1.type === 'image' ? (
+          <Pressable
+            key={-1}
+            style={{flex: 1}}
+            onPress={async () => {
+              setVisible(true);
+              // await modalRef.current.open();
+              if (scrollViewRef.current) {
+                setTimeout(() => {
+                  scrollViewRef.current.scrollTo({
+                    x: 0,
+                    animated: false,
+                    y: 0,
+                  });
+                }, 1 * 100);
+              }
+            }}>
+            <Image
+              source={{uri: uriImg1.uri}}
+              resizeMode="stretch"
+              resizeMethod="auto"
+              style={styles.stylesImageGrid.fullsize}
+            />
+          </Pressable>
+        ) : (
+          <Pressable
+            style={{flex: 1}}
+            onPress={async () => {
+              setVisible(true);
+              // await modalRef.current.open();
+              if (scrollViewRef.current) {
+                setTimeout(() => {
+                  scrollViewRef.current.scrollTo({
+                    x: 0,
+                    animated: false,
+                    y: 0,
+                  });
+                }, 1 * 100);
+              }
+            }}>
+            <VideoPlayer source={uriImg1.uri} />
+
+            {/* <Video
+              paused={true}
+              controls
+              resizeMode="contain"
+              source={{uri: uriImg1.uri}}
+              style={styles.stylesImageGrid.fullsize}
+            /> */}
+          </Pressable>
+        )}
         <View style={{flex: 1}}>
           {srcImage1.map((val, i) => {
             return (
@@ -132,7 +202,7 @@ const ImageGrid = (props) => {
             onPress={async () => {
               // await modalRef.current.open();
               setVisible(true);
-              console.log(scrollViewRef.current);
+              // console.log(scrollViewRef.current);
               // console.log(scrollViewRef.current);
               if (scrollViewRef.current) {
                 paging.current = 3;
@@ -162,7 +232,7 @@ const ImageGrid = (props) => {
                 // await modalRef.current.open();
                 setVisible(true);
                 setTimeout(() => {
-                  console.log(scrollViewRef.current);
+                  // console.log(scrollViewRef.current);
                   if (scrollViewRef.current) {
                     paging.current = i;
                     scrollViewRef.current.scrollTo({
@@ -177,7 +247,7 @@ const ImageGrid = (props) => {
                 resizeMode="stretch"
                 style={styles.stylesImageGrid.fullsize}
                 source={{
-                  uri: val,
+                  uri: val.uri,
                 }}
               />
             </Pressable>
@@ -186,15 +256,16 @@ const ImageGrid = (props) => {
       </View>
     );
   };
-
   const ImageScroll = (item, i) => {
-    return (
+    return item.type === 'image' ? (
       <Image
         key={i}
         source={{uri: item.uri}}
         resizeMode="contain"
-        style={{width: deviceWidth}}
+        style={{width: '100%'}}
       />
+    ) : (
+      <VideoNative key={i} source={item.uri} style={{width: '100%'}} />
     );
   };
   const [visible, setVisible] = useState(false);
@@ -203,94 +274,37 @@ const ImageGrid = (props) => {
       {srcImage.length <= 2 && render2File(srcImage)}
       {srcImage.length === 3 && render3File(srcImage)}
       {srcImage.length >= 4 && render4PlusFile(srcImage)}
-      <SwipeDownModal
-        modalVisible={visible}
-        ContentModal={
-          <>
-            <Button
-              buttonStyle={{
-                width: deviceWidth / 2,
-                backgroundColor: 'transparent',
-                height: deviceHeight,
-              }}
-              containerStyle={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                zIndex: 999,
-              }}
-              icon={
-                <AntDesignIcon name="caretleft" size={25} color="transparent" />
-              }
-              onPress={() => {
-                paging.current <= 0 ? (paging.current = 0) : paging.current--;
-                if (scrollViewRef.current) {
-                  scrollViewRef.current.scrollTo({
-                    x: deviceWidth * paging.current,
-                    animated: false,
-                    y: 0,
-                  });
-                }
-              }}
-            />
-            <Button
-              buttonStyle={{
-                width: deviceWidth / 2,
-                backgroundColor: 'transparent',
-                height: deviceHeight,
-              }}
-              containerStyle={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                zIndex: 999,
-              }}
-              type="solid"
-              icon={
-                <AntDesignIcon
-                  name="caretright"
-                  size={25}
-                  color="transparent"
-                />
-              }
-              onPress={() => {
-                paging.current >= srcImage.length - 1
-                  ? (paging.current = srcImage.length - 1)
-                  : paging.current++;
-                if (scrollViewRef.current) {
-                  scrollViewRef.current.scrollTo({
-                    x: deviceWidth * paging.current,
-                    animated: false,
-                    y: 0,
-                  });
-                }
-              }}
-            />
-            <ScrollView
-              ref={scrollViewRef}
-              scrollEnabled={false}
-              showsHorizontalScrollIndicator={false}
-              snapToInterval={deviceWidth}
-              horizontal
-              decelerationRate="fast">
-              {srcImage.map(ImageScroll)}
-            </ScrollView>
-          </>
-        }
-        ContentModalStyle={styles.stylesViewLCS.Modal}
-        onClose={() => {
-          setVisible(false);
+
+      <Modal
+        isVisible={visible}
+        animationIn="slideInUp"
+        onBackButtonPress={() => setVisible(false)}
+        animationOut="slideOutDown"
+        swipeDirection={['up', 'down']}
+        swipeThreshold={150}
+        // backdropColor="white"
+        // backdropOpacity={1}
+        onSwipeComplete={() => setVisible(false)}
+        onBackdropPress={() => setVisible(false)}
+        onSwipeCancel={() => setVisible(true)}
+        style={{
+          backgroundColor: 'white',
+          margin: 0,
+          height: 150,
         }}
-      />
-      {/* <Video /> */}
-      {/* <Modal
-        position="center"
-        coverScreen
-        backButtonClose
-        // swipeToClose={false}
-        // swipeThreshold={1}
-        swipeArea={deviceHeight}
-        ref={modalRef}></Modal> */}
+        scrollHorizontal>
+        <ScrollView
+          onScroll={(e) => console.log(e.nativeEvent)}
+          ref={scrollViewRef}
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={Dimensions.get('screen').width}
+          horizontal
+          decelerationRate="fast">
+          {srcImage.map(ImageScroll)}
+        </ScrollView>
+      </Modal>
+
+      {/* <VideoPlayer source="http://api.facebook-kltn.alphawolf.io/video/vqXpEe8Vm5UBMKAB2fmxZASICyzgqS.mp4" /> */}
     </>
   );
 };

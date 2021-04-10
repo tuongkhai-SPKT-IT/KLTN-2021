@@ -8,7 +8,6 @@ export const stylesIndex = StyleSheet.create({
   },
   container1: {
     backgroundColor: 'white',
-    borderWidth: 1,
     paddingTop: 10,
     marginBottom: 10,
   },
@@ -21,6 +20,7 @@ export const stylesImageGrid = StyleSheet.create({
     height: 540,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
   },
   fullsize: {width: '100%', height: '100%'},
   boxExtend: {
@@ -176,5 +176,31 @@ export const stylesViewLCS = StyleSheet.create({
     justifyContent: 'center',
     width: 38,
     alignItems: 'center',
+  },
+});
+export const VideoNative = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 250,
+  },
+  controls: {
+    backgroundColor: 'rgba(0,0,0,.5)',
+    height: 48,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    position: 'absolute',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    // paddingHorizontal: 10,
+    paddingLeft: 5,
+  },
+  mainButton: {
+    marginRight: 15,
+  },
+  duration: {
+    color: 'white',
+    marginLeft: 15,
   },
 });
