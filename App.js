@@ -11,6 +11,7 @@ import Register1 from './src/components/Login/Register1';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -36,15 +37,17 @@ const App = () => {
     // </NavigationContainer>
     <SafeAreaProvider>
       <StoreProvider store={store}>
-        <NativeRouter>
-          <View style={{height: '100%'}}>
-            {/* <Register /> */}
-            <Route exact path="/" component={Login} />
-            <Route exact path="/Home" component={Home} />
+        <PaperProvider>
+          <NativeRouter>
+            <View style={{ height: '100%' }}>
+              {/* <Register /> */}
+              <Route exact path="/" component={Login} />
+              <Route exact path="/Home" component={Home} />
 
-            {/* <Route path="/" component={Home} /> */}
-          </View>
-        </NativeRouter>
+              {/* <Route path="/" component={Home} /> */}
+            </View>
+          </NativeRouter>
+        </PaperProvider>
       </StoreProvider>
     </SafeAreaProvider>
   );

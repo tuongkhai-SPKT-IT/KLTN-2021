@@ -79,7 +79,7 @@ const MainContent = (props) => {
         <Text style={styles.captionText}>
           {props.caption ? props.caption : props.header}
         </Text>
-        <ImageGrid ref={props.ref} srcImage={props.srcImg} />
+        {/* <ImageGrid ref={props.ref} srcImage={props.srcImg} /> */}
       </View>
     </>
   );
