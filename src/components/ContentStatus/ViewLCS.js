@@ -289,13 +289,14 @@ export default function ViewLCS(props) {
           loadingProps={{animating: true}}
           title="Bình luận"
           onPress={() => {
-            if (textComment.current) textComment.current.focus();
-            // AsyncStorage.clear();
+            // if (textComment.current) textComment.current.focus();
+            AsyncStorage.clear();
+            // history.back();
           }}
           titleStyle={{
             marginHorizontal: 5,
             color: 'rgba(0,0,0,.6)',
-            fontSize: 16
+            fontSize: 16,
           }}
         />
       </View>

@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 const Register = ({ navigation }) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [formData, setformData] = useState({
+  const [formData, setformData] = useState({ 
     password: '',
     email: '',
     phone: '',
