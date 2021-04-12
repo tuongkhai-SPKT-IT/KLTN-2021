@@ -71,7 +71,7 @@ const Home = () => {
                   );
                 },
               }}
-              component={Profile}
+              component={AppBar}
             />
             <Tab.Screen
               name="Notifications"

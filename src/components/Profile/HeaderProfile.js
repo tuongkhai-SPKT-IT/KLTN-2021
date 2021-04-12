@@ -13,13 +13,14 @@ export default function HeaderProfile(props) {
   const [declarePopUp, setDeclarePopUp] = useState(true);
   //true: avatar, false: cover props.imgPopup
   useEffect(() => {
-    console.log(userInfo);
-    const temp = {
-      avatar: userInfo.information[0].value,
-      cover: userInfo.information[1].value,
-    };
-    setImageProfile({...temp});
-  }, [userInfo]);
+    if (userInfo.information) {
+      const temp = {
+        avatar: userInfo.information[0].value,
+        cover: userInfo.information[1].value,
+      };
+      setImageProfile({...temp});
+    }
+  }, [userInfo.information]);
   const buttonUpImg = (name) => {
     return (
       <Button
@@ -76,6 +77,7 @@ export default function HeaderProfile(props) {
           />
         </View>
       </Modal>
+
       <View
         style={{
           justifyContent: 'center',
@@ -96,11 +98,12 @@ export default function HeaderProfile(props) {
             resizeMode="stretch"
           />
         </Pressable>
+
         <Avatar
           containerStyle={{
             position: 'absolute',
             left: (Dimensions.get('screen').width - 150) * 0.5,
-            top: Dimensions.get('screen').height * 0.18,
+            bottom: -50,
             zIndex: 999,
           }}
           onLongPress={() => alert('onLongPress')}
@@ -113,10 +116,8 @@ export default function HeaderProfile(props) {
           source={{uri: imageProfile.avatar}}>
           {buttonUpImg('avatar')}
         </Avatar>
-
         {buttonUpImg('cover')}
       </View>
-     
     </>
   );
 }
