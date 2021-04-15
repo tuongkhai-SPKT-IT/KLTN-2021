@@ -29,15 +29,35 @@ export default function AppBar() {
     //     caption: '1 hình 1 video',
     //     created_at: [],
     //     file_uploaded: [
+    //       // {
+    //       //   type: 'video',
+    //       //   uri:
+    //       //     'http://api.facebook-kltn.alphawolf.io/video/vqXpEe8Vm5UBMKAB2fmxZASICyzgqS.mp4',
+    //       // },
     //       {
     //         type: 'image',
     //         uri:
     //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
     //       },
     //       {
-    //         type: 'video',
+    //         type: 'image',
     //         uri:
-    //           'http://api.facebook-kltn.alphawolf.io/video/vqXpEe8Vm5UBMKAB2fmxZASICyzgqS.mp4',
+    //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
+    //       },
+    //       {
+    //         type: 'image',
+    //         uri:
+    //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
+    //       },
+    //       {
+    //         type: 'image',
+    //         uri:
+    //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
+    //       },
+    //       {
+    //         type: 'image',
+    //         uri:
+    //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
     //       },
     //     ],
     //     id: '606ef522e1f7bd56b33d4708',
@@ -85,6 +105,8 @@ export default function AppBar() {
             <ToolBar />
             <View style={styles.divider}></View>
             <ScrollView
+              keyboardDismissMode="on-drag"
+              keyboardShouldPersistTaps="handled"
               onScroll={({nativeEvent}) => {
                 if (isCloseToBottom(nativeEvent)) {
                   console.log(1);

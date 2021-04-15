@@ -1,7 +1,6 @@
 import React, {Component, useState, useEffect, useRef} from 'react';
 import Register from './Register';
 import * as storeKeys from '../Constants';
-import Modal from 'react-native-modalbox';
 import {Login_Request} from '../Redux/Actions/Login.Action';
 import {
   StyleSheet,
@@ -15,19 +14,19 @@ import {
   Keyboard,
   ScrollView,
   Alert,
-  Button,
 } from 'react-native';
+import {Button} from 'react-native-elements';
 import {useSelector, useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useHistory} from 'react-router-native';
+import Modal from 'react-native-modal';
+
 import API from '../API/API';
 const Login = ({navigation}) => {
   const [Account, setAccount] = useState('');
   const [Password, setPassword] = useState('');
   const [phone_verified, setPhoneVerified] = useState('');
-  const [focused, setFocused] = useState(false);
-
-  const initRef = useRef(null);
+  const [visible, setVisible] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
   const storeState = useSelector((state) => state.login);
@@ -61,14 +60,11 @@ const Login = ({navigation}) => {
   });
   useEffect(() => {
     if (storeState.err_code === 'Phone is not verifed') {
-      initRef.current.open();
+      setVisible(true);
     }
   }, [storeState]);
   const _Register = () => {
     navigation.navigate('Register');
-    // history.push('/Register');
-    // history.goBack();
-    // await AsyncStorage.clear()
   };
   const CheckSDT = () => {
     var route = 'user/update/info';
@@ -85,6 +81,7 @@ const Login = ({navigation}) => {
           Alert.alert(res.data.message);
         } else {
           Alert.alert('Đã xác thực otp');
+          setVisible(false);
           _Login();
         }
       })
@@ -106,105 +103,98 @@ const Login = ({navigation}) => {
 
   return (
     <>
-      <View style={styles.View1}>
-        {/* <Register /> */}
-        <Modal
-          position="center"
-          swipeToClose={false}
-          backdropPressToClose={false}
+      {storeState.authentication && (
+        <View
           style={{
-            flexDirection: 'column',
-            width: '85%',
-            backgroundColor: 'white',
-            height: '35%',
-          }}
-          ref={initRef}>
-          <View style={{flex: 1}}>
-            <View
-              style={{
-                backgroundColor: 'white',
-                alignItems: 'center',
-                padding: 5,
-              }}>
-              <Text style={{fontSize: 20, fontWeight: 'bold'}}>Thông báo</Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: '800',
-                  textAlign: 'center',
-                }}>
-                Bạn phải nhập OTP được gửi vào email bạn đã dùng để đăng ký
-              </Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: 'white',
-                alignItems: 'center',
-              }}>
-              <TextInput
-                autoCapitalize="none"
-                autoCompleteType="off"
-                placeholderTextColor="rgba(0,0,0,.5)"
-                onFocus={() => setFocused(true)}
-                onEndEditing={() => setFocused(false)}
-                style={{
-                  fontSize: 15,
-                  borderTopWidth: 1,
-                  borderBottomWidth: 1,
-                  paddingLeft: 10,
-                  borderTopColor: 'rgba(0,0,0,.5)',
-                  borderBottomColor: 'rgba(0,0,0,.5)',
-                  width: '100%',
-                  marginVertical: 10,
-                }}
-                onChangeText={(otp) => setPhoneVerified(otp)}
-                placeholder="Mã OTP"
-              />
-              {!focused && (
-                <View
-                  style={[
-                    {
-                      width: '80%',
-                    },
-                  ]}>
-                  <Button
-                    onPress={() => {
-                      initRef.current.close();
-                      CheckSDT();
-                    }}
-                    color="#1877F2"
-                    title="OK"
-                  />
-                </View>
-              )}
-            </View>
-          </View>
-        </Modal>
-
-        {storeState.authentication && (
+            justifyContent: 'center',
+            alignContent: 'center',
+            backgroundColor: '#1877F2',
+            width: 150,
+            height: 150,
+            zIndex: 999,
+            position: 'absolute',
+            top: '30%',
+            alignSelf: 'center',
+          }}>
+          <ActivityIndicator size="large" color="white" />
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: 'white',
+            }}>
+            Đang xác thực
+          </Text>
+        </View>
+      )}
+      <Modal
+        isVisible={visible}
+        // swipeDirection={['up', 'down', 'left', 'right']}
+        backdropOpacity={0.5}
+        animationIn="zoomInDown"
+        onBackdropPress={() => setVisible(false)}
+        animationOut="zoomOutUp"
+        animationInTiming={600}
+        animationOutTiming={600}
+        hideModalContentWhileAnimating
+        avoidKeyboard
+        style={{margin: 0}}>
+        <View style={{width: '100%'}}>
           <View
             style={{
-              justifyContent: 'center',
-              alignContent: 'center',
-              backgroundColor: '#1877F2',
-              width: 150,
-              height: 150,
-              zIndex: 999,
-              position: 'absolute',
-              top: '30%',
+              backgroundColor: 'white',
+              alignItems: 'center',
+              padding: 5,
             }}>
-            <ActivityIndicator size="large" color="white" />
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Thông báo</Text>
             <Text
               style={{
+                fontSize: 20,
+                fontWeight: '800',
                 textAlign: 'center',
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: 'white',
               }}>
-              Đang xác thực
+              Bạn phải nhập OTP được gửi vào email bạn đã dùng để đăng ký
             </Text>
           </View>
-        )}
+          <View
+            style={{
+              backgroundColor: 'white',
+              alignItems: 'center',
+            }}>
+            <TextInput
+              autoCapitalize="none"
+              autoCompleteType="off"
+              placeholderTextColor="rgba(0,0,0,.5)"
+              style={{
+                fontSize: 15,
+                borderTopWidth: 1,
+                borderBottomWidth: 1,
+                paddingLeft: 10,
+                borderTopColor: 'rgba(0,0,0,.5)',
+                borderBottomColor: 'rgba(0,0,0,.5)',
+                width: '100%',
+                marginVertical: 10,
+              }}
+              onChangeText={(otp) => setPhoneVerified(otp)}
+              placeholder="Mã OTP"
+            />
+            <Button
+              buttonStyle={{width: 150}}
+              containerStyle={{margin: 5}}
+              disabledTitleStyle={{color: '#00F'}}
+              onPress={() => {
+                CheckSDT();
+              }}
+              title="Xác nhận"
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <ScrollView style={styles.View1}>
+        {/* <Register /> */}
+
         <View
           style={[
             styles.View2,
@@ -279,6 +269,7 @@ const Login = ({navigation}) => {
             width: '80%',
             marginVertical: 15,
             marginTop: 30,
+            alignSelf: 'center',
           }}>
           <View style={{flex: 1, height: 1, backgroundColor: 'black'}} />
           <View>
@@ -304,7 +295,7 @@ const Login = ({navigation}) => {
             <Text style={[styles.appButtonText]}>Tạo tài khoản mới</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -329,7 +320,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     display: 'flex',
     position: 'relative',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   View2: {
     display: 'flex',

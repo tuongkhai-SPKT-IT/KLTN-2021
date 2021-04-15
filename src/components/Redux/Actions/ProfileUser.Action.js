@@ -61,3 +61,48 @@ export const Get_IntroUser = () => {
     }
   };
 };
+export const Get_StatusProfile = () => {
+  return async (dispatch) => {
+    try {
+      AsyncStorage.getItem(storeKeys.User_Token).then((val) => {
+        if (val) {
+          const params = {
+            token: val,
+          };
+          const route = 'status/load-personal-status';
+
+          const headers = {};
+          const api = new API();
+          api
+            .onCallAPI('get', route, {}, params, headers)
+            .then((res) => {
+              if (res.data.error_code !== 0) {
+                alert(res.data.message);
+              } else {
+                dispatch({
+                  type: types.GetStatusProfile_Success,
+                  data: res.data.data,
+                  err: '',
+                });
+              }
+            })
+            .catch((err) => {
+              dispatch({type: types.GetStatusProfile_Failed, err: err});
+
+              console.log(err);
+            });
+        } else {
+          dispatch({
+            type: types.GetStatusProfile_Failed,
+            err: 'No Token',
+          });
+        }
+      });
+    } catch (err) {
+      dispatch({
+        type: types.GetStatusProfile_Failed,
+        err: err,
+      });
+    }
+  };
+};
