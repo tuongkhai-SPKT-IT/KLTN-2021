@@ -8,10 +8,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {VideoNative as styles} from './Styles';
 import ProgressBar from 'react-native-progress/Bar';
 const VideoNative = (props) => {
-  const [paused, setPaused] = useState(true);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const player = useRef(null);
+  const [paused, setPaused] = useState(true);
+
   const {width} = Dimensions.get('window');
   const height = width * 0.5625;
   const [playableDuration, setPlayableDuration] = useState({
@@ -56,10 +57,15 @@ const VideoNative = (props) => {
     }
     setPaused(!paused);
   };
-
+  useEffect(() => {
+    return () => {
+      setPaused(true);
+    };
+  }, []);
   const secondsToTime = (time) => {
     return ~~(time / 60) + ':' + (time % 60 < 10 ? '0' : '') + (time % 60);
   };
+  var timeVisible;
   return (
     <Pressable
       style={[
@@ -71,16 +77,19 @@ const VideoNative = (props) => {
         },
       ]}
       onPress={() => {
+        clearTimeout(timeVisible);
         setVisibleControls(true);
-        setTimeout(() => {
+        timeVisible = setTimeout(() => {
           setVisibleControls(false);
-        }, 2000);
+        }, 5000);
       }}>
       <Video
         bufferConfig={{
           minBufferMs: progress * duration * 1000 + 15000,
           maxBufferMs: 5000000,
         }}
+        fullscreenAutorotate
+        fullscreenOrientation="all"
         paused={paused}
         style={{width: '100%', height}}
         source={{uri: props.source}}
@@ -105,7 +114,6 @@ const VideoNative = (props) => {
           }}>
           <View
             style={{
-              backgroundColor: 'black',
               width: '100%',
               flexDirection: 'row',
               opacity: 0.68,

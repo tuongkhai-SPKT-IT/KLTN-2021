@@ -7,7 +7,7 @@ import {
   Text,
   Image,
   Pressable,
-  BackHandler,
+  Dimensions,
 } from 'react-native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesome5nIcon from 'react-native-vector-icons/FontAwesome5';
@@ -18,6 +18,7 @@ import {Button} from 'react-native-elements';
 import SwipeDownModal from 'react-native-swipe-down';
 import * as keys from '../Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Modal from 'react-native-modal';
 export default function ViewLCS(props) {
   const [listLike, setListLike] = useState(props.likeList);
   const [likeNumber, setLikeNumber] = useState(props.likeNumber);
@@ -32,6 +33,10 @@ export default function ViewLCS(props) {
   const [smallCmt, setSmallCmt] = useState(
     listComment.slice(listComment.length - 2),
   );
+  const device = Dimensions.get('window');
+
+  const [layoutModal, setLayoutModal] = useState(device);
+  const [scrollOffset, setScrollOffset] = useState(0);
 
   useEffect(() => {
     AsyncStorage.getItem(keys.User_Token).then((val) => {
@@ -192,59 +197,119 @@ export default function ViewLCS(props) {
       }
     return listWho;
   };
+
+  const handleOnScroll = (event) => {
+    if (event.nativeEvent.contentOffset.y)
+      setScrollOffset(event.nativeEvent.contentOffset.y);
+  };
+  const handleScrollTo = (p) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo(p);
+    }
+  };
+
   return (
     <>
-      <SwipeDownModal
-        modalVisible={visible}
-        ContentModal={
+      <Modal
+        isVisible={visible}
+        hasBackdrop={false}
+        swipeDirection={['up', 'down']}
+        animationIn="slideInUp"
+        scrollTo={handleScrollTo}
+        onBackdropPress={() => setVisible(false)}
+        scrollOffset={scrollOffset}
+        scrollOffsetMax={layoutModal.height}
+        onSwipeCancel={() => setVisible(true)}
+        onSwipeComplete={() => setVisible(false)}
+        onBackButtonPress={() => setVisible(false)}
+        animationOut="slideOutDown"
+        propagateSwipe={true}
+        animationInTiming={600}
+        animationOutTiming={600}
+        avoidKeyboard
+        hideModalContentWhileAnimating
+        style={{margin: 0}}>
+        <View
+          onLayout={(e) => setLayoutModal(e.nativeEvent.layout)}
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'white',
+          }}>
           <View style={styles.stylesViewLCS.containerContent}>
             {listLike.length > 0 && (
-              <Pressable
-                onPress={() => {
-                  console.log(listLike);
-                }}
-                style={[
-                  {borderTopLeftRadius: 16, borderTopRightRadius: 16},
-                  styles.stylesViewLCS.iconLike,
-                  styles.stylesViewLCS.extendLike,
-                ]}>
-                <View style={styles.stylesViewLCS.viewIcon}>
-                  <AntDesignIcon name="like1" size={15} color="white" />
-                </View>
-                <Text style={styles.stylesViewLCS.likeNumber}>
-                  {whoLike(listLike)}
-                </Text>
-              </Pressable>
+              <View
+                style={{
+                  padding: 10,
+                  flexDirection: 'row',
+                  position: 'relative',
+                  borderBottomWidth: 1,
+                  backgroundColor: 'rgba(0,0,0,.1)',
+                }}>
+                <Pressable
+                  onPress={() => {
+                    console.log(listLike);
+                  }}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    flex: 10,
+                  }}>
+                  <View style={styles.stylesViewLCS.viewIcon}>
+                    <AntDesignIcon name="like1" size={15} color="white" />
+                  </View>
+                  <Text style={styles.stylesViewLCS.likeNumber}>
+                    {whoLike(listLike)}
+                  </Text>
+                </Pressable>
+                <Button
+                  buttonStyle={{
+                    backgroundColor: 'transparent',
+                  }}
+                  containerStyle={{borderRadius: 100}}
+                  icon={
+                    liked ? (
+                      <AntDesignIcon name="like1" size={20} color="blue" />
+                    ) : (
+                      <AntDesignIcon
+                        name="like2"
+                        size={20}
+                        color="rgba(0,0,0,.6)"
+                      />
+                    )
+                  }
+                  loading={loadding}
+                  loadingProps={{animating: true, color: '#999'}}
+                  loadingStyle={{borderColor: 'black'}}
+                  onPress={() => Like()}
+                />
+              </View>
             )}
             <View style={{flex: 10}}>
               <ScrollView
                 ref={scrollRef}
                 overScrollMode="always"
+                scrollToOverflowEnabled
                 contentContainerStyle={{justifyContent: 'center'}}
                 // showsHorizontalScrollIndicator={false}
                 snapToInterval={450}
                 decelerationRate="fast"
-                onScroll={(event) =>
-                  console.log(event.nativeEvent.contentOffset)
-                }
+                onScroll={handleOnScroll}
                 style={{marginTop: 10}}>
                 {listComment.map(SingleComment)}
               </ScrollView>
             </View>
             {inputComment()}
           </View>
-        }
-        ContentModalStyle={styles.stylesViewLCS.Modal}
-        onClose={() => {
-          setVisible(false);
-        }}
-      />
+        </View>
+      </Modal>
+
       {listLike.length > 0 && (
         <Pressable
           onPress={() => {
-            // setCmtVisible(true);
+            setVisible(true);
           }}
-          style={styles.stylesViewLCS.iconLike}>
+          style={[styles.stylesViewLCS.iconLike, {marginTop: 10}]}>
           <View style={styles.stylesViewLCS.viewIcon}>
             <AntDesignIcon name="like1" size={12} color="white" />
           </View>
@@ -289,8 +354,8 @@ export default function ViewLCS(props) {
           loadingProps={{animating: true}}
           title="Bình luận"
           onPress={() => {
-            // if (textComment.current) textComment.current.focus();
-            AsyncStorage.clear();
+            if (textComment.current) textComment.current.focus();
+            // AsyncStorage.clear();
             // history.back();
           }}
           titleStyle={{

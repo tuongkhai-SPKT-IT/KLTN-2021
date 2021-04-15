@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View} from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Button, Text } from 'react-native-elements';
-import { useDispatch, useSelector } from 'react-redux';
-import { Image } from 'react-native';
-import { Pressable } from 'react-native';
+import {Button, Text} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
+import {Image} from 'react-native';
+import {Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const IntroProfile = ({ navigation }) => {
+const IntroProfile = ({navigation}) => {
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
   const [introUser, setIntroUser] = useState({});
   useEffect(() => {
@@ -25,12 +25,12 @@ const IntroProfile = ({ navigation }) => {
           alert('click');
         }}
         key={i}
-        style={{ width: 100 }}>
+        style={{width: 100}}>
         <Image
-          source={{ uri: friend.avatar }}
-          style={{ width: 100, height: 100, borderRadius: 15 }}
+          source={{uri: friend.avatar}}
+          style={{width: 100, height: 100, borderRadius: 15}}
         />
-        <Text h4 h4Style={{ fontSize: 15 }} style={{ textAlign: 'center' }}>
+        <Text h4 h4Style={{fontSize: 15}} style={{textAlign: 'center'}}>
           {friend.user_name}
         </Text>
       </Pressable>
@@ -47,7 +47,7 @@ const IntroProfile = ({ navigation }) => {
           alignItems: 'flex-end',
         }}>
         <Fontisto name="email" size={25} color="black" />
-        <Text style={{ flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5 }}>
+        <Text style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
           {introUser.email}
         </Text>
       </View>
@@ -58,7 +58,7 @@ const IntroProfile = ({ navigation }) => {
           alignItems: 'flex-end',
         }}>
         <Entypo name="old-phone" size={25} color="black" />
-        <Text style={{ flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5 }}>
+        <Text style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
           {introUser.phone}
         </Text>
       </View>
@@ -105,47 +105,52 @@ const IntroProfile = ({ navigation }) => {
           marginVertical: 10,
           zIndex: 999,
         }}
-        containerStyle={{ width: '100%' }}
+        containerStyle={{width: '100%'}}
         icon={
           <Ionicons
             name="ios-settings-outline"
             size={20}
             color="#000"
-            style={{ marginHorizontal: 5 }}
+            style={{marginHorizontal: 5}}
           />
         }
         onPress={() => AsyncStorage.clear()}
         title="Edit Infomation Details"
-        titleStyle={{ color: 'black' }}
+        titleStyle={{color: 'black'}}
       />
-      <View style={{ borderTopWidth: 0.8 }}>
-        <Text h3 h3Style={{ padding: 15, paddingVertical: 0 }}>
+      <View style={{borderTopWidth: 0.8}}>
+        <Text h3 h3Style={{padding: 15, paddingVertical: 0}}>
           Bạn bè
         </Text>
-        <Text
-          style={{ fontSize: 20, color: 'gray', opacity: 0.99, paddingLeft: 15 }}>
-          {introUser.friend_array
-            ? introUser.friend_array.length > 1
+        {introUser.friend_array ? (
+          <Text
+            style={{
+              fontSize: 20,
+              color: 'gray',
+              opacity: 0.99,
+              paddingLeft: 15,
+            }}>
+            {introUser.friend_array.length > 1
               ? introUser.friend_array.length + ' friends'
-              : introUser.friend_array.length + ' friend'
-            : ''}
-        </Text>
+              : introUser.friend_array.length + ' friend'}
+          </Text>
+        ) : (
+          <></>
+        )}
         <View
           style={{
             margin: 10,
             flexDirection: 'row',
             justifyContent: 'space-around',
           }}>
-          {introUser.friend_array ?
+          {introUser.friend_array ? (
             introUser.friend_array.map(blockFriend)
-            :
+          ) : (
             <></>
-          }
+          )}
         </View>
-
       </View>
-
     </>
   );
-}
+};
 export default IntroProfile;

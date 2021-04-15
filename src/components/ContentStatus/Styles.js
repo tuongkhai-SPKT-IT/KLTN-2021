@@ -104,8 +104,6 @@ export const stylesViewLCS = StyleSheet.create({
   iconLike: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
-    marginLeft: 10,
   },
   SingleCommentContainer: {
     flex: 1,
@@ -146,7 +144,7 @@ export const stylesViewLCS = StyleSheet.create({
   },
   likeNumber: {
     color: 'rgba(0,0,0,.6)',
-    fontSize: 16,
+    fontSize: 18,
     marginLeft: 5,
   },
   viewBtn: {

@@ -1,23 +1,36 @@
-import { NativeRouter, Route, Link, useHistory, useRouteMatch, } from 'react-router-native';
-import React, { Component, useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import * as storeKeys from '../Constants';
-import { Register_Request } from '../Redux/Actions/Login.Action';
-import { useSelector, useDispatch } from 'react-redux';
+import {Register_Request} from '../Redux/Actions/Login.Action';
+import {useSelector, useDispatch} from 'react-redux';
 import Modal from 'react-native-modalbox';
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel, } from 'react-native-simple-radio-button';
-import { StyleSheet, View, Button, BackHandler, TextInput, Text, TouchableOpacity, Image, Keyboard, Alert, ScrollView, ActivityIndicator } from 'react-native';
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  Keyboard,
+  Alert,
+  ScrollView,
+} from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
+import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
 const Stack = createStackNavigator();
-const Register = ({ navigation }) => {
-  const history = useHistory();
+const Register = ({navigation}) => {
   const dispatch = useDispatch();
-  const [formData, setformData] = useState({ 
+  const [formData, setformData] = useState({
     password: '',
     email: '',
     phone: '',
     sex: '', //1 || 0 // 1 là nam, 0 là nữ
     dOb: '',
+    first_name: '',
+    last_name: '',
   });
   const [alertModal, setAlertModal] = useState(true);
   const initRef = useRef(null);
@@ -38,7 +51,9 @@ const Register = ({ navigation }) => {
       });
       dispatch(Register_Request(formData));
       if (storeState.err_code === '') {
-        history.push('/');
+        navigation.goBack();
+      } else {
+        console.log(storeState.err_code);
       }
     } catch (err) {
       console.log('error signing up: ', err);
@@ -89,20 +104,16 @@ const Register = ({ navigation }) => {
     return today.getTime() >= date.getTime();
   };
   // const checkString = (str) => { return /^-?[\d.]+(?:e-?\d+)?$/.test(str); }
-  const showEmail = (str) => {
-    const index = str.indexOf('@');
 
-    return str.slice(0, index) + '\n' + str.slice(index, str.length);
-  };
-  const setUserName = ({ navigation }) => {
+  const setUserName = ({navigation}) => {
     const [firstName, setFirstName] = useState(formData.first_name);
     const [lastName, setLastName] = useState(formData.last_name);
     return (
-      <View
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
           width: '100%',
           height: '100%',
-          alignItems: 'center',
         }}>
         <Text
           style={{
@@ -115,7 +126,7 @@ const Register = ({ navigation }) => {
           Bạn tên gì?
         </Text>
 
-        <View style={{ width: '100%', flexDirection: 'row', marginBottom: 35 }}>
+        <View style={{width: '100%', flexDirection: 'row', marginBottom: 35}}>
           <TextInput
             ref={input1}
             style={[
@@ -131,8 +142,8 @@ const Register = ({ navigation }) => {
             placeholder="Họ"
             autoCapitalize="none"
             placeholderTextColor="black"
-            onChangeText={(val) => setFirstName(val)}
-            value={firstName}
+            onChangeText={(val) => setLastName(val)}
+            value={lastName}
           />
 
           <TextInput
@@ -150,8 +161,8 @@ const Register = ({ navigation }) => {
             placeholder="Tên"
             autoCapitalize="none"
             placeholderTextColor="black"
-            onChangeText={(val) => setLastName(val)}
-            value={lastName}
+            onChangeText={(val) => setFirstName(val)}
+            value={firstName}
           />
         </View>
 
@@ -168,29 +179,33 @@ const Register = ({ navigation }) => {
               return;
             } else {
               setformData({
-                ...formData, first_name: firstName, last_name: lastName
-              })
+                ...formData,
+                first_name: firstName,
+                last_name: lastName,
+              });
               setAlertModal(false);
               navigation.push('dateOfBirth');
             }
           }}
-          style={styles.appButtonContainer}>
+          style={[styles.appButtonContainer]}>
           <Text style={styles.appButtonText}>Tiếp theo</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   };
-  const setDateOfBirth = ({ navigation }) => {
+  const setDateOfBirth = ({navigation}) => {
     return (
-      <View
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
           width: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
         }}>
         <DatePicker
           date={date}
-          style={{ marginVertical: 50, backgroundColor: "transparent" }}
+          style={{
+            marginVertical: 50,
+            alignSelf: 'center',
+          }}
           locale="vi"
           onDateChange={(e) => {
             setDate(e);
@@ -200,8 +215,7 @@ const Register = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             if (comparedDate(date)) {
-              setformData({ ...formData, dOb: formatDateTime(date) });
-              console.log(formData);
+              setformData({...formData, dOb: formatDateTime(date)});
               navigation.push('Sex');
             } else {
               initRef.current.open();
@@ -210,30 +224,37 @@ const Register = ({ navigation }) => {
           style={styles.appButtonContainer}>
           <Text style={styles.appButtonText}>Tiếp theo</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   };
   const [isSelected, setIsSelected] = useState(-1);
-  const setSex = ({ navigation }) => {
+  const setSex = ({navigation}) => {
     var radio_props = [
-      { label: 'Nữ', value: 0 },
-      { label: 'Nam', value: 1 },
+      {label: 'Nữ', value: 0},
+      {label: 'Nam', value: 1},
     ];
     return (
-      <View
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
           width: '100%',
           height: '100%',
-          alignItems: 'center',
+          // alignItems: 'center',
           position: 'relative',
         }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 24, marginVertical: 70 }}>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            alignSelf: 'center',
+            fontSize: 24,
+            marginVertical: 70,
+          }}>
           Giới tính của bạn là gì?
         </Text>
         <RadioForm
           formHorizontal={false}
           animation={true}
-          style={{ width: '90%' }}>
+          style={{width: '90%', alignSelf: 'center'}}>
           {radio_props.map((arr, i) => {
             return (
               <RadioButton
@@ -253,7 +274,7 @@ const Register = ({ navigation }) => {
                   onPress={() => {
                     setIsSelected(i);
                   }}
-                  labelStyle={{ fontSize: 22, color: '#000', paddingTop: 5 }}
+                  labelStyle={{fontSize: 22, color: '#000', paddingTop: 5}}
                   labelWrapStyle={{}}
                 />
                 <RadioButtonInput
@@ -287,20 +308,20 @@ const Register = ({ navigation }) => {
           onPress={() => {
             if (isSelected > -1) {
               navigation.push('EmailandPhone');
-              setformData({ ...formData, sex: isSelected });
+              setformData({...formData, sex: isSelected});
             } else {
               Alert.alert(
                 'Bạn phải chọn giới tính (giới tính trên giấy khai sinh)',
               );
             }
           }}
-          style={[styles.appButtonContainer, { marginTop: 70 }]}>
+          style={[styles.appButtonContainer, {marginTop: 70}]}>
           <Text style={styles.appButtonText}>Tiếp theo</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   };
-  const setPhoneEmail = ({ navigation }) => {
+  const setPhoneEmail = ({navigation}) => {
     const [phone, setPhone] = useState(formData.email);
     const [email, setEmail] = useState(formData.phone);
     return (
@@ -320,7 +341,7 @@ const Register = ({ navigation }) => {
           }}>
           Nhập số di động và email của bạn
         </Text>
-        <View style={{ width: '100%', flexDirection: 'column', marginTop: 15 }}>
+        <View style={{width: '100%', flexDirection: 'column', marginTop: 15}}>
           <TextInput
             style={[styles.input]}
             ref={input1}
@@ -354,7 +375,7 @@ const Register = ({ navigation }) => {
               input2.current.focus();
               return;
             } else {
-              setformData({ ...formData, phone: phone, email: email })
+              setformData({...formData, phone: phone, email: email});
               navigation.push('Password');
             }
           }}
@@ -365,7 +386,7 @@ const Register = ({ navigation }) => {
     );
   };
 
-  const setPassword = ({ navigation }) => {
+  const setPassword = ({navigation}) => {
     const [passWord, setPassWord] = useState(formData.password);
     return (
       <View
@@ -397,12 +418,13 @@ const Register = ({ navigation }) => {
             placeholderTextColor="black"
             secureTextEntry
             value={passWord}
-            onChangeText={(val) => setPassWord(val.trimEnd())} />
+            onChangeText={(val) => setPassWord(val.trimEnd())}
+          />
         </View>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("doneRegister")
-            setformData({ ...formData, password: passWord })
+            navigation.navigate('doneRegister');
+            setformData({...formData, password: passWord});
           }}
           style={styles.appButtonContainer}>
           <Text style={styles.appButtonText}>Tiếp theo</Text>
@@ -411,68 +433,80 @@ const Register = ({ navigation }) => {
     );
   };
   const doneInfo = () => {
-    return <View style={{ width: '100%', height: '100%' }}>
-      <Text
-        style={{
-          fontWeight: 'bold',
-          fontSize: 20,
-          textAlign: 'center',
-          position: 'absolute',
-          top: 20,
-        }}>
-        Đây là thông tin tài khoản của bạn, bạn hãy kiểm tra lại lần cuối
-        và xác thực đăng ký
-    </Text>
-      <View style={{ flexDirection: 'row', marginTop: 150 }}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.collumn}>Họ:</Text>
-          <Text style={styles.collumn}>Tên:</Text>
-          <Text style={styles.collumn}>Giới tính:</Text>
-          <Text style={styles.collumn}>Ngày sinh:</Text>
-          <Text style={styles.collumn}>Số điện thoại:</Text>
-          <Text style={styles.collumn}>Email:</Text>
+    return (
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{width: '100%', height: '100%'}}>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 20,
+            textAlign: 'center',
+            position: 'absolute',
+            top: 20,
+          }}>
+          Đây là thông tin tài khoản của bạn, bạn hãy kiểm tra lại lần cuối và
+          xác thực đăng ký
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 150,
+            alignItems: 'baseline',
+            alignSelf: 'center',
+            justifyContent: 'center',
+            flex: 1,
+            marginLeft: 20,
+          }}>
+          <View style={{flex: 2}}>
+            <Text style={styles.column}>Họ:</Text>
+            <Text style={styles.column}>Tên:</Text>
+            <Text style={styles.column}>Giới tính:</Text>
+            <Text style={styles.column}>Ngày sinh:</Text>
+            <Text style={styles.column}>Số điện thoại:</Text>
+            <Text style={styles.column}>Email:</Text>
+          </View>
+          <View style={{flex: 2}}>
+            <Text style={[styles.column, styles.column1]}>
+              {formData.last_name.trimEnd()}
+            </Text>
+            <Text style={[styles.column, styles.column1]}>
+              {formData.first_name}
+            </Text>
+            <Text style={[styles.column, styles.column1]}>
+              {formData.sex ? 'Nam' : 'Nữ'}
+            </Text>
+            <Text style={[styles.column, styles.column1]}>{formData.dOb}</Text>
+            <Text style={[styles.column, styles.column1]}>
+              {formData.phone}
+            </Text>
+            <Text style={[styles.column, styles.column1]}>
+              {formData.email}
+            </Text>
+          </View>
         </View>
-        <View style={{ flex: 2 }}>
-          <Text style={[styles.collumn, styles.collumn1]}>
-            {formData.last_name.trimEnd()}
-          </Text>
-          <Text style={[styles.collumn, styles.collumn1]}>
-            {formData.first_name}
-          </Text>
-          <Text style={[styles.collumn, styles.collumn1]}>
-            {formData.sex ? 'Nam' : 'Nữ'}
-          </Text>
-          <Text style={[styles.collumn, styles.collumn1]}>
-            {formData.dOb}
-          </Text>
-          <Text style={[styles.collumn, styles.collumn1]}>
-            {formData.phone}
-          </Text>
-          <Text style={[styles.collumn, styles.collumn1]}>
-            {showEmail(formData.email)}
-          </Text>
-        </View>
-      </View>
 
-      <View
-        style={{
-          width: '100%',
-          alignItems: 'center',
-          position: 'absolute',
-          bottom: 10,
-        }}>
-        <TouchableOpacity
-          onPress={() => signUp()}
-          style={styles.appButtonContainer}>
-          <Text style={styles.appButtonText}>Đăng ký</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  }
+        <View
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            marginTop: 50,
+            // position: 'absolute',
+            // bottom: 0,
+          }}>
+          <TouchableOpacity
+            onPress={() => signUp()}
+            style={styles.appButtonContainer}>
+            <Text style={styles.appButtonText}>Đăng ký</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    );
+  };
   const alertBackLogin = () => {
     return (
       <>
-        <View style={{ width: '100%', paddingHorizontal: 15 }}>
+        <View style={{width: '100%', paddingHorizontal: 15}}>
           <Text
             style={{
               color: 'black',
@@ -482,16 +516,16 @@ const Register = ({ navigation }) => {
             }}>
             Bạn có muốn dừng tạo tài khoản không?
           </Text>
-          <Text style={{ color: 'black', fontSize: 22, fontWeight: '800' }}>
+          <Text style={{color: 'black', fontSize: 22, fontWeight: '800'}}>
             Nếu dừng bây giờ, bạn sẽ mất toàn bộ thông tin đã điền
           </Text>
         </View>
-        <View style={{ width: '100%', flexDirection: 'row' }}>
+        <View style={{width: '100%', flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => initRef.current.close()}
             style={[
               styles.appButtonContainer,
-              { flex: 1, width: 0, backgroundColor: 'transparent' },
+              {flex: 1, width: 0, backgroundColor: 'transparent'},
             ]}>
             <Text
               style={{
@@ -509,7 +543,7 @@ const Register = ({ navigation }) => {
             }}
             style={[
               styles.appButtonContainer,
-              { flex: 1, width: 0, backgroundColor: 'transparent' },
+              {flex: 1, width: 0, backgroundColor: 'transparent'},
             ]}>
             <Text
               style={{
@@ -528,7 +562,7 @@ const Register = ({ navigation }) => {
   const alertDob = () => {
     return (
       <>
-        <View style={{ width: '100%', paddingHorizontal: 15 }}>
+        <View style={{width: '100%', paddingHorizontal: 15}}>
           <Text
             style={{
               color: 'black',
@@ -549,7 +583,7 @@ const Register = ({ navigation }) => {
             Bạn phải thay đổi ngày sinh phù hợp
           </Text>
         </View>
-        <View style={{ width: '100%', flexDirection: 'row' }}>
+        <View style={{width: '100%', flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => initRef.current.close()}
             style={[
@@ -595,37 +629,68 @@ const Register = ({ navigation }) => {
         <Stack.Screen
           name="userName"
           options={{
-            title: "Tên", headerTitleStyle: { fontSize: 25 }, headerLeft: () => (<HeaderBackButton onPress={() => {
-              Keyboard.dismiss();
-              initRef.current.open();
-            }} />)
+            title: 'Tên',
+            headerTitleStyle: {fontSize: 25},
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => {
+                  Keyboard.dismiss();
+                  initRef.current.open();
+                }}
+              />
+            ),
           }}
           component={setUserName}
         />
-        <Stack.Screen name="dateOfBirth" options={{
-          headerLeft: () => (<HeaderBackButton onPress={() => {
-            navigation.navigate("userName");
-            setAlertModal(true);
-          }} />),
-          title: "Ngày sinh", headerTitleStyle: { fontSize: 25, },
-        }} component={setDateOfBirth} />
-        <Stack.Screen name="Sex"
-          options={{ title: "Giới tính", headerTitleStyle: { fontSize: 25 } }}
-          component={setSex} />
-        <Stack.Screen name="EmailandPhone" options={{
-          title: "Số điện thoại và Email", headerTitleStyle: { fontSize: 25 }
-        }} component={setPhoneEmail} />
-        <Stack.Screen name="Password"
+        <Stack.Screen
+          name="dateOfBirth"
           options={{
-            title: "Mật khẩu",
+            headerLeft: () => (
+              <HeaderBackButton
+                onPress={() => {
+                  navigation.navigate('userName');
+                  setAlertModal(true);
+                }}
+              />
+            ),
+            title: 'Ngày sinh',
+            headerTitleStyle: {fontSize: 25},
+          }}
+          component={setDateOfBirth}
+        />
+        <Stack.Screen
+          name="Sex"
+          options={{title: 'Giới tính', headerTitleStyle: {fontSize: 25}}}
+          component={setSex}
+        />
+        <Stack.Screen
+          name="EmailandPhone"
+          options={{
+            title: 'Số điện thoại và Email',
+            headerTitleStyle: {fontSize: 25},
+          }}
+          component={setPhoneEmail}
+        />
+        <Stack.Screen
+          name="Password"
+          options={{
+            title: 'Mật khẩu',
             headerTitleStyle: {
               fontSize: 25,
             },
-          }} component={setPassword} />
-        <Stack.Screen name="doneRegister"
+          }}
+          component={setPassword}
+        />
+        <Stack.Screen
+          name="doneRegister"
           options={{
-            headerShown: false
-          }} component={doneInfo} />
+            title: 'Đăng ký',
+            headerTitleStyle: {
+              fontSize: 25,
+            },
+          }}
+          component={doneInfo}
+        />
       </Stack.Navigator>
     </>
   );
@@ -663,6 +728,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 10,
     alignContent: 'center',
+    alignSelf: 'center',
   },
   appButtonText: {
     fontSize: 18,
@@ -675,5 +741,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 999,
+  },
+  column: {
+    fontSize: 20,
+    fontWeight: '900',
+    marginTop: 10,
   },
 });

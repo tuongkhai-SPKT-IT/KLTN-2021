@@ -23,45 +23,56 @@ export default function AppBar() {
     );
   };
   const showstatus = () => {
-    // const {srcData} = storeState;
-    const srcData = [
-      {
-        caption: '1 hình 1 video',
-        created_at: [],
-        file_uploaded: [
-          // {
-          //   type: 'image',
-          //   uri:
-          //     'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
-          // },
-          {
-            type: 'image',
-            uri:
-              'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
-          },
-          {
-            type: 'image',
-            uri:
-              'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
-          },{
-            type: 'image',
-            uri:
-              'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
-          },
-        ],
-        id: '606ef522e1f7bd56b33d4708',
-        like_number: 0,
-        liked: false,
-        no_sign_profile: 'khaidev.chatheader.09.01',
-        posted_time: '08/04/2021 07:20:50 PM',
-        sex: '1',
-        status_setting: 'pub',
-        user_avatar: 'http://api.facebook-kltn.alphawolf.io/image/default.jpg',
-        user_id: '606c1c6af2cda67fc337dc73',
-        user_name: 'Khải dev chat header',
-        who_liked_status: [],
-      },
-    ];
+    const {srcData} = storeState;
+    // const srcData = [
+    //   {
+    //     caption: '1 hình 1 video',
+    //     created_at: [],
+    //     file_uploaded: [
+    //       // {
+    //       //   type: 'video',
+    //       //   uri:
+    //       //     'http://api.facebook-kltn.alphawolf.io/video/vqXpEe8Vm5UBMKAB2fmxZASICyzgqS.mp4',
+    //       // },
+    //       {
+    //         type: 'image',
+    //         uri:
+    //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
+    //       },
+    //       {
+    //         type: 'image',
+    //         uri:
+    //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
+    //       },
+    //       {
+    //         type: 'image',
+    //         uri:
+    //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
+    //       },
+    //       {
+    //         type: 'image',
+    //         uri:
+    //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
+    //       },
+    //       {
+    //         type: 'image',
+    //         uri:
+    //           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
+    //       },
+    //     ],
+    //     id: '606ef522e1f7bd56b33d4708',
+    //     like_number: 0,
+    //     liked: false,
+    //     no_sign_profile: 'khaidev.chatheader.09.01',
+    //     posted_time: '08/04/2021 07:20:50 PM',
+    //     sex: '1',
+    //     status_setting: 'pub',
+    //     user_avatar: 'http://api.facebook-kltn.alphawolf.io/image/default.jpg',
+    //     user_id: '606c1c6af2cda67fc337dc73',
+    //     user_name: 'Khải dev chat header',
+    //     who_liked_status: [],
+    //   },
+    // ];
     if (srcData.length > 0) {
       {
         return srcData.map((stt, i) => {
@@ -94,6 +105,8 @@ export default function AppBar() {
             <ToolBar />
             <View style={styles.divider}></View>
             <ScrollView
+              keyboardDismissMode="on-drag"
+              keyboardShouldPersistTaps="handled"
               onScroll={({nativeEvent}) => {
                 if (isCloseToBottom(nativeEvent)) {
                   console.log(1);
