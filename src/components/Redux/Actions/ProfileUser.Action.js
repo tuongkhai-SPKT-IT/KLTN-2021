@@ -34,7 +34,7 @@ export const Get_IntroUser = () => {
                   storeKeys.User_Avatar,
                   res.data.data.user_avatar,
                 );
-                localStorage.setItem(
+                AsyncStorage.setItem(
                   storeKeys.User_Cover,
                   res.data.data.user_cover,
                 );

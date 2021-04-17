@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useRef, useState } from 'react';
+import React, {Component, useEffect, useRef, useState} from 'react';
 import {
   View,
   Image,
@@ -21,9 +21,9 @@ const ImageGrid = (props) => {
   const deviceWidth = Dimensions.get('window').width;
   const scrollImage = useRef(props.srcImage);
   useEffect(() => {
-    scrollImage.current = [...props.srcImage]
-  }, [props.srcImage])
-  const { srcImage } = props;
+    scrollImage.current = [...props.srcImage];
+  }, [props.srcImage]);
+  const {srcImage} = props;
   const [layoutModal, setLayoutModal] = useState(device);
   if (srcImage.length === 0) {
     return <></>;
@@ -40,7 +40,7 @@ const ImageGrid = (props) => {
               style={{
                 flex: 1,
                 borderWidth: 1,
-                borderColor: "white"
+                borderColor: 'white',
               }}
               onPress={() => {
                 setVisible(true);
@@ -57,13 +57,13 @@ const ImageGrid = (props) => {
                 }, 1 * 10);
               }}>
               <Image
-                source={{ uri: media.uri }}
+                source={{uri: media.uri}}
                 resizeMode="stretch"
                 style={styles.stylesImageGrid.fullsize}
               />
             </Pressable>
           ) : (
-            <View style={{ flex: 1 }} key={i}>
+            <View style={{flex: 1}} key={i}>
               <Pressable
                 style={{
                   backgroundColor: 'black',
@@ -123,12 +123,12 @@ const ImageGrid = (props) => {
           imageTemp.shift();
           return (
             <View style={[styles.stylesImageGrid.container]}>
-              <View style={{ width: '50%', height: '100%' }}>
+              <View style={{width: '50%', height: '100%'}}>
                 <Pressable
                   style={{
                     flex: 1,
                     borderWidth: 1,
-                    borderColor: "white"
+                    borderColor: 'white',
                   }}
                   onPress={async () => {
                     setVisible(true);
@@ -143,17 +143,19 @@ const ImageGrid = (props) => {
                       }, 1 * 10);
                     }
                   }}>
-                  {image[0] ?
+                  {image[0] ? (
                     <Image
-                      source={{ uri: image[0].uri }}
+                      source={{uri: image[0].uri}}
                       resizeMode="stretch"
                       resizeMethod="auto"
                       style={styles.stylesImageGrid.fullsize}
-                    /> : <></>
-                  }
+                    />
+                  ) : (
+                    <></>
+                  )}
                 </Pressable>
               </View>
-              <View style={{ width: '50%', height: '100%' }}>
+              <View style={{width: '50%', height: '100%'}}>
                 {imageTemp.map((file, i) => {
                   return (
                     <Pressable
@@ -161,7 +163,7 @@ const ImageGrid = (props) => {
                       style={{
                         flex: 1,
                         borderWidth: 1,
-                        borderColor: "white"
+                        borderColor: 'white',
                       }}
                       onPress={async () => {
                         setVisible(true);
@@ -176,7 +178,7 @@ const ImageGrid = (props) => {
                         }
                       }}>
                       <Image
-                        source={{ uri: file.uri }}
+                        source={{uri: file.uri}}
                         resizeMode="stretch"
                         resizeMethod="auto"
                         style={styles.stylesImageGrid.fullsize}
@@ -189,10 +191,10 @@ const ImageGrid = (props) => {
           );
         }
         if (video.length === 1) {
-          scrollImage.current = [...video, ...image]
+          scrollImage.current = [...video, ...image];
           return (
             <View style={[styles.stylesImageGrid.container]}>
-              <View style={{ width: '100%', height: '50%' }}>
+              <View style={{width: '100%', height: '50%'}}>
                 <Pressable
                   key={0}
                   style={{
@@ -228,12 +230,12 @@ const ImageGrid = (props) => {
                 </Pressable>
               </View>
               <View
-                style={{ width: '100%', height: '50%', flexDirection: 'row' }}>
+                style={{width: '100%', height: '50%', flexDirection: 'row'}}>
                 {image.map((file, i) => {
                   return (
                     <Pressable
                       key={i + 1}
-                      style={{ flex: 1 }}
+                      style={{flex: 1}}
                       onPress={async () => {
                         setVisible(true);
                         setTimeout(() => {
@@ -247,7 +249,7 @@ const ImageGrid = (props) => {
                         }, 1 * 10);
                       }}>
                       <Image
-                        source={{ uri: file.uri }}
+                        source={{uri: file.uri}}
                         resizeMode="stretch"
                         resizeMethod="auto"
                         style={styles.stylesImageGrid.fullsize}
@@ -263,10 +265,10 @@ const ImageGrid = (props) => {
           scrollImage.current = [...image, ...video];
           return (
             <View style={[styles.stylesImageGrid.container]}>
-              <View style={{ width: '50%', height: '100%' }}>
+              <View style={{width: '50%', height: '100%'}}>
                 <Pressable
                   key={0}
-                  style={{ flex: 1 }}
+                  style={{flex: 1}}
                   onPress={() => {
                     setVisible(true);
                     setTimeout(() => {
@@ -274,23 +276,22 @@ const ImageGrid = (props) => {
                       if (scrollViewRef.current) {
                         // = file.index;
                         scrollViewRef.current.scrollTo({
-                          x: layoutModal.width * (0),
+                          x: layoutModal.width * 0,
                           animated: false,
                           y: 0,
                         });
                       }
                     }, 1 * 10);
-                  }}
-                >
+                  }}>
                   <Image
-                    source={{ uri: image[0].uri }}
+                    source={{uri: image[0].uri}}
                     resizeMode="stretch"
                     resizeMethod="auto"
                     style={styles.stylesImageGrid.fullsize}
                   />
                 </Pressable>
               </View>
-              <View style={{ width: '50%', height: '100%' }}>
+              <View style={{width: '50%', height: '100%'}}>
                 {video.map((file, i) => {
                   return (
                     <Pressable
@@ -382,7 +383,7 @@ const ImageGrid = (props) => {
                 </Pressable>
               </View>
               <View
-                style={{ width: '100%', height: '50%', flexDirection: 'row' }}>
+                style={{width: '100%', height: '50%', flexDirection: 'row'}}>
                 {temp.map((file, i) => {
                   return (
                     <Pressable
@@ -460,95 +461,109 @@ const ImageGrid = (props) => {
           <></>
         )}
         {uri.map((val, i) => {
-          return (
-            val.type === "image" ?
-              <Pressable
-                key={i}
-                style={{
-                  width: '50%',
-                  height: 540 / 2,
+          return val.type === 'image' ? (
+            <Pressable
+              key={i}
+              style={{
+                width: '50%',
+                height: 540 / 2,
+              }}
+              onPress={async () => {
+                // await modalRef.current.open();
+                setVisible(true);
+                setTimeout(() => {
+                  // console.log(scrollViewRef.current);
+                  if (scrollViewRef.current) {
+                    // = i;
+                    scrollViewRef.current.scrollTo({
+                      x: deviceWidth * i,
+                      animated: false,
+                      y: 0,
+                    });
+                  }
+                }, 1 * 10);
+              }}>
+              <Image
+                resizeMode="stretch"
+                style={styles.stylesImageGrid.fullsize}
+                source={{
+                  uri: val.uri,
                 }}
-                onPress={async () => {
-                  // await modalRef.current.open();
-                  setVisible(true);
-                  setTimeout(() => {
-                    // console.log(scrollViewRef.current);
-                    if (scrollViewRef.current) {
-                      // = i;
-                      scrollViewRef.current.scrollTo({
-                        x: deviceWidth * i,
-                        animated: false,
-                        y: 0,
-                      });
-                    }
-                  }, 1 * 10);
-                }}>
-                <Image
-                  resizeMode="stretch"
-                  style={styles.stylesImageGrid.fullsize}
-                  source={{
-                    uri: val.uri,
-                  }}
-                />
-              </Pressable>
-              : <Pressable key={i}
+              />
+            </Pressable>
+          ) : (
+            <Pressable
+              key={i}
+              style={{
+                backgroundColor: 'black',
+                width: '50%',
+                height: 540 / 2,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: 'white',
+              }}
+              onPress={() => {
+                setVisible(true);
+                setTimeout(() => {
+                  // console.log(scrollViewRef.current);
+                  if (scrollViewRef.current) {
+                    // = i;
+                    scrollViewRef.current.scrollTo({
+                      x: deviceWidth * i,
+                      animated: false,
+                      y: 0,
+                    });
+                  }
+                }, 1 * 10);
+              }}>
+              <View
                 style={{
-                  backgroundColor: 'black',
-                  width: '50%',
-                  height: 540 / 2,
-                  justifyContent: 'center',
+                  backgroundColor: 'rgba(255,255,255,0.6)',
+                  width: 50,
+                  height: 50,
+                  borderRadius: 25,
+                  justifyContent: 'space-around',
                   alignItems: 'center',
-                  borderWidth: 1,
-                  borderColor: "white"
-                }}
-                onPress={() => {
-                  setVisible(true);
-                  setTimeout(() => {
-                    // console.log(scrollViewRef.current);
-                    if (scrollViewRef.current) {
-                      // = i;
-                      scrollViewRef.current.scrollTo({
-                        x: deviceWidth * i,
-                        animated: false,
-                        y: 0,
-                      });
-                    }
-                  }, 1 * 10);
+                  flexDirection: 'row',
                 }}>
-                <View
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.6)',
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                  }}>
-                  <FontAwesomeIcon name="play" size={30} color="white" />
-                </View>
-              </Pressable>
+                <FontAwesomeIcon name="play" size={30} color="white" />
+              </View>
+            </Pressable>
           );
         })}
       </View>
     );
   };
+  // const pausedChild = useRef(true);
+  const [isScroll, setIsScroll] = useState(false);
   const ImageScroll = (item, i) => {
     if (item.type === 'image')
       return (
-        <Image
+        <View
           key={i}
-          style={{ width: layoutModal.width, height: layoutModal.height }}
-          resizeMode="contain"
-          source={{ uri: item.uri }}
-        />
+          style={{width: layoutModal.width, height: layoutModal.height}}>
+          <Image
+            style={{flex: 1}}
+            resizeMode="contain"
+            source={{uri: item.uri}}
+          />
+        </View>
       );
     else
       return (
-        <VideoNative
+        <View
           key={i}
-          style={{ width: layoutModal.width, height: layoutModal.height, alignItems: "center" }}
-          source={item.uri} />
+          style={{width: layoutModal.width, height: layoutModal.height}}>
+          <VideoNative
+            isScroll={isScroll}
+            style={{
+              alignItems: 'center',
+              flex: 1,
+            }}
+            source={item.uri}
+          />
+        </View>
       );
   };
 
@@ -559,7 +574,7 @@ const ImageGrid = (props) => {
         <View style={styles.stylesImageGrid.container}>
           <Pressable
             key={i}
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             onPress={() => {
               setVisible(true);
               setTimeout(() => {
@@ -575,7 +590,7 @@ const ImageGrid = (props) => {
               }, 1 * 10);
             }}>
             <Image
-              source={{ uri: file.uri }}
+              source={{uri: file.uri}}
               resizeMode="stretch"
               style={styles.stylesImageGrid.fullsize}
             />
@@ -585,10 +600,10 @@ const ImageGrid = (props) => {
     } else {
       return (
         <View style={styles.stylesImageGrid.container} key={i}>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <Pressable
               style={{
-                backgroundColor: 'red',
+                backgroundColor: 'black',
                 flex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -625,12 +640,17 @@ const ImageGrid = (props) => {
       );
     }
   };
-  const [scrollOffset, setScrollOffset] = useState(0)
-  const handleOnScroll = event => {
+
+  const [scrollOffset, setScrollOffset] = useState(0);
+  const handleOnScroll = (event) => {
+    setIsScroll(true);
     if (event.nativeEvent.contentOffset.x)
-      setScrollOffset(event.nativeEvent.contentOffset.x)
+      setScrollOffset(event.nativeEvent.contentOffset.x);
   };
-  const handleScrollTo = p => {
+  const handleEndScroll = (e) => {
+    setIsScroll(false);
+  };
+  const handleScrollTo = (p) => {
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollTo(p);
     }
@@ -660,16 +680,24 @@ const ImageGrid = (props) => {
         animationOutTiming={600}
         hideModalContentWhileAnimating
         scrollHorizontal
-        style={{ margin: 0 }}>
-        <View onLayout={(e) => setLayoutModal(e.nativeEvent.layout)}
-          style={{ width: '100%', height: "100%", backgroundColor: "white" }}>
+        style={{margin: 0}}>
+        <View
+          onLayout={(e) => {
+            setLayoutModal(e.nativeEvent.layout);
+            console.log(e.nativeEvent.layout);
+          }}
+          style={{width: '100%', height: '100%', backgroundColor: 'white'}}>
           <ScrollView
             // onScrollEndDrag={handleScrollEnd}
             overScrollMode="always"
             scrollToOverflowEnabled
             snapToInterval={layoutModal.width}
             showsHorizontalScrollIndicator={false}
-            onScroll={handleOnScroll} horizontal ref={scrollViewRef}>
+            onScroll={handleOnScroll}
+            horizontal
+            onScrollEndDrag={handleEndScroll}
+            // onScrollBeginDrag={() => console.log('bắt đầu scroll')}
+            ref={scrollViewRef}>
             {scrollImage.current.map(ImageScroll)}
           </ScrollView>
         </View>

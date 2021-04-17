@@ -23,6 +23,11 @@ const VideoNative = (props) => {
   const handleLoad = (e) => {
     setDuration(e.duration);
   };
+  useEffect(() => {
+    if (props.isScroll) {
+      setPaused(true);
+    }
+  }, [props.isScroll]);
   const handleTimeVideo = (value) => {
     if (value === 'left') {
       player.current.seek(

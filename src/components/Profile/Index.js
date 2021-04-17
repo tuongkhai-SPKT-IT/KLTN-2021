@@ -18,10 +18,11 @@ import {
   Get_StatusProfile,
 } from '../Redux/Actions/ProfileUser.Action';
 import IntroProfile from './IntroProfile';
+import OtherProfile from '../OtherProfile';
 import {createStackNavigator} from '@react-navigation/stack';
 import friendsList from './friendsList';
 import ContentStatus from '../ContentStatus';
-const Profile = ({navigation}, props) => {
+const Profile = ({navigation}) => {
   const Stack = createStackNavigator();
 
   const mainProfile = ({navigation}) => {
@@ -166,8 +167,6 @@ const Profile = ({navigation}, props) => {
           animationOut="slideOutDown"
           swipeDirection={['up', 'down']}
           swipeThreshold={150}
-          // backdropColor="white"
-          // backdropOpacity={1}
           onSwipeComplete={() => setVisiblePopup(false)}
           onBackdropPress={() => setVisiblePopup(false)}
           onSwipeCancel={() => setVisiblePopup(true)}
@@ -239,6 +238,13 @@ const Profile = ({navigation}, props) => {
           }}
           component={mainProfile}
         />
+        {/* <Stack.Screen
+          name="OtherUser"
+          options={{
+            headerShown: false,
+          }}
+          component={OtherProfile}
+        /> */}
         <Stack.Screen
           name="fullfriends"
           options={{
