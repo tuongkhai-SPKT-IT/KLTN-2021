@@ -309,7 +309,10 @@ export default function ViewLCS(props) {
           onPress={() => {
             setVisible(true);
           }}
-          style={[styles.stylesViewLCS.iconLike, {marginTop: 10}]}>
+          style={[
+            styles.stylesViewLCS.iconLike,
+            {marginTop: 10, marginLeft: 10},
+          ]}>
           <View style={styles.stylesViewLCS.viewIcon}>
             <AntDesignIcon name="like1" size={12} color="white" />
           </View>

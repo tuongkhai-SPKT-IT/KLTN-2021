@@ -15,5 +15,8 @@ export const GetStatusProfile_Success = 'GetStatusProfile_Success';
 export const Get_IntroUser_Success = 'Get_IntroUser_Success';
 export const Get_IntroUser_Failed = 'Get_IntroUser_Failed';
 
-export const FillIntroUser_Failed = 'FillIntroUser_Failed';
-export const FillIntroUser_Success = 'FillIntroUser_Success';
+export const GetStatusOther_Failed = 'GetStatusOther_Failed';
+export const GetStatusOther_Success = 'GetStatusOther_Success';
+
+export const Get_IntroOther_Success = 'Get_IntroOther_Success';
+export const Get_IntroOther_Failed = 'Get_IntroOther_Failed';
