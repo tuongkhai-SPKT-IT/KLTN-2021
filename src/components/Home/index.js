@@ -24,7 +24,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Profile from '../Profile';
+import Profile from '../Profile/Index';
 import Notifications from '../Notifications';
 import Messengers from '../Messengers';
 // import OtherProfile from '../OtherProfile';
