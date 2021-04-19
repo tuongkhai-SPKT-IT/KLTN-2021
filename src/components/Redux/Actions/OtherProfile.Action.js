@@ -74,3 +74,12 @@ export const Get_Status_Other = (userId) => {
     }
   };
 };
+
+export const Clear_Store_Other = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({type: types.Clear_Store_Other});
+    } catch (err) {}
+    dispatch({type: types.Clear_Store_Other});
+  };
+};

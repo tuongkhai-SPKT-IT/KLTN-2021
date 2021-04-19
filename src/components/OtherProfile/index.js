@@ -38,7 +38,7 @@ const OtherProfile = ({navigation}) => {
           });
         }
       } else {
-        return <Text style={{}}>Không có tin tức nào!!</Text>;
+        return <Text style={{padding: 20}}>Không có tin tức nào!!</Text>;
       }
     };
 
@@ -69,7 +69,7 @@ const OtherProfile = ({navigation}) => {
                 opacity: 0.5,
               }}
             />
-            <IntroOther />
+            <IntroOther direction={() => navigation.navigate('OtherUser')} />
 
             <View
               style={{
@@ -119,6 +119,11 @@ const OtherProfile = ({navigation}) => {
             headerShown: false,
           }}
           component={mainProfile}
+        />
+        <Stack.Screen
+          name="OtherUser"
+          options={{headerShown: false}}
+          component={OtherProfile}
         />
         <Stack.Screen
           name="fullfriends"
