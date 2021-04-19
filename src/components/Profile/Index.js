@@ -27,7 +27,6 @@ const Profile = ({navigation}) => {
 
   const mainProfile = ({navigation}) => {
     const ProfileInfo = useSelector((state) => state.ProfileInfo);
-    console.log(ProfileInfo);
     const userInfo = useSelector((state) => state.UserInfo);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -75,7 +74,6 @@ const Profile = ({navigation}) => {
               style={{
                 width: '100%',
                 height: 50,
-                // marginBottom: 10,
               }}></View>
             <Text
               h4
@@ -220,7 +218,7 @@ const Profile = ({navigation}) => {
         <Stack.Screen
           name="fullfriends"
           options={{
-            title: 'Bạn Bè',
+            title: 'Friends',
           }}
           component={friendsList}
         />

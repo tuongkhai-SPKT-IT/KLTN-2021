@@ -59,7 +59,7 @@ export default function ToolBar() {
         setIsReload(true);
         initRef.current.close();
       } else {
-        alert('Không thể đăng tin!! Vui lòng thử lại sau.');
+        alert('Server error! Please try again later :(');
       }
     }
   };

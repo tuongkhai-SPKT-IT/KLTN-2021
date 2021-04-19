@@ -132,13 +132,13 @@ const ContentStatus = (props) => {
       linkProfile: 'facebook.com/tuongkhai191999',
     },
   ];
-  // console.log(props.srcData);
+  // console.log('src: ',props.srcData);
   return (
     <>
       <View style={styles.stylesIndex.container1}>
         <MainContent
-          header={srcData.header_content}
-          caption={srcData.caption}
+          header={srcData?.header_content || ''}
+          caption={srcData?.caption || ''}
           id={srcData.id}
           linkProfile={srcData.no_sign_profile}
           srcImg={srcData.file_uploaded}
