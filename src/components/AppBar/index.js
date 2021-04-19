@@ -24,6 +24,7 @@ export default function AppBar() {
   };
   const showstatus = () => {
     const {srcData} = storeState;
+    console.log(srcData.length);
     // const srcData = [
     //   {
     //     caption: '1 hình 1 video',
@@ -84,7 +85,7 @@ export default function AppBar() {
         });
       }
     } else {
-      return <Text style={{}}>Không có tin tức nào!!</Text>;
+      return <Text style={{padding: 20}}>Không có tin tức nào!!</Text>;
     }
   };
   return (

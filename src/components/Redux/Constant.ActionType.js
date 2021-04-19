@@ -20,3 +20,5 @@ export const GetStatusOther_Success = 'GetStatusOther_Success';
 
 export const Get_IntroOther_Success = 'Get_IntroOther_Success';
 export const Get_IntroOther_Failed = 'Get_IntroOther_Failed';
+
+export const Clear_Store_Other = 'Clear_Store_Other';
