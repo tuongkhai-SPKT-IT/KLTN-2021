@@ -27,7 +27,6 @@ const Profile = ({navigation}) => {
 
   const mainProfile = ({navigation}) => {
     const ProfileInfo = useSelector((state) => state.ProfileInfo);
-
     const userInfo = useSelector((state) => state.UserInfo);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -54,7 +53,7 @@ const Profile = ({navigation}) => {
           });
         }
       } else {
-        return <Text style={{}}>Không có tin tức nào!!</Text>;
+        return <Text style={{padding: 20}}>Không có tin tức nào!!</Text>;
       }
     };
     const getIntro = () => {
@@ -92,7 +91,7 @@ const Profile = ({navigation}) => {
                 opacity: 0.5,
               }}
             />
-            <IntroProfile />
+            <IntroProfile direction={() => navigation.navigate('OtherUser')} />
 
             <View
               style={{
@@ -209,13 +208,13 @@ const Profile = ({navigation}) => {
           }}
           component={mainProfile}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="OtherUser"
           options={{
-            headerShown: false,
+            title: '',
           }}
           component={OtherProfile}
-        /> */}
+        />
         <Stack.Screen
           name="fullfriends"
           options={{
@@ -229,3 +228,32 @@ const Profile = ({navigation}) => {
 };
 export default Profile;
 const styles = StyleSheet.create({});
+// const srcData = [
+//   {
+//     caption: '1 hình 1 video',
+//     created_at: [],
+//     file_uploaded: [
+//       {
+//         type: 'image',
+//         uri:
+//           'http://api.facebook-kltn.alphawolf.io/image/Y0cF4YV8sjxRsixidrn6YuvwCnkhRN.jpg',
+//       },
+//       {
+//         type: 'video',
+//         uri:
+//           'http://api.facebook-kltn.alphawolf.io/video/vqXpEe8Vm5UBMKAB2fmxZASICyzgqS.mp4',
+//       },
+//     ],
+//     id: '606ef522e1f7bd56b33d4708',
+//     like_number: 0,
+//     liked: false,
+//     no_sign_profile: 'khaidev.chatheader.09.01',
+//     posted_time: '08/04/2021 07:20:50 PM',
+//     sex: '1',
+//     status_setting: 'pub',
+//     user_avatar: 'http://api.facebook-kltn.alphawolf.io/image/default.jpg',
+//     user_id: '606c1c6af2cda67fc337dc73',
+//     user_name: 'Khải dev chat header',
+//     who_liked_status: [],
+//   },
+// ];

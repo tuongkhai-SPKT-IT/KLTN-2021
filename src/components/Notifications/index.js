@@ -13,16 +13,10 @@ import {
   Colors,
 } from 'react-native-paper';
 import {SafeAreaView} from 'react-navigation';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  Get_Intro_Other,
-  Get_Status_Other,
-} from '../Redux/Actions/OtherProfile.Action';
+import {useSelector} from 'react-redux';
 export default function Notifications() {
   const [visible, setVisible] = useState(false);
-  const dispatch = useDispatch();
   const OtherProfile = useSelector((state) => state.OtherProfile);
-  console.log(OtherProfile);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = {backgroundColor: 'white', padding: 10};

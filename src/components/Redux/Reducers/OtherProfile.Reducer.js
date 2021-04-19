@@ -25,6 +25,9 @@ var OtherProfile = (state = initState, action) => {
       const {err} = action;
       return {...state, intro: [], err_code: err};
     }
+    case keys.Clear_Store_Other: {
+      return {intro: [], status: [], err: ''};
+    }
     default:
       return state;
   }

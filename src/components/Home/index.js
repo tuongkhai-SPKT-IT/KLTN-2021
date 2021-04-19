@@ -27,7 +27,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Profile from '../Profile/Index';
 import Notifications from '../Notifications';
 import Messengers from '../Messengers';
-// import OtherProfile from '../OtherProfile';
+import OtherProfile from '../OtherProfile';
 const Tab = createMaterialBottomTabNavigator();
 
 const Home = () => {

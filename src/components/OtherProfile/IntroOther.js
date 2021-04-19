@@ -9,20 +9,28 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Image} from 'react-native';
 import {Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  Get_Intro_Other,
+  Get_Status_Other,
+  Clear_Store_Other,
+} from '../Redux/Actions/OtherProfile.Action';
 
-const IntroProfile = ({navigation}) => {
+const IntroProfile = (props) => {
   const OtherProfile = useSelector((state) => state.OtherProfile);
   const [introUser, setIntroUser] = useState({});
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (OtherProfile.intro) setIntroUser(OtherProfile.intro);
   }, [OtherProfile.intro]);
   const blockFriend = (friend, i) => {
-    // console.log(friend);
-    // if (introUser.friend_array)
     return (
       <Pressable
         onPress={() => {
-          alert('click');
+          dispatch(Clear_Store_Other());
+          dispatch(Get_Intro_Other(friend.user_id));
+          dispatch(Get_Status_Other(friend.user_id));
+          props.direction();
         }}
         key={i}
         style={{width: 100}}>
