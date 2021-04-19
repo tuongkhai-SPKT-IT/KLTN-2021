@@ -10,12 +10,14 @@ import { ReloadHome } from '../Redux/Actions/Home.Action';
 import Modal from 'react-native-modal';
 import { Searchbar, List, Appbar, Avatar } from 'react-native-paper';
 import { GetUsers } from '../../services/user';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
 import Profile from '../Profile/Index';
 import {
   Get_Intro_Other,
   Get_Status_Other,
+  Clear_Store_Other,
 } from '../Redux/Actions/OtherProfile.Action';
+import OtherProfile from '../OtherProfile';
 
 export default function AppBar() {
   const Stack = createStackNavigator();
@@ -72,23 +74,38 @@ export default function AppBar() {
       );
     };
 
-    const showstatus = () => {
-      const { srcData } = storeState;
+    const showstatus = ({item}) => {
+      // const { srcData } = storeState;
 
-      if (srcData.length > 0) {
-        {
-          return srcData.map((stt, i) => {
-            return (
-              <View key={i} style={{ backgroundColor: 'rgba(0,0,0,.3)' }}>
-                <ContentStatus srcData={stt} />
-              </View>
-            );
-          });
-        }
-      } else {
-        return <Text style={{}}>Have no any news in your newsfeed! Post your first status now!</Text>;
-      }
+      return (
+        <View style={{ backgroundColor: 'rgba(0,0,0,.3)' }}>
+          <ContentStatus srcData={item} />
+        </View>
+      );
+
+      // if (srcData.length > 0) {
+      //   {
+      //     return srcData.map((stt, i) => {
+            
+      //     });
+      //   }
+      // } else {
+      //   return <Text style={{}}>Have no any news in your newsfeed! Post your first status now!</Text>;
+      // }
     };
+
+    const statusList = () =>{
+      const { srcData } = storeState;
+      if(srcData.length > 0){
+        return (
+          <FlatList
+            data={srcData}
+            keyExtractor={(status)=>status.id}
+            renderItem={showstatus}
+          />
+        )
+      }
+    }
 
     const searchList = ({ item }) => {
       if (usersList.length > 0) {
@@ -104,10 +121,11 @@ export default function AppBar() {
               style={{ margin: 10 }}
             />}
             onPress={()=>{
+              // dispatch(Clear_Store_Other());
               dispatch(Get_Intro_Other(item.user_id))
               dispatch(Get_Status_Other(item.user_id))
-              navigation.navigate('ProfileUser')
-              navigation.jumpTo('Profile',{})
+              navigation.push('ProfileUser')
+              // navigation.jumpTo('Profile',{})
             }}
           />
         );
@@ -144,7 +162,8 @@ export default function AppBar() {
             <ScrollView style={styles.scrollView}>
               <ToolBar />
               <View style={styles.divider}></View>
-              <ScrollView
+              {statusList()}
+              {/* <ScrollView
                 keyboardDismissMode="on-drag"
                 keyboardShouldPersistTaps="handled"
                 onScroll={({ nativeEvent }) => {
@@ -154,7 +173,7 @@ export default function AppBar() {
                 }}
                 scrollEventThrottle={400}>
                 {showstatus()}
-              </ScrollView>
+              </ScrollView> */}
             </ScrollView>
           </View>
           <Modal
@@ -214,9 +233,9 @@ export default function AppBar() {
         <Stack.Screen
           name="ProfileUser"
           options={{
-            headerShown: false,
+            title: "Ngay cho nay la thanh tim kiem hihi",
           }}
-          component={Profile}
+          component={OtherProfile}
         />
       </Stack.Navigator>
     </>
