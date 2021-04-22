@@ -13,7 +13,7 @@ export default function HeaderProfile(props) {
   const [declarePopUp, setDeclarePopUp] = useState(true);
   //true: avatar, false: cover props.imgPopup
   useEffect(() => {
-    if (userInfo.information) {
+    if (userInfo.information.length > 0) {
       const temp = {
         avatar: userInfo.information[0].value,
         cover: userInfo.information[1].value,

@@ -24,7 +24,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Profile from '../Profile/Index';
+import Profile from '../Profile';
 import Notifications from '../Notifications';
 import Messengers from '../Messengers';
 import OtherProfile from '../OtherProfile';
@@ -49,73 +49,71 @@ const Home = () => {
   const storeState = useSelector((state) => state.HomePage);
 
   return (
-    <NavigationContainer>
-      <NativeRouter>
-        <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
-        <SafeAreaView style={styles.container}>
-          <Tab.Navigator
-            activeColor="#1877F2"
-            inactiveColor="#65676B"
-            barStyle={{backgroundColor: '#ffff'}}
-            shifting={true}>
-            <Tab.Screen
-              name="Home"
-              options={{
-                tabBarIcon: () => {
-                  return (
-                    <MaterialCommunityIcons
-                      name="home"
-                      color="#1877F2"
-                      size={26}
-                    />
-                  );
-                },
-              }}
-              component={AppBar}
-            />
-            <Tab.Screen
-              name="Notifications"
-              options={{
-                tabBarIcon: () => {
-                  return <Entypo name="bell" color="#1877F2" size={26} />;
-                },
-              }}
-              component={Notifications}
-            />
-            <Tab.Screen
-              name="Messengers"
-              options={{
-                tabBarIcon: () => {
-                  return (
-                    <MaterialCommunityIcons
-                      name="facebook-messenger"
-                      color="#1877F2"
-                      size={26}
-                    />
-                  );
-                },
-              }}
-              component={Messengers}
-            />
-            <Tab.Screen
-              name="Profile"
-              options={{
-                tabBarIcon: () => {
-                  return (
-                    <Ionicons
-                      name="person-circle-outline"
-                      color="#1877F2"
-                      size={26}
-                    />
-                  );
-                },
-              }}
-              component={Profile}
-            />
-          </Tab.Navigator>
-        </SafeAreaView>
-      </NativeRouter>
-    </NavigationContainer>
+    <NativeRouter>
+      <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
+      <SafeAreaView style={styles.container}>
+        <Tab.Navigator
+          activeColor="#1877F2"
+          inactiveColor="#65676B"
+          barStyle={{backgroundColor: '#ffff'}}
+          shifting={true}>
+          <Tab.Screen
+            name="Home"
+            options={{
+              tabBarIcon: () => {
+                return (
+                  <MaterialCommunityIcons
+                    name="home"
+                    color="#1877F2"
+                    size={26}
+                  />
+                );
+              },
+            }}
+            component={AppBar}
+          />
+          <Tab.Screen
+            name="Notifications"
+            options={{
+              tabBarIcon: () => {
+                return <Entypo name="bell" color="#1877F2" size={26} />;
+              },
+            }}
+            component={Notifications}
+          />
+          <Tab.Screen
+            name="Messengers"
+            options={{
+              tabBarIcon: () => {
+                return (
+                  <MaterialCommunityIcons
+                    name="facebook-messenger"
+                    color="#1877F2"
+                    size={26}
+                  />
+                );
+              },
+            }}
+            component={Messengers}
+          />
+          <Tab.Screen
+            name="Profile"
+            options={{
+              tabBarIcon: () => {
+                return (
+                  <Ionicons
+                    name="person-circle-outline"
+                    color="#1877F2"
+                    size={26}
+                  />
+                );
+              },
+            }}
+            component={Profile}
+          />
+        </Tab.Navigator>
+      </SafeAreaView>
+    </NativeRouter>
   );
 };
 const styles = StyleSheet.create({

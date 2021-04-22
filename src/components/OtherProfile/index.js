@@ -9,21 +9,105 @@ import {
 } from 'react-native';
 import HeaderOther from './HeaderOther';
 import Modal from 'react-native-modal';
-import EntypoIcons from 'react-native-vector-icons/Entypo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Avatar, Button, Text, SearchBar} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import IntroOther from './IntroOther';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
 import OthersFriend from './OthersFriend';
+import {
+  Get_Intro_Other,
+  Get_Status_Other,
+  Clear_Store_Other,
+} from '../Redux/Actions/OtherProfile.Action';
 import ContentStatus from '../ContentStatus';
-const OtherProfile = ({navigation}) => {
-  const Stack = createStackNavigator();
+import API from '../API/API';
+import HeaderApp from '../HeaderApp';
 
+const OtherProfile = ({route, navigation}) => {
+  const Stack = createStackNavigator();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (route.params) {
+      dispatch(Clear_Store_Other());
+      dispatch(Get_Intro_Other(route.params.userId));
+      dispatch(Get_Status_Other(route.params.userId));
+    }
+  }, [route.params]);
   const mainProfile = ({navigation}) => {
     const OtherProfile = useSelector((state) => state.OtherProfile);
-    console.log(OtherProfile);
-    const dispatch = useDispatch();
+    const userInfo = useSelector((state) => state.UserInfo);
+    const token = userInfo.information[3].value;
+    const [relationShip, setRelationShip] = useState(false); // true: friend, false: requested, not friend
+    const [buttonFriend, setButtonFriend] = useState({
+      // title: 'Add friend',
+      // icon: 'user-plus',
+    });
+    const [buttonMessenger, setButtonMessenger] = useState({});
+    const checkRelationship = () => {
+      if (OtherProfile.intro.user_id) {
+        const route = 'user/check-relationship';
+        const param = {
+          friend_id: OtherProfile.intro.user_id,
+        };
+        const header = {
+          Authorization: 'bearer' + token,
+        };
+        const api = new API();
+        api
+          .onCallAPI('get', route, {}, param, header)
+          .then((res) => {
+            if (res.data.error_code !== 0) {
+              window.alert(res.data.message);
+            } else {
+              if (res.data.data === 0) {
+                //bạn bè
+                setButtonFriend({
+                  title: 'Friend',
+                  icon: 'user-friends',
+                });
+                setRelationShip(true);
+              }
 
+              if (res.data.data === 1) {
+                console.log('đã gửi yêu cầu kb');
+                setButtonFriend({
+                  title: 'Requested',
+                  icon: 'user-times',
+                });
+                setRelationShip(false);
+              }
+
+              if (res.data.data === 2) {
+                console.log('chờ người ta xác nhận');
+                setButtonFriend({
+                  title: 'Confirm',
+                  icon: 'user-check',
+                });
+                setRelationShip(false);
+              }
+
+              if (res.data.data === 3) {
+                console.log('không là bạn bè');
+                setButtonFriend({
+                  title: 'Add friend',
+                  icon: 'user-plus',
+                });
+                setRelationShip(false);
+              }
+              setButtonMessenger({
+                title: 'Send a message',
+                icon: 'facebook-messenger', //MaterialCommunityIcons
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    };
     const showstatus = () => {
       const srcData = OtherProfile.status;
 
@@ -41,7 +125,12 @@ const OtherProfile = ({navigation}) => {
         return <Text style={{padding: 20}}>Không có tin tức nào!!</Text>;
       }
     };
-
+    const createRoom = () => {
+      navigation.jumpTo('Messengers');
+    };
+    useEffect(() => {
+      checkRelationship();
+    }, [OtherProfile.intro]);
     return (
       <>
         <View style={{position: 'relative'}}>
@@ -61,7 +150,55 @@ const OtherProfile = ({navigation}) => {
               }}>
               {OtherProfile.intro.user_name}
             </Text>
+            <View
+              style={{flexDirection: 'row', width: '100%', marginBottom: 10}}>
+              <Button
+                buttonStyle={{backgroundColor: '#E4E6EB'}}
+                titleStyle={{color: 'black'}}
+                containerStyle={{marginHorizontal: 10, flex: 10}}
+                loadingProps={{animating: true}}
+                icon={
+                  relationShip ? (
+                    <MaterialCommunityIcons
+                      name={buttonMessenger.icon}
+                      style={{marginRight: 10}}
+                      size={20}
+                    />
+                  ) : (
+                    <FontAwesome5
+                      name={buttonFriend.icon}
+                      style={{marginRight: 10}}
+                      size={20}
+                    />
+                  )
+                }
+                onPress={() => alert('click')}
+                title={
+                  relationShip ? buttonMessenger.title : buttonFriend.title
+                }
+              />
 
+              <Button
+                buttonStyle={{
+                  backgroundColor: '#E4E6EB',
+                  width: 40,
+                }}
+                titleStyle={{color: 'black'}}
+                containerStyle={{marginHorizontal: 10}}
+                loadingProps={{animating: true}}
+                icon={
+                  relationShip ? (
+                    <FontAwesome5 name={buttonFriend.icon} size={20} />
+                  ) : (
+                    <MaterialCommunityIcons
+                      name={buttonMessenger.icon}
+                      size={20}
+                    />
+                  )
+                }
+                onPress={() => alert('click')}
+              />
+            </View>
             <View
               style={{
                 borderBottomColor: 'black',
@@ -69,7 +206,7 @@ const OtherProfile = ({navigation}) => {
                 opacity: 0.5,
               }}
             />
-            <IntroOther direction={() => navigation.navigate('OtherUser')} />
+            <IntroOther direction={() => navigation.push('OtherUser')} />
 
             <View
               style={{
@@ -88,7 +225,7 @@ const OtherProfile = ({navigation}) => {
                     containerStyle={{
                       width: '100%',
                     }}
-                    onPress={() => navigation.navigate('fullfriends')}
+                    onPress={() => navigation.push('fullfriends')}
                     title="See All Friends"
                     titleStyle={{color: 'black'}}
                   />
@@ -122,13 +259,15 @@ const OtherProfile = ({navigation}) => {
         />
         <Stack.Screen
           name="OtherUser"
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+          }}
           component={OtherProfile}
         />
         <Stack.Screen
           name="fullfriends"
           options={{
-            title: 'Bạn Bè',
+            title: 'Friends',
           }}
           component={OthersFriend}
         />

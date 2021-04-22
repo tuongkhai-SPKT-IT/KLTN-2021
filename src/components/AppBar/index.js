@@ -1,72 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ToolBar from '../ToolBar';
 import ContentStatus from '../ContentStatus';
-import { useDispatch, useSelector } from 'react-redux';
-import { ReloadHome } from '../Redux/Actions/Home.Action';
+import {useDispatch, useSelector} from 'react-redux';
+import {ReloadHome} from '../Redux/Actions/Home.Action';
 import Modal from 'react-native-modal';
-import { Searchbar, List, Appbar, Avatar } from 'react-native-paper';
-import { GetUsers } from '../../services/user';
-import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
-import Profile from '../Profile/Index';
-import {
-  Get_Intro_Other,
-  Get_Status_Other,
-  Clear_Store_Other,
-} from '../Redux/Actions/OtherProfile.Action';
+import {Searchbar, List, Appbar, Avatar} from 'react-native-paper';
+import {GetUsers} from '../../Services/user';
+import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
+
 import OtherProfile from '../OtherProfile';
+import HeaderApp from '../HeaderApp';
+import {useHistory} from 'react-router';
 
-export default function AppBar() {
+export default function AppBar({navigation}) {
   const Stack = createStackNavigator();
-
-  const homePage = ({ navigation }) => {
+  const homePage = () => {
     const dispatch = useDispatch();
     const storeState = useSelector((state) => state.HomePage);
-
+    const history = useHistory();
     /**
-   * AppBar State
-   */
-    const [isVisibleSearchModal, setIsVisibleSearchModal] = useState(false);
-    const [searchContent, setSearchContent] = useState('');
-    const [usersList, setUsersList] = useState([]);
+     * AppBar State
+     */
 
     useEffect(() => {
       dispatch(ReloadHome());
     }, []);
 
-    useEffect(() => {
-      loadUsers();
-    }, [searchContent])
-
-    const loadUsers = async () => {
-      let data = {
-        type_search: 0,
-      }
-      if (searchContent !== '') {
-        data = {
-          ...data,
-          search_content: searchContent
-        }
-
-        try {
-          const userResponse = await GetUsers(data);
-
-          if (userResponse.status) {
-            setUsersList(userResponse.data);
-          } else {
-            alert(userResponse.message)
-          }
-        } catch (e) {
-          console.log('error: ', e)
-        }
-      }
-      return;
-    }
-
-    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    const isCloseToBottom = ({
+      layoutMeasurement,
+      contentOffset,
+      contentSize,
+    }) => {
       const paddingToBottom = 20;
       return (
         layoutMeasurement.height + contentOffset.y >=
@@ -78,7 +46,7 @@ export default function AppBar() {
       // const { srcData } = storeState;
 
       return (
-        <View style={{ backgroundColor: 'rgba(0,0,0,.3)' }}>
+        <View style={{backgroundColor: 'rgba(0,0,0,.3)'}}>
           <ContentStatus srcData={item} />
         </View>
       );
@@ -86,7 +54,7 @@ export default function AppBar() {
       // if (srcData.length > 0) {
       //   {
       //     return srcData.map((stt, i) => {
-            
+
       //     });
       //   }
       // } else {
@@ -94,75 +62,37 @@ export default function AppBar() {
       // }
     };
 
-    const statusList = () =>{
-      const { srcData } = storeState;
-      if(srcData.length > 0){
+    const statusList = () => {
+      const {srcData} = storeState;
+      if (srcData.length > 0) {
         return (
           <FlatList
             data={srcData}
-            keyExtractor={(status)=>status.id}
+            keyExtractor={(status) => status.id}
             renderItem={showstatus}
           />
-        )
-      }
-    }
-
-    const searchList = ({ item }) => {
-      if (usersList.length > 0) {
+        );
+      } else {
         return (
-          <List.Item
-            title={item.user_name}
-            description={item.email}
-            left={props => <Avatar.Image
-              size={40}
-              source={{
-                uri: item.user_avatar,
-              }}
-              style={{ margin: 10 }}
-            />}
-            onPress={()=>{
-              // dispatch(Clear_Store_Other());
-              dispatch(Get_Intro_Other(item.user_id))
-              dispatch(Get_Status_Other(item.user_id))
-              navigation.push('ProfileUser')
-              // navigation.jumpTo('Profile',{})
-            }}
-          />
+          <Text style={{padding: 20, fontSize: 20, textAlign: 'center'}}>
+            There didnt have any news in your newsfeed! Post your first status
+            now!
+          </Text>
         );
       }
-      return (
-        <></>
-      )
     };
-
-    const handleOnChangeSearchBar = (query) => {
-      setSearchContent(query)
-      if (searchContent) {
-        setUsersList([])
-      }
-    }
 
     return (
       <>
+        <View style={styles.containerHeader}>
+          <HeaderApp navigation={navigation} />
+        </View>
         <View style={styles.container}>
-          <View style={styles.containerHeader}>
-            <View style={styles.row}>
-              <View style={styles.appName}>
-                <Text style={styles.appName}>facebook</Text>
-              </View>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => { setIsVisibleSearchModal(true) }}
-              >
-                <Feather name="search" size={30} color="black" />
-              </TouchableOpacity>
-            </View>
-          </View>
           <View style={styles.containerBody}>
             <ScrollView style={styles.scrollView}>
               <ToolBar />
               <View style={styles.divider}></View>
-              {statusList()}
+              {/* {statusList()} */}
               {/* <ScrollView
                 keyboardDismissMode="on-drag"
                 keyboardShouldPersistTaps="handled"
@@ -176,50 +106,11 @@ export default function AppBar() {
               </ScrollView> */}
             </ScrollView>
           </View>
-          <Modal
-            isVisible={isVisibleSearchModal}
-            onBackButtonPress={() => setIsVisibleSearchModal(false)}
-            style={{
-              backgroundColor: 'transparent',
-              margin: 0,
-            }}
-          >
-            <View
-              style={styles.searchModal}
-            >
-              <View style={{
-                flex: 1,
-                backgroundColor: "#fff"
-              }}>
-                <Appbar.Header style={{ backgroundColor: '#fff' }}>
-                  <Appbar.BackAction onPress={() => {
-                    setIsVisibleSearchModal(false);
-                    setSearchContent('');
-                    setUsersList([])
-                  }} />
-                  <Searchbar
-                    placeholder="Search"
-                    style={styles.searchBox}
-                    value={searchContent}
-                    onChangeText={handleOnChangeSearchBar}
-                  />
-                </Appbar.Header>
-                <FlatList
-                  data={usersList}
-                  keyExtractor={(item) => item.user_id}
-                  renderItem={searchList}
-                />
-
-              </View>
-
-            </View>
-
-          </Modal>
         </View>
         {/* <ToolBar/> */}
       </>
     );
-  }
+  };
   return (
     <>
       <Stack.Navigator>
@@ -231,9 +122,19 @@ export default function AppBar() {
           component={homePage}
         />
         <Stack.Screen
-          name="ProfileUser"
+          name="OtherUser"
           options={{
-            title: "Ngay cho nay la thanh tim kiem hihi",
+            title: '',
+            headerRight: (props) => (
+              <>
+                <HeaderApp
+                  navigation={navigation}
+                  iconApp={false}
+                  searchBar={true}
+                />
+              </>
+            ),
+            headerRightContainerStyle: {},
           }}
           component={OtherProfile}
         />
@@ -256,7 +157,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#CCCCD2',
   },
   container: {
-    position: "relative",
+    position: 'relative',
     width: '100%',
     height: 56,
     paddingTop: 5,
@@ -269,10 +170,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   containerHeader: {
-    flex: 1,
     width: '100%',
     backgroundColor: '#fff',
-    marginBottom: 25,
+    padding: 10,
   },
   containerBody: {
     flex: 18,
@@ -307,13 +207,13 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     bottom: 0,
-    flex: 1
+    flex: 1,
   },
   searchBox: {
-    backgroundColor: "whitesmoke",
+    backgroundColor: 'whitesmoke',
     borderRadius: 20,
     marginTop: 10,
     marginBottom: 15,
-    width: 350
-  }
+    width: 350,
+  },
 });
