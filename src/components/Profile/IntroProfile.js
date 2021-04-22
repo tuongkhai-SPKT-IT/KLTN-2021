@@ -14,15 +14,14 @@ import {
   Clear_Store_Other,
 } from '../Redux/Actions/OtherProfile.Action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import OtherProfile from '../OtherProfile';
-import {createStackNavigator} from '@react-navigation/stack';
+import {useHistory} from 'react-router-native';
 
 const IntroProfile = (props) => {
-  // console.log(navigate);
+  const history = useHistory();
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
   const OtherProfile = useSelector((state) => state.OtherProfile);
-  console.log(OtherProfile);
   const [introUser, setIntroUser] = useState({});
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (ProfileInfo.introUser) setIntroUser(ProfileInfo.introUser);
@@ -31,10 +30,9 @@ const IntroProfile = (props) => {
     return (
       <Pressable
         onPress={() => {
-          dispatch(Clear_Store_Other());
-          dispatch(Get_Intro_Other(friend.user_id));
-          dispatch(Get_Status_Other(friend.user_id));
-          props.direction();
+          props.navigation.push('OtherUser', {
+            userId: friend.user_id,
+          });
         }}
         key={i}
         style={{width: 100}}>
@@ -125,8 +123,10 @@ const IntroProfile = (props) => {
             style={{marginHorizontal: 5}}
           />
         }
-        onPress={() => AsyncStorage.clear()}
-        title="Edit Infomation Details"
+        onPress={() => {
+          AsyncStorage.clear();
+        }}
+        title="Edit Information Details"
         titleStyle={{color: 'black'}}
       />
       <View style={{borderTopWidth: 0.8}}>

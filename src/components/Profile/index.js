@@ -19,12 +19,16 @@ import {
 } from '../Redux/Actions/ProfileUser.Action';
 import IntroProfile from './IntroProfile';
 import OtherProfile from '../OtherProfile';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
 import friendsList from './friendsList';
 import ContentStatus from '../ContentStatus';
+import HeaderApp from '../HeaderApp';
+import {useHistory} from 'react-router';
+
 const Profile = ({navigation}) => {
   const Stack = createStackNavigator();
-
+  // const history = useHistory();
+  // console.log(history.location);
   const mainProfile = ({navigation}) => {
     const ProfileInfo = useSelector((state) => state.ProfileInfo);
     const userInfo = useSelector((state) => state.UserInfo);
@@ -62,6 +66,14 @@ const Profile = ({navigation}) => {
     return (
       <>
         <View style={{position: 'relative'}}>
+          <View
+            style={{
+              width: '100%',
+              backgroundColor: '#fff',
+              padding: 10,
+            }}>
+            <HeaderApp navigation={navigation} />
+          </View>
           <ScrollView>
             <HeaderProfile
               setImgPopup={setImgPopup}
@@ -91,8 +103,7 @@ const Profile = ({navigation}) => {
                 opacity: 0.5,
               }}
             />
-            <IntroProfile direction={() => navigation.navigate('OtherUser')} />
-
+            <IntroProfile navigation={navigation} />
             <View
               style={{
                 paddingBottom: 10,
@@ -110,7 +121,7 @@ const Profile = ({navigation}) => {
                     containerStyle={{
                       width: '100%',
                     }}
-                    onPress={() => navigation.navigate('fullfriends')}
+                    onPress={() => navigation.push('fullfriends')}
                     title="See All Friends"
                     titleStyle={{color: 'black'}}
                   />
@@ -212,6 +223,16 @@ const Profile = ({navigation}) => {
           name="OtherUser"
           options={{
             title: '',
+            headerRight: (props) => (
+              <>
+                <HeaderApp
+                  navigation={navigation}
+                  iconApp={false}
+                  searchBar={true}
+                />
+              </>
+            ),
+            headerRightContainerStyle: {},
           }}
           component={OtherProfile}
         />

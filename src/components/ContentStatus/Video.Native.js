@@ -68,7 +68,7 @@ const VideoNative = (props) => {
     };
   }, []);
   const secondsToTime = (time) => {
-    return ~~(time / 60) + ':' + (time % 60 < 10 ? '0' : '') + (time % 60);
+    return ~~(time / 60) + ':' + (time % 60 < 10 ? '0' : '') + (time % 60); 
   };
   var timeVisible;
   return (

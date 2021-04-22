@@ -50,11 +50,7 @@ const Login = ({navigation}) => {
       dispatch(Login_Request(info));
     }
   };
-  useEffect(() => {
-    AsyncStorage.getItem(storeKeys.User_Token).then((val) => {
-      if (val) history.push('/Home');
-    });
-  }, []);
+
   AsyncStorage.getItem(storeKeys.User_Token).then((val) => {
     if (val) history.push('/Home');
   });

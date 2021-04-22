@@ -22,3 +22,6 @@ export const Get_IntroOther_Success = 'Get_IntroOther_Success';
 export const Get_IntroOther_Failed = 'Get_IntroOther_Failed';
 
 export const Clear_Store_Other = 'Clear_Store_Other';
+
+export const Get_Group_Chat = 'Get_Group_Chat';
+export const Create_Group_Chat = 'Create_Group_Chat';
