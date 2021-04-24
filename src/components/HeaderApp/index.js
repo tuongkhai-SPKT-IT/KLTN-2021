@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {ReloadHome} from '../Redux/Actions/Home.Action';
 import Modal from 'react-native-modal';
 import {Searchbar, List, Appbar, Avatar} from 'react-native-paper';
-import {GetUsers} from '../../Services/user';
+import {GetUsers} from '../../services/user';
 import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
 import {useHistory} from 'react-router';
 
