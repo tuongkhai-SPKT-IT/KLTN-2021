@@ -1,57 +1,73 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions} from 'react-native';
-import {View, ScrollView, Pressable} from 'react-native';
-import {Avatar, Text} from 'react-native-elements';
+import {View, ScrollView, TouchableOpacity, Image} from 'react-native';
+import {Avatar, Button, Text} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import API from '../API/API';
+import * as keys from '../Constants';
 const SmallMessenger = ({navigation}) => {
   const userInfo = useSelector((state) => state.UserInfo);
   const [arrChatGroup, setArrChatGroup] = useState([]);
-  const userToken = useRef(null);
-  if (userInfo.informtion)
-    userToken.current =
-      // userInfo.information[3].value;
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmZhY2Vib29rLWtsdG4uYWxwaGF3b2xmLmlvL2FwaS91c2VyL2xvZy1pbiIsImlhdCI6MTYxODkwNDY2NiwibmJmIjoxNjE4OTA0NjY2LCJqdGkiOiJ2SkdjdzVxVWI3NUs5VE0yIiwic3ViIjoiNjA1MzM4M2ZmY2Y5ZTk2YzJlMjI5OGM1IiwicHJ2IjoiMzg1MmIyMTg1MDEzNTZkMzNjNjEyOTJiNzVmMmFkNzU3Mjk4NmExNyIsInVzZXJfbmFtZSI6Ilx1MDExMFx1MWVkNyBUXHUwMWIwXHUxZWRkbmcgS2hcdTFlYTNpIiwidXNlcl9pZCI6IjYwNTMzODNmZmNmOWU5NmMyZTIyOThjNCIsInVzZXJfZnVsbF9uYW1lIjoiXHUwMTEwXHUxZWQ3IFRcdTAxYjBcdTFlZGRuZyBLaFx1MWVhM2kiLCJwaG9uZSI6IjA1ODU1MTE5NTUiLCJlbWFpbCI6ImRvdHVvbmdraGFpMTkxOTk5QGdtYWlsLmNvbSIsInNleCI6IjEifQ.s5obfQoJaTQUEWIlevDwo0j8hzdM5eQK66pX0xGCAoM';
-  useEffect(() => {
-    if (userToken.current) {
-      const route = 'chat/list-messages';
-      const param = {
-        token: userToken.current,
-      };
-      const header = {
-        Authorization: 'bearer' + userToken.current,
-      };
-      const api = new API();
-      api.onCallAPI('get', route, {}, param, header).then((res) => {
-        if (res.data.error_code !== 0) {
-          window.alert(res.data.message);
-        } else {
-          if (res.data.data) {
-            // this.setState({friendAddArray: res.data.data});
-            setArrChatGroup(res.data.data);
-            console.log(res.data.data);
-          }
-        }
-      });
-    }
-  }, [userToken]);
-  // const [widthMess, setWidthMess] = useState(0);
 
+  useEffect(() => {
+    AsyncStorage.getItem(keys.User_Token).then((val) => {
+      if (val) {
+        const route = 'chat/list-messages';
+        const param = {
+          token: val,
+        };
+        const header = {
+          Authorization: 'bearer' + val,
+        };
+        const api = new API();
+        api.onCallAPI('get', route, {}, param, header).then((res) => {
+          if (res.data.error_code !== 0) {
+            window.alert(res.data.message);
+          } else {
+            if (res.data.data) {
+              // this.setState({friendAddArray: res.data.data});
+              setArrChatGroup(res.data.data);
+            }
+          }
+        });
+      }
+    });
+  }, []);
+
+  // const [widthMess, setWidthMess] = useState(0);
   const singleSmallMess = (message, i) => {
-    console.log(message);
+    const maxlimit = 40;
+    var contentCurrent = message.isCurrent
+      ? 'Bạn: '
+      : message.friend_chat + ': ';
+    contentCurrent += message.messRecent;
     return (
-      <Pressable
-        onPress={() => navigation.push('DetailMessages')}
+      <TouchableOpacity
         key={i}
-        style={{flex: 1, flexDirection: 'row', padding: 10}}>
-        <Avatar
-          avatarStyle={{}}
-          containerStyle={{backgroundColor: '#BDBDBD'}}
-          onLongPress={() => alert('onLongPress')}
-          onPress={() => alert('onPress')}
-          rounded
-          size="large"
+        onPress={() =>
+          navigation.push('DetailMessages', {
+            chat_group_id: message.room,
+            avatar: message.avatar,
+            friend_chat: message.friend_chat,
+          })
+        }
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          borderBottomWidth: 1,
+          borderColor: 'black',
+          alignItems: 'center',
+          paddingLeft: 10,
+        }}>
+        <Image
+          style={{
+            borderColor: 'black',
+            width: 60,
+            height: 60,
+            borderRadius: 40,
+            borderWidth: 1.5,
+          }}
           source={{uri: message.avatar}}
         />
         <View style={{padding: 5, justifyContent: 'space-between'}}>
@@ -71,15 +87,16 @@ const SmallMessenger = ({navigation}) => {
               style={{
                 fontSize: 16,
               }}>
-              {message.isCurrent ? 'Bạn: ' : message.friend_chat + ': '}
-              {message.messRecent}
+              {contentCurrent.length > maxlimit
+                ? contentCurrent.substring(0, maxlimit - 3) + '...'
+                : contentCurrent}
             </Text>
           </View>
           <View style={{flex: 1, justifyContent: 'center'}}>
             <Text style={{fontSize: 16}}>{message.time}</Text>
           </View>
         </View>
-      </Pressable>
+      </TouchableOpacity>
     );
   };
   return (
@@ -88,9 +105,7 @@ const SmallMessenger = ({navigation}) => {
         {arrChatGroup.length > 0 ? (
           arrChatGroup.map(singleSmallMess)
         ) : (
-          <Text
-            // onPress={() => navigation.push('DetailMessages')}
-            style={{padding: 20, fontSize: 16}}>
+          <Text style={{padding: 20, fontSize: 16}}>
             You haven't any messages
           </Text>
         )}

@@ -9,25 +9,17 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
-import UpStatus from './UpStatus';
 import {NativeRouter, Route, Link, useHistory} from 'react-router-native';
-import ContentStatus from '../ContentStatus';
 import {useDispatch, useSelector} from 'react-redux';
 import AppBar from '../AppBar';
 import {SafeAreaView} from 'react-navigation';
-import ToolBar from '../ToolBar';
-import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import ViewLCS from '../ContentStatus/ViewLCS';
-// import Comment from '../ContentStatus/Comment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Profile from '../Profile';
 import Notifications from '../Notifications';
 import Messengers from '../Messengers';
-import OtherProfile from '../OtherProfile';
 const Tab = createMaterialBottomTabNavigator();
 
 const Home = () => {
@@ -38,12 +30,12 @@ const Home = () => {
 
   const history = useHistory();
   useEffect(() => {}, []);
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      history.goBack();
-      return true;
-    });
-  }, []);
+  // useEffect(() => {
+  //   BackHandler.addEventListener('hardwareBackPress', () => {
+  //     history.goBack();
+  //     return true;
+  //   });
+  // }, []);
 
   const dispatch = useDispatch();
   const storeState = useSelector((state) => state.HomePage);
@@ -70,7 +62,7 @@ const Home = () => {
                 );
               },
             }}
-            component={AppBar}
+            component={Messengers}
           />
           <Tab.Screen
             name="Notifications"

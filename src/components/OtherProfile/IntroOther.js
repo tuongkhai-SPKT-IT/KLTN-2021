@@ -7,15 +7,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Button, Text} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {Image} from 'react-native';
-import {Pressable} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  Get_Intro_Other,
-  Get_Status_Other,
-  Clear_Store_Other,
-} from '../Redux/Actions/OtherProfile.Action';
+import {TouchableOpacity} from 'react-native';
 
-const IntroProfile = (props) => {
+const IntroProfile = ({navigation}) => {
   const OtherProfile = useSelector((state) => state.OtherProfile);
   const [introUser, setIntroUser] = useState({});
   const dispatch = useDispatch();
@@ -25,12 +19,11 @@ const IntroProfile = (props) => {
   }, [OtherProfile.intro]);
   const blockFriend = (friend, i) => {
     return (
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
-          dispatch(Clear_Store_Other());
-          dispatch(Get_Intro_Other(friend.user_id));
-          dispatch(Get_Status_Other(friend.user_id));
-          props.direction();
+          navigation.push('OtherUser', {
+            userId: friend.user_id,
+          });
         }}
         key={i}
         style={{width: 100}}>
@@ -41,7 +34,7 @@ const IntroProfile = (props) => {
         <Text h4 h4Style={{fontSize: 15}} style={{textAlign: 'center'}}>
           {friend.user_name}
         </Text>
-      </Pressable>
+      </TouchableOpacity>
     );
     //else return <></>;
   };

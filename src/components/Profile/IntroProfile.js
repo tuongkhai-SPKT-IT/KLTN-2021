@@ -7,7 +7,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Button, Text} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {Image} from 'react-native';
-import {Pressable} from 'react-native';
 import {
   Get_Intro_Other,
   Get_Status_Other,
@@ -15,22 +14,22 @@ import {
 } from '../Redux/Actions/OtherProfile.Action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useHistory} from 'react-router-native';
+import {DevSettings} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const IntroProfile = (props) => {
-  const history = useHistory();
+const IntroProfile = ({navigation}) => {
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
-  const OtherProfile = useSelector((state) => state.OtherProfile);
   const [introUser, setIntroUser] = useState({});
-
   const dispatch = useDispatch();
+  
   useEffect(() => {
     if (ProfileInfo.introUser) setIntroUser(ProfileInfo.introUser);
   }, [ProfileInfo.introUser]);
   const blockFriend = (friend, i) => {
     return (
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
-          props.navigation.push('OtherUser', {
+          navigation.push('OtherUser', {
             userId: friend.user_id,
           });
         }}
@@ -43,7 +42,7 @@ const IntroProfile = (props) => {
         <Text h4 h4Style={{fontSize: 15}} style={{textAlign: 'center'}}>
           {friend.user_name}
         </Text>
-      </Pressable>
+      </TouchableOpacity>
     );
   };
 
@@ -125,6 +124,7 @@ const IntroProfile = (props) => {
         }
         onPress={() => {
           AsyncStorage.clear();
+          DevSettings.reload();
         }}
         title="Edit Information Details"
         titleStyle={{color: 'black'}}

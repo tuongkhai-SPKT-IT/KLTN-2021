@@ -132,32 +132,37 @@ export default function ViewLCS(props) {
           value={inputCmt}
         />
 
-        <Pressable style={styles.stylesViewLCS.btnComment}>
-          <FontAwesomenIcon
-            onPress={() => {
-              if (inputCmt.trim() !== '') {
-                listComment.push({
-                  comment: inputCmt,
-                  linkProfile: userInfo.current.user_ProLink,
-                  user_avatar: userInfo.current.user_avatar,
-                  user_name: userInfo.current.user_name,
-                });
-                setSmallCmt(listComment.slice(listComment.length - 2));
-                if (textComment.current) textComment.current.clear();
-                setInputCmt('');
-                if (scrollRef.current) {
-                  setTimeout(() => {
-                    scrollRef.current.scrollToEnd();
-                  }, 1 * 100);
-                }
+        {/* <Pressable ></Pressable> */}
+        <Button
+          // buttonStyle={{backgroundColor: 'transparent'}}
+          style={styles.stylesViewLCS.btnComment}
+          onPress={() => {
+            if (inputCmt.trim() !== '') {
+              listComment.push({
+                comment: inputCmt,
+                linkProfile: userInfo.current.user_ProLink,
+                user_avatar: userInfo.current.user_avatar,
+                user_name: userInfo.current.user_name,
+              });
+              setSmallCmt(listComment.slice(listComment.length - 2));
+              if (textComment.current) textComment.current.clear();
+              setInputCmt('');
+              if (scrollRef.current) {
+                setTimeout(() => {
+                  scrollRef.current.scrollToEnd();
+                }, 1 * 100);
               }
-            }}
-            name="send"
-            style={{width: 26}}
-            size={25}
-            color="rgba(0,0,0,.8)"
-          />
-        </Pressable>
+            }
+          }}
+          icon={
+            <FontAwesomenIcon
+              name="send"
+              style={{width: 26}}
+              size={25}
+              color="rgba(0,0,0,.8)"
+            />
+          }
+        />
       </View>
       // </ScrollView>
     );

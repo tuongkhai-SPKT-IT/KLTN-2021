@@ -1,17 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  BackHandler,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  Modal,
-  Pressable,
-} from 'react-native';
-
+import {StyleSheet, Text, View, Image} from 'react-native';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import ImageGrid from './ImageGrid';

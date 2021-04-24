@@ -28,7 +28,7 @@ import HeaderApp from '../HeaderApp';
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
   const dispatch = useDispatch();
-
+  console.log(route.params);
   useEffect(() => {
     if (route.params) {
       dispatch(Clear_Store_Other());
@@ -127,6 +127,8 @@ const OtherProfile = ({route, navigation}) => {
     };
     const createRoom = () => {
       navigation.jumpTo('Messengers');
+      navigation.push('DetailMessages', {chat_group_id: 'con cá'});
+      navigation.goBack();
     };
     useEffect(() => {
       checkRelationship();
@@ -172,7 +174,9 @@ const OtherProfile = ({route, navigation}) => {
                     />
                   )
                 }
-                onPress={() => alert('click')}
+                onPress={() =>
+                  relationShip ? createRoom() : alert('Add friends')
+                }
                 title={
                   relationShip ? buttonMessenger.title : buttonFriend.title
                 }
@@ -196,7 +200,9 @@ const OtherProfile = ({route, navigation}) => {
                     />
                   )
                 }
-                onPress={() => alert('click')}
+                onPress={() =>
+                  relationShip ? alert('Unfriends friends') : createRoom()
+                }
               />
             </View>
             <View
@@ -206,7 +212,8 @@ const OtherProfile = ({route, navigation}) => {
                 opacity: 0.5,
               }}
             />
-            <IntroOther direction={() => navigation.push('OtherUser')} />
+            <IntroOther navigation={navigation} />
+            {/*  direction={() => navigation.push('OtherUser')} /> */}
 
             <View
               style={{
