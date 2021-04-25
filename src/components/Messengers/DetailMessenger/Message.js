@@ -29,7 +29,7 @@ const Message = (props) => {
           marginLeft: 10,
           maxWidth: '80%',
         }}>
-        <Text style={{}}>{props.message.text}</Text>
+        <Text style={{fontSize: 16}}>{props.message.text}</Text>
       </View>
     </View>
   ) : (
@@ -53,7 +53,9 @@ const Message = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text style={{textAlign: 'center'}}>{props.message.text}</Text>
+        <Text style={{textAlign: 'center', fontSize: 16}}>
+          {props.message.text}
+        </Text>
       </View>
     </View>
   );

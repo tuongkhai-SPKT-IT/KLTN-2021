@@ -12,6 +12,7 @@ import {Keyboard} from 'react-native';
 const DetailMessenger = ({route, navigation}) => {
   const {chat_group_id, avatar, friend_chat} = route.params;
   const [messages, setMessages] = useState([]);
+  const [visibleScroll, setVisibleScroll] = useState(false);
   let userToken = '';
   useEffect(() => {
     AsyncStorage.getItem(keys.User_Token).then((val) => {
@@ -99,9 +100,15 @@ const DetailMessenger = ({route, navigation}) => {
         avatar={avatar}
         name={friend_chat}
       />
-      <Messages style={{}} messages={messages} selfName={selfName} />
+      <Messages
+        style={{}}
+        messages={messages}
+        setVisibleScroll={setVisibleScroll}
+        selfName={selfName}
+      />
       <InputMessage
         style={{}}
+        visibleScroll={visibleScroll}
         sendMessage={sendMessage}
         setMessage={setMessage}
         message={message}

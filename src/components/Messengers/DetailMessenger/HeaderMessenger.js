@@ -8,7 +8,11 @@ const HeaderMessenger = (props) => {
     <View
       style={[
         props.style,
-        {flexDirection: 'row', borderBottomWidth: 1, borderColor: 'red'},
+        {
+          flexDirection: 'row',
+          borderBottomWidth: 0.5,
+          borderColor: 'rgba(0,0,0,0.5)',
+        },
       ]}>
       <TouchableOpacity
         onPress={() => props.navigation.goBack()}

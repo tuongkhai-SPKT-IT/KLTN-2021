@@ -14,13 +14,7 @@ const HomePage = ({navigation}) => {
     dispatch(ReloadHome());
   }, []);
 
-  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-    const paddingToBottom = 20;
-    return (
-      layoutMeasurement.height + contentOffset.y >=
-      contentSize.height - paddingToBottom
-    );
-  };
+ 
 
   const showstatus = ({item}) => {
     // const { srcData } = storeState;
@@ -34,6 +28,7 @@ const HomePage = ({navigation}) => {
     // if (srcData.length > 0) {
     //   {
     //     return srcData.map((stt, i) => {
+    // <ContentStatus srcData={stt} key={i}/>;
 
     //     });
     //   }
