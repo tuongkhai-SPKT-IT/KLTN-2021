@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ScrollView, Text} from 'react-native';
 import {StyleSheet} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
@@ -14,6 +14,9 @@ import {
 } from 'react-native-paper';
 import {SafeAreaView} from 'react-navigation';
 import {useSelector} from 'react-redux';
+import {SOCKET} from '../../config';
+import jwt_decode from "jwt-decode";
+
 export default function Notifications() {
   const [visible, setVisible] = useState(false);
   const OtherProfile = useSelector((state) => state.OtherProfile);
@@ -25,6 +28,12 @@ export default function Notifications() {
   const _handleSearch = () => console.log('Searching');
 
   const _handleMore = () => console.log('Shown more');
+
+  SOCKET.on("server-push-notification",(data)=>{
+    console.log('new noti: ',data);
+    const token = jwt_decode('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmZhY2Vib29rLWtsdG4uYWxwaGF3b2xmLmlvL2FwaS91c2VyL2xvZy1pbiIsImlhdCI6MTYxNzI5NTYwMiwibmJmIjoxNjE3Mjk1NjAyLCJqdGkiOiJKU25zbFNqWE4yZFpBSmhVIiwic3ViIjoiNjA1MzM4M2ZmY2Y5ZTk2YzJlMjI5OGM1IiwicHJ2IjoiMzg1MmIyMTg1MDEzNTZkMzNjNjEyOTJiNzVmMmFkNzU3Mjk4NmExNyIsInVzZXJfbmFtZSI6Ilx1MDExMFx1MWVkNyBUXHUwMWIwXHUxZWRkbmcgS2hcdTFlYTNpIiwidXNlcl9pZCI6IjYwNTMzODNmZmNmOWU5NmMyZTIyOThjNCIsInVzZXJfZnVsbF9uYW1lIjoiXHUwMTEwXHUxZWQ3IFRcdTAxYjBcdTFlZGRuZyBLaFx1MWVhM2kiLCJwaG9uZSI6IjA1ODU1MTE5NTUiLCJlbWFpbCI6ImRvdHVvbmdraGFpMTkxOTk5QGdtYWlsLmNvbSIsInNleCI6IjEifQ.hYaNha5IrWSoHlM1TyT2Bdp_PcDaTvRXEz1iYdiQGNM');
+    
+  })
 
   const renderItem = ({item}) => {
     return (
@@ -44,7 +53,7 @@ export default function Notifications() {
           <IconButton {...props} icon="dots-vertical" onPress={showModal} />
         )}
         onPress={() => {
-          alert('hi from nortification');
+          SOCKET.emit("foo", 'hello')
         }}
       />
     );

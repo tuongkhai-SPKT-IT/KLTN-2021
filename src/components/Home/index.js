@@ -28,6 +28,10 @@ import Profile from '../Profile/';
 import Notifications from '../Notifications';
 import Messengers from '../Messengers';
 import OtherProfile from '../OtherProfile';
+import { SOCKET } from '../../config';
+import { showMessage, hideMessage } from "react-native-flash-message";
+import {Avatar} from "react-native-paper"
+
 const Tab = createMaterialBottomTabNavigator();
 
 const Home = () => {
@@ -47,6 +51,33 @@ const Home = () => {
 
   const dispatch = useDispatch();
   const storeState = useSelector((state) => state.HomePage);
+
+  const notificationTitle = (data) =>{
+    return (
+      <View style={{ width: "100%", height: "100%", flexDirection: "row", alignItems: "center" }}>
+        <View style={{justifyContent: "space-around", flex: 1}}>
+          <Avatar.Image size={35} source={{ uri: data.avatar }} />
+        </View>
+        <View style={{justifyContent: "space-around", flex: 1, marginHorizontal: 5}}>
+          <Text>{data.content}</Text>
+          <Text>{data.moment}</Text>
+        </View>
+      </View>
+    )
+  }
+
+  SOCKET.on("server-popup-notification",(data)=>{
+    showMessage({
+      message: notificationTitle({
+        avatar: data.current_user_avatar,
+        content: data.content,
+        moment: data.moment
+      }),
+      type: "default",
+      color: "black",
+    })
+  })
+  
 
   return (
     <NativeRouter>
