@@ -53,7 +53,7 @@ const UpStatus = () => {
             placeholderTextColor="rgba(0,0,0,.5)"
             style={styles.textCaption}
             multiline={true}
-            placeholder="Bạn đang nghĩ gì?"
+            placeholder="What's on your mind?"
           />
         </View>
         <View style={{alignItems: 'center', marginTop: 5}}>

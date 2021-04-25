@@ -18,7 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Modal from 'react-native-modalbox';
 import DropDownPicker from 'react-native-dropdown-picker';
-import * as StatusServices from '../../Services/status';
+import * as StatusServices from '../../services/status';
 import {useDispatch, useSelector} from 'react-redux';
 import {ReloadHome} from '../Redux/Actions/Home.Action';
 export default function ToolBar() {
@@ -77,7 +77,7 @@ export default function ToolBar() {
           />
         </View>
         <Pressable style={styles.input} onPress={() => popUpStatusModal()}>
-          <Text>Bạn đang nghĩ gì?</Text>
+          <Text>What's on your mind?</Text>
         </Pressable>
         {/* <TextInput placeholder="Bạn đang nghĩ gì?" style={styles.input} onFocus={() => popUpStatusModal()} /> */}
       </View>
@@ -233,7 +233,7 @@ export default function ToolBar() {
                 </View>
                 <View style={[styles.popupStatusMainContent]}>
                   <TextInput
-                    placeholder="Bạn đang nghĩ gì?"
+                    placeholder="What's on your mind?"
                     multiline={true}
                     style={{
                       height: 530,
