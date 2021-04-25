@@ -22,9 +22,9 @@ export default function Input(props) {
           }}>
           <TouchableOpacity
             onPress={() => {
-              // if (messagesScroll.current) {
-              messagesScroll.current.scrollToEnd();
-              // }
+              if (props.messagesScroll.current) {
+                props.messagesScroll.current.scrollToEnd();
+              }
             }}
             style={{
               width: 40,

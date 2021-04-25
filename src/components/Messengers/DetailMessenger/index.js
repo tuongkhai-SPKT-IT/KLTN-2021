@@ -13,6 +13,7 @@ const DetailMessenger = ({route, navigation}) => {
   const {chat_group_id, avatar, friend_chat} = route.params;
   const [messages, setMessages] = useState([]);
   const [visibleScroll, setVisibleScroll] = useState(false);
+  const messagesScroll = useRef();
   let userToken = '';
   useEffect(() => {
     AsyncStorage.getItem(keys.User_Token).then((val) => {
@@ -102,6 +103,7 @@ const DetailMessenger = ({route, navigation}) => {
       />
       <Messages
         style={{}}
+        messagesScroll={messagesScroll}
         messages={messages}
         setVisibleScroll={setVisibleScroll}
         selfName={selfName}
@@ -111,6 +113,7 @@ const DetailMessenger = ({route, navigation}) => {
         visibleScroll={visibleScroll}
         sendMessage={sendMessage}
         setMessage={setMessage}
+        messagesScroll={messagesScroll}
         message={message}
       />
     </View>

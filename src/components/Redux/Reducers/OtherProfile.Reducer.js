@@ -4,10 +4,38 @@ var initState = {
   intro: [],
   status: [],
   err_code: '',
+  buttonFriend: {},
+  buttonMessage: {},
+  relationShip: false,
 };
 
 var OtherProfile = (state = initState, action) => {
   switch (action.type) {
+    case keys.checkRelationship_Failed: {
+      const {err_code} = action;
+      alert(err_code);
+      return;
+    }
+    case keys.checkRelationship_Success: {
+      const {buttonFriend, buttonMessage, relationShip} = action;
+      return {
+        ...state,
+        buttonFriend,
+        buttonMessage,
+        err_code: '',
+        relationShip,
+      };
+    }
+    case keys.Add_Friend: {
+      const {buttonFriend, relationShip, buttonMessage} = action;
+      return {
+        ...state,
+        buttonFriend,
+        err_code: '',
+        relationShip,
+        buttonMessage,
+      };
+    }
     case keys.Get_IntroOther_Success: {
       const {data} = action;
       return {...state, intro: data, err_code: ''};

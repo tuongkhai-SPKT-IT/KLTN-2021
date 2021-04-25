@@ -8,7 +8,6 @@ import Modal from 'react-native-modal';
 import {useSelector} from 'react-redux';
 
 export default function HeaderProfile(props) {
-  // const userInfo = useSelector((state) => state.UserInfo);
   const userInfo = useSelector((state) => state.OtherProfile);
   const [imageProfile, setImageProfile] = useState({});
   // const [declarePopUp, setDeclarePopUp] = useState(true);

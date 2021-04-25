@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import HeaderOther from './HeaderOther';
 import Modal from 'react-native-modal';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Avatar, Button, Text, SearchBar} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import IntroOther from './IntroOther';
@@ -20,94 +18,34 @@ import {
   Get_Intro_Other,
   Get_Status_Other,
   Clear_Store_Other,
+  Check_Relationship,
+  Add_Friend,
+  Cancel_Friend,
 } from '../Redux/Actions/OtherProfile.Action';
 import ContentStatus from '../ContentStatus';
-import API from '../API/API';
-import HeaderApp from '../HeaderApp';
+import {ActivityIndicator} from 'react-native';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
   const dispatch = useDispatch();
-  console.log(route.params);
+
   useEffect(() => {
     if (route.params) {
       dispatch(Clear_Store_Other());
       dispatch(Get_Intro_Other(route.params.userId));
       dispatch(Get_Status_Other(route.params.userId));
+      dispatch(Check_Relationship(route.params.userId));
     }
   }, [route.params]);
   const mainProfile = ({navigation}) => {
     const OtherProfile = useSelector((state) => state.OtherProfile);
-    const userInfo = useSelector((state) => state.UserInfo);
-    const token = userInfo.information[3].value;
-    const [relationShip, setRelationShip] = useState(false); // true: friend, false: requested, not friend
-    const [buttonFriend, setButtonFriend] = useState({
-      // title: 'Add friend',
-      // icon: 'user-plus',
-    });
-    const [buttonMessenger, setButtonMessenger] = useState({});
-    const checkRelationship = () => {
-      if (OtherProfile.intro.user_id) {
-        const route = 'user/check-relationship';
-        const param = {
-          friend_id: OtherProfile.intro.user_id,
-        };
-        const header = {
-          Authorization: 'bearer' + token,
-        };
-        const api = new API();
-        api
-          .onCallAPI('get', route, {}, param, header)
-          .then((res) => {
-            if (res.data.error_code !== 0) {
-              window.alert(res.data.message);
-            } else {
-              if (res.data.data === 0) {
-                //bạn bè
-                setButtonFriend({
-                  title: 'Friend',
-                  icon: 'user-friends',
-                });
-                setRelationShip(true);
-              }
-
-              if (res.data.data === 1) {
-                console.log('đã gửi yêu cầu kb');
-                setButtonFriend({
-                  title: 'Requested',
-                  icon: 'user-times',
-                });
-                setRelationShip(false);
-              }
-
-              if (res.data.data === 2) {
-                console.log('chờ người ta xác nhận');
-                setButtonFriend({
-                  title: 'Confirm',
-                  icon: 'user-check',
-                });
-                setRelationShip(false);
-              }
-
-              if (res.data.data === 3) {
-                console.log('không là bạn bè');
-                setButtonFriend({
-                  title: 'Add friend',
-                  icon: 'user-plus',
-                });
-                setRelationShip(false);
-              }
-              setButtonMessenger({
-                title: 'Send a message',
-                icon: 'facebook-messenger', //MaterialCommunityIcons
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    };
+    const {buttonFriend, buttonMessage, relationShip} = OtherProfile;
+    console.log(buttonFriend, buttonMessage, relationShip);
+    const [visiblePopup, setVisiblePopup] = useState(false);
     const showstatus = () => {
       const srcData = OtherProfile.status;
 
@@ -130,128 +68,228 @@ const OtherProfile = ({route, navigation}) => {
       navigation.push('DetailMessages', {chat_group_id: 'con cá'});
       navigation.goBack();
     };
-    useEffect(() => {
-      checkRelationship();
-    }, [OtherProfile.intro]);
-    return (
-      <>
-        <View style={{position: 'relative'}}>
-          <ScrollView>
-            <HeaderOther />
-            <View
-              style={{
-                width: '100%',
-                height: 50,
-                // marginBottom: 10,
-              }}></View>
-            <Text
-              h4
-              style={{
-                textAlign: 'center',
-                marginBottom: 10,
-              }}>
-              {OtherProfile.intro.user_name}
-            </Text>
-            <View
-              style={{flexDirection: 'row', width: '100%', marginBottom: 10}}>
-              <Button
-                buttonStyle={{backgroundColor: '#E4E6EB'}}
-                titleStyle={{color: 'black'}}
-                containerStyle={{marginHorizontal: 10, flex: 10}}
-                loadingProps={{animating: true}}
-                icon={
-                  relationShip ? (
-                    <MaterialCommunityIcons
-                      name={buttonMessenger.icon}
-                      style={{marginRight: 10}}
-                      size={20}
-                    />
-                  ) : (
-                    <FontAwesome5
-                      name={buttonFriend.icon}
-                      style={{marginRight: 10}}
-                      size={20}
-                    />
-                  )
-                }
-                onPress={() =>
-                  relationShip ? createRoom() : alert('Add friends')
-                }
-                title={
-                  relationShip ? buttonMessenger.title : buttonFriend.title
-                }
-              />
 
+    // useEffect(() => {}, [OtherProfile.intro]);
+    if (buttonFriend !== undefined && buttonMessage !== undefined) {
+      return (
+        <>
+          <Modal
+            isVisible={visiblePopup}
+            animationIn="slideInUp"
+            onBackButtonPress={() => setVisiblePopup(false)}
+            animationOut="slideOutDown"
+            swipeDirection={['up', 'down']}
+            swipeThreshold={150}
+            onSwipeComplete={() => setVisiblePopup(false)}
+            onBackdropPress={() => setVisiblePopup(false)}
+            onSwipeCancel={() => setVisiblePopup(true)}
+            style={{
+              backgroundColor: 'transparent',
+              margin: 0,
+            }}
+            backdropOpacity={0.5}>
+            <View
+              style={{
+                backgroundColor: 'white',
+                position: 'absolute',
+                right: 0,
+                left: 0,
+                bottom: 0,
+              }}>
               <Button
                 buttonStyle={{
-                  backgroundColor: '#E4E6EB',
-                  width: 40,
+                  backgroundColor: 'white',
+                  justifyContent: 'flex-start',
+                  padding: 20,
                 }}
-                titleStyle={{color: 'black'}}
-                containerStyle={{marginHorizontal: 10}}
-                loadingProps={{animating: true}}
                 icon={
-                  relationShip ? (
-                    <FontAwesome5 name={buttonFriend.icon} size={20} />
-                  ) : (
-                    <MaterialCommunityIcons
-                      name={buttonMessenger.icon}
-                      size={20}
-                    />
-                  )
+                  <FontAwesome5Icon
+                    name="user-check"
+                    style={{marginRight: 5}}
+                    color="black" //"#050505"
+                    size={30}
+                  />
                 }
-                onPress={() =>
-                  relationShip ? alert('Unfriends friends') : createRoom()
+                onPress={() => dispatch(Cancel_Friend(route.params.userId))}
+                title={'Confirm'}
+                titleStyle={{color: 'black'}}
+              />
+              <Button
+                buttonStyle={{
+                  backgroundColor: 'white',
+                  // width: "100%"
+                  justifyContent: 'flex-start',
+                  padding: 20,
+                }}
+                icon={
+                  <FontAwesome5Icon
+                    name="times"
+                    style={{marginRight: 5}}
+                    color="#050505"
+                    size={30}
+                  />
                 }
+                onPress={() => DevSettings.reload()}
+                title={'Delete Request'}
+                titleStyle={{color: 'black'}}
               />
             </View>
-            <View
-              style={{
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                opacity: 0.5,
-              }}
-            />
-            <IntroOther navigation={navigation} />
-            {/*  direction={() => navigation.push('OtherUser')} /> */}
+          </Modal>
+          <View style={{position: 'relative'}}>
+            <ScrollView>
+              <HeaderOther />
+              <View
+                style={{
+                  width: '100%',
+                  height: 50,
+                  // marginBottom: 10,
+                }}></View>
+              <Text
+                h4
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 10,
+                }}>
+                {OtherProfile.intro.user_name}
+              </Text>
+              <View
+                style={{flexDirection: 'row', width: '100%', marginBottom: 10}}>
+                <Button
+                  buttonStyle={{backgroundColor: '#E4E6EB'}}
+                  titleStyle={{color: 'black'}}
+                  containerStyle={{marginHorizontal: 10, flex: 10}}
+                  loadingProps={{animating: true}}
+                  icon={
+                    relationShip ? (
+                      <MaterialCommunityIcons
+                        name={buttonMessage.icon}
+                        style={{marginRight: 10}}
+                        size={20}
+                      />
+                    ) : (
+                      <FontAwesome5
+                        name={buttonFriend.icon}
+                        style={{marginRight: 10}}
+                        size={20}
+                      />
+                    )
+                  }
+                  onPress={() => {
+                    if (relationShip) createRoom();
+                    else {
+                      // fasle button to là friends, true button to là messenger
+                      if (buttonFriend.title === 'Requested') {
+                        dispatch(Cancel_Friend(route.params.userId));
+                      }
+                      if (buttonFriend.title === 'Confirm') {
+                        setVisiblePopup(true);
+                      }
+                      if (buttonFriend.title === 'Add friend') {
+                        dispatch(Add_Friend(route.params.userId));
+                      }
+                    }
+                  }}
+                  title={
+                    relationShip ? buttonMessage.title : buttonFriend.title
+                  }
+                />
 
-            <View
-              style={{
-                paddingBottom: 10,
-                borderBottomWidth: 0.8,
-                marginBottom: 20,
-              }}>
-              {OtherProfile.intro.friend_array ? (
-                OtherProfile.intro.friend_array.length > 6 && (
-                  <Button
-                    buttonStyle={{
-                      backgroundColor: 'rgba(0,0,0,.09555)',
-                      marginVertical: 10,
-                      zIndex: 999,
-                    }}
-                    containerStyle={{
-                      width: '100%',
-                    }}
-                    onPress={() => navigation.push('fullfriends')}
-                    title="See All Friends"
-                    titleStyle={{color: 'black'}}
-                  />
-                )
-              ) : (
-                <></>
-              )}
-            </View>
-            <View
-              style={{
-                backgroundColor: 'gray',
-                height: 20,
-                width: '100%',
-                opacity: 0.6,
-              }}></View>
-            {showstatus()}
-          </ScrollView>
-        </View>
-      </>
+                <Button
+                  buttonStyle={{
+                    backgroundColor: '#E4E6EB',
+                    width: 40,
+                  }}
+                  titleStyle={{color: 'black'}}
+                  containerStyle={{marginHorizontal: 10}}
+                  loadingProps={{animating: true}}
+                  icon={
+                    relationShip ? (
+                      <FontAwesome5Icon name={buttonFriend.icon} size={20} />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name={buttonMessage.icon}
+                        size={20}
+                      />
+                    )
+                  }
+                  onPress={() =>
+                    relationShip ? alert('Unfriends friends') : createRoom()
+                  }
+                />
+              </View>
+              <View
+                style={{
+                  borderBottomColor: 'black',
+                  borderBottomWidth: 1,
+                  opacity: 0.5,
+                }}
+              />
+              <IntroOther navigation={navigation} />
+              {/*  direction={() => navigation.push('OtherUser')} /> */}
+
+              <View
+                style={{
+                  paddingBottom: 10,
+                  borderBottomWidth: 0.8,
+                  marginBottom: 20,
+                }}>
+                {OtherProfile.intro.friend_array ? (
+                  OtherProfile.intro.friend_array.length > 6 && (
+                    <Button
+                      buttonStyle={{
+                        backgroundColor: 'rgba(0,0,0,.09555)',
+                        marginVertical: 10,
+                        zIndex: 999,
+                      }}
+                      containerStyle={{
+                        width: '100%',
+                      }}
+                      onPress={() => navigation.push('fullfriends')}
+                      title="See All Friends"
+                      titleStyle={{color: 'black'}}
+                    />
+                  )
+                ) : (
+                  <></>
+                )}
+              </View>
+              <View
+                style={{
+                  backgroundColor: 'gray',
+                  height: 20,
+                  width: '100%',
+                  opacity: 0.6,
+                }}></View>
+              {showstatus()}
+            </ScrollView>
+          </View>
+        </>
+      );
+    }
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignContent: 'center',
+          backgroundColor: '#1877F2',
+          width: 150,
+          height: 150,
+          zIndex: 999,
+          position: 'absolute',
+          top: '30%',
+          alignSelf: 'center',
+        }}>
+        <ActivityIndicator size="large" color="white" />
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: 'white',
+          }}>
+          Loadding
+        </Text>
+      </View>
     );
   };
   return (

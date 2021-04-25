@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as keys from '../Constant.ActionType';
 var initState = {
-  introUser: [],
+  introUser: {},
   statusUser: [],
   err_code: '',
 };

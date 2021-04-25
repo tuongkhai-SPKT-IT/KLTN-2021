@@ -134,7 +134,7 @@ export default function ViewLCS(props) {
 
         {/* <Pressable ></Pressable> */}
         <Button
-          // buttonStyle={{backgroundColor: 'transparent'}}
+          buttonStyle={{backgroundColor: 'transparent'}}
           style={styles.stylesViewLCS.btnComment}
           onPress={() => {
             if (inputCmt.trim() !== '') {

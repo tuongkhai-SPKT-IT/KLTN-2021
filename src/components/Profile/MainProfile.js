@@ -13,6 +13,7 @@ import {
 import IntroProfile from './IntroProfile';
 import ContentStatus from '../ContentStatus';
 import HeaderApp from '../HeaderApp';
+import {ActivityIndicator} from 'react-native';
 const mainProfile = ({navigation}) => {
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
   const userInfo = useSelector((state) => state.UserInfo);
@@ -47,55 +48,57 @@ const mainProfile = ({navigation}) => {
   const getIntro = () => {
     dispatch(Get_IntroUser());
   };
-  return (
-    <>
-      <View style={{position: 'relative'}}>
-        <View
-          style={{
-            width: '100%',
-            backgroundColor: '#fff',
-            padding: 10,
-          }}>
-          <HeaderApp navigation={navigation} />
-        </View>
-        <ScrollView>
-          <HeaderProfile
-            setImgPopup={setImgPopup}
-            imgPopup={imgPopup}
-            setVisiblePopup={setVisiblePopup}
-            typeImg={typeImg}
-            setTypeImg={setTypeImg}
-          />
+
+  if (Object.keys(ProfileInfo.introUser).length !== 0) {
+    console.log(1);
+    return (
+      <>
+        <View style={{position: 'relative'}}>
           <View
             style={{
               width: '100%',
-              height: 50,
-            }}></View>
-          <Text
-            h4
-            style={{
-              textAlign: 'center',
-              marginBottom: 10,
+              backgroundColor: '#fff',
+              padding: 10,
             }}>
-            {userInfo.information[2] ? userInfo.information[2].value : ''}
-          </Text>
+            <HeaderApp navigation={navigation} />
+          </View>
+          <ScrollView>
+            <HeaderProfile
+              setImgPopup={setImgPopup}
+              imgPopup={imgPopup}
+              setVisiblePopup={setVisiblePopup}
+              typeImg={typeImg}
+              setTypeImg={setTypeImg}
+            />
+            <View
+              style={{
+                width: '100%',
+                height: 50,
+              }}></View>
+            <Text
+              h4
+              style={{
+                textAlign: 'center',
+                marginBottom: 10,
+              }}>
+              {userInfo.information[2] ? userInfo.information[2].value : ''}
+            </Text>
 
-          <View
-            style={{
-              borderBottomColor: 'black',
-              borderBottomWidth: 1,
-              opacity: 0.5,
-            }}
-          />
-          <IntroProfile navigation={navigation} />
-          <View
-            style={{
-              paddingBottom: 10,
-              borderBottomWidth: 0.8,
-              marginBottom: 20,
-            }}>
-            {ProfileInfo.introUser.friend_array ? (
-              ProfileInfo.introUser.friend_array.length > 6 && (
+            <View
+              style={{
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+                opacity: 0.5,
+              }}
+            />
+            <IntroProfile navigation={navigation} />
+            <View
+              style={{
+                paddingBottom: 10,
+                borderBottomWidth: 0.8,
+                marginBottom: 20,
+              }}>
+              {ProfileInfo.introUser.friend_array.length > 6 && (
                 <Button
                   buttonStyle={{
                     backgroundColor: 'rgba(0,0,0,.09555)',
@@ -109,87 +112,113 @@ const mainProfile = ({navigation}) => {
                   title="See All Friends"
                   titleStyle={{color: 'black'}}
                 />
-              )
-            ) : (
-              <></>
-            )}
-          </View>
+              )}
+            </View>
+            <View
+              style={{
+                backgroundColor: 'gray',
+                height: 20,
+                width: '100%',
+                opacity: 0.6,
+              }}></View>
+            {showstatus()}
+          </ScrollView>
+        </View>
+
+        <Modal
+          isVisible={visiblePopup}
+          animationIn="slideInUp"
+          onBackButtonPress={() => setVisiblePopup(false)}
+          animationOut="slideOutDown"
+          swipeDirection={['up', 'down']}
+          swipeThreshold={150}
+          onSwipeComplete={() => setVisiblePopup(false)}
+          onBackdropPress={() => setVisiblePopup(false)}
+          onSwipeCancel={() => setVisiblePopup(true)}
+          style={{
+            backgroundColor: 'transparent',
+            margin: 0,
+          }}
+          backdropOpacity={0.5}>
           <View
             style={{
-              backgroundColor: 'gray',
-              height: 20,
-              width: '100%',
-              opacity: 0.6,
-            }}></View>
-          {showstatus()}
-        </ScrollView>
-      </View>
-
-      <Modal
-        isVisible={visiblePopup}
-        animationIn="slideInUp"
-        onBackButtonPress={() => setVisiblePopup(false)}
-        animationOut="slideOutDown"
-        swipeDirection={['up', 'down']}
-        swipeThreshold={150}
-        onSwipeComplete={() => setVisiblePopup(false)}
-        onBackdropPress={() => setVisiblePopup(false)}
-        onSwipeCancel={() => setVisiblePopup(true)}
+              backgroundColor: 'white',
+              position: 'absolute',
+              right: 0,
+              left: 0,
+              bottom: 0,
+            }}>
+            <Button
+              buttonStyle={{
+                backgroundColor: 'white',
+                justifyContent: 'flex-start',
+                padding: 20,
+              }}
+              icon={
+                <EntypoIcons
+                  name="images"
+                  style={{marginRight: 5}}
+                  color="#050505"
+                  size={30}
+                />
+              }
+              iconContainerStyle={{}}
+              onPress={() => setImgPopup(true)}
+              title={typeImg ? 'View Profile Picture' : 'View Cover Picture'}
+              titleStyle={{color: 'black'}}
+            />
+            <Button
+              buttonStyle={{
+                backgroundColor: 'white',
+                // width: "100%"
+                justifyContent: 'flex-start',
+                padding: 20,
+              }}
+              icon={
+                <MaterialCommunityIcons
+                  name="image-edit"
+                  style={{marginRight: 5}}
+                  color="#050505"
+                  size={30}
+                />
+              }
+              onPress={() => DevSettings.reload()}
+              title={
+                typeImg ? 'Change Profile Picture' : 'Change Cover Picture'
+              }
+              titleStyle={{color: 'black'}}
+            />
+          </View>
+        </Modal>
+      </>
+    );
+  } else {
+    return (
+      <View
         style={{
-          backgroundColor: 'transparent',
-          margin: 0,
-        }}
-        backdropOpacity={0.5}>
-        <View
+          justifyContent: 'center',
+          alignContent: 'center',
+          backgroundColor: '#1877F2',
+          width: 150,
+          height: 150,
+          zIndex: 999,
+          position: 'absolute',
+          top: '30%',
+          alignSelf: 'center',
+        }}>
+        <ActivityIndicator size="large" color="white" />
+        <Text
           style={{
-            backgroundColor: 'white',
-            position: 'absolute',
-            right: 0,
-            left: 0,
-            bottom: 0,
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: 'white',
           }}>
-          <Button
-            buttonStyle={{
-              backgroundColor: 'white',
-              justifyContent: 'flex-start',
-              padding: 20,
-            }}
-            icon={
-              <EntypoIcons
-                name="images"
-                style={{marginRight: 5}}
-                color="#050505"
-                size={30}
-              />
-            }
-            iconContainerStyle={{}}
-            onPress={() => setImgPopup(true)}
-            title={typeImg ? 'View Profile Picture' : 'View Cover Picture'}
-            titleStyle={{color: 'black'}}
-          />
-          <Button
-            buttonStyle={{
-              backgroundColor: 'white',
-              // width: "100%"
-              justifyContent: 'flex-start',
-              padding: 20,
-            }}
-            icon={
-              <MaterialCommunityIcons
-                name="image-edit"
-                style={{marginRight: 5}}
-                color="#050505"
-                size={30}
-              />
-            }
-            onPress={() => DevSettings.reload()}
-            title={typeImg ? 'Change Profile Picture' : 'Change Cover Picture'}
-            titleStyle={{color: 'black'}}
-          />
-        </View>
-      </Modal>
-    </>
-  );
+          Loadding
+        </Text>
+      </View>
+    );
+  }
 };
 export default mainProfile;
 

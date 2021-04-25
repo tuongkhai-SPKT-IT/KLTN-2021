@@ -1,13 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useRef, useState} from 'react';
-import {Dimensions} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {View, ScrollView, TouchableOpacity, Image} from 'react-native';
-import {Avatar, Button, Text} from 'react-native-elements';
-import {useDispatch, useSelector} from 'react-redux';
+import {Text} from 'react-native-elements';
 import API from '../API/API';
 import * as keys from '../Constants';
 const SmallMessenger = ({navigation}) => {
-  const userInfo = useSelector((state) => state.UserInfo);
   const [arrChatGroup, setArrChatGroup] = useState([]);
 
   useEffect(() => {
@@ -26,7 +23,6 @@ const SmallMessenger = ({navigation}) => {
             window.alert(res.data.message);
           } else {
             if (res.data.data) {
-              // this.setState({friendAddArray: res.data.data});
               setArrChatGroup(res.data.data);
             }
           }
@@ -35,7 +31,6 @@ const SmallMessenger = ({navigation}) => {
     });
   }, []);
 
-  // const [widthMess, setWidthMess] = useState(0);
   const singleSmallMess = (message, i) => {
     const maxlimit = 40;
     var contentCurrent = message.isCurrent

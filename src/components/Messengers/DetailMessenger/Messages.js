@@ -1,19 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {View, Text, ScrollView, Keyboard, TouchableOpacity} from 'react-native';
 import Message from './Message';
-import {useSelector} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as keys from '../../Constants';
-import {Button} from 'react-native-elements';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const Messages = (props) => {
-  // const userInfo = useSelector((state) => state.UserInfo);
-  const messagesScroll = useRef();
+  // const props.messagesScroll = useRef();
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
     Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
-
+    if (props.messagesScroll.current) {
+    }
     // cleanup function
     return () => {
       Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
@@ -24,16 +19,20 @@ const Messages = (props) => {
   const [keyboardStatus, setKeyboardStatus] = useState(false);
   const _keyboardDidShow = () => setKeyboardStatus(true);
   const _keyboardDidHide = () => setKeyboardStatus(false);
-
+  useEffect(() => {
+    if (props.messagesScroll.current) {
+      props.messagesScroll.current.scrollToEnd();
+    }
+  }, [keyboardStatus]);
   useEffect(() => {
     if (props.messages) {
-      if (messagesScroll.current) {
-        messagesScroll.current.scrollToEnd();
+      if (props.messagesScroll.current) {
+        props.messagesScroll.current.scrollToEnd();
       }
     }
   }, [props.messages]);
   const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-    const paddingToBottom = 100;
+    const paddingToBottom = 150;
     return (
       layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom
@@ -42,6 +41,9 @@ const Messages = (props) => {
   return (
     <>
       <ScrollView
+        onContentSizeChange={() => {
+          props.messagesScroll.current.scrollToEnd();
+        }}
         onScroll={({nativeEvent}) => {
           if (isCloseToBottom(nativeEvent)) {
             props.setVisibleScroll(false);
@@ -49,7 +51,7 @@ const Messages = (props) => {
             props.setVisibleScroll(true);
           }
         }}
-        ref={messagesScroll}
+        ref={props.messagesScroll}
         style={[props.style, {position: 'relative'}]}>
         <View>
           {props.messages.map((message, i) => {
