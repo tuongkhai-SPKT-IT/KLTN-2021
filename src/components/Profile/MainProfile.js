@@ -48,9 +48,9 @@ const mainProfile = ({navigation}) => {
   const getIntro = () => {
     dispatch(Get_IntroUser());
   };
+  console.log(ProfileInfo.introUser);
 
   if (Object.keys(ProfileInfo.introUser).length !== 0) {
-    console.log(1);
     return (
       <>
         <View style={{position: 'relative'}}>
@@ -193,6 +193,14 @@ const mainProfile = ({navigation}) => {
       </>
     );
   } else {
+    setTimeout(() => {
+      if (Object.keys(ProfileInfo.introUser).length === 0)
+        return (
+          <View>
+            <Text>Hiện tại không thể tải được dữ liệu từ server</Text>
+          </View>
+        );
+    }, 10000);
     return (
       <View
         style={{

@@ -21,12 +21,12 @@ import {
   Check_Relationship,
   Add_Friend,
   Cancel_Friend,
+  Accept_Friend,
 } from '../Redux/Actions/OtherProfile.Action';
 import ContentStatus from '../ContentStatus';
 import {ActivityIndicator} from 'react-native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OtherProfile = ({route, navigation}) => {
@@ -110,7 +110,7 @@ const OtherProfile = ({route, navigation}) => {
                     size={30}
                   />
                 }
-                onPress={() => dispatch(Cancel_Friend(route.params.userId))}
+                onPress={() => dispatch(Accept_Friend(route.params.userId))}
                 title={'Confirm'}
                 titleStyle={{color: 'black'}}
               />
@@ -129,7 +129,7 @@ const OtherProfile = ({route, navigation}) => {
                     size={30}
                   />
                 }
-                onPress={() => DevSettings.reload()}
+                onPress={() => dispatch(Cancel_Friend(route.params.userId))}
                 title={'Delete Request'}
                 titleStyle={{color: 'black'}}
               />

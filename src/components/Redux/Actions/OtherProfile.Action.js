@@ -270,3 +270,48 @@ export const Cancel_Friend = (userId) => {
     dispatch({type: types.Clear_Store_Other});
   };
 };
+
+export const Accept_Friend = (userId) => {
+  return async (dispatch) => {
+    try {
+      let token = '';
+      await AsyncStorage.getItem(keys.User_Token).then((val) => {
+        if (val) token = val;
+      });
+      const param = {
+        friend_id: userId,
+        update_type: 3,
+      };
+      const header = {
+        Authorization: 'bearer' + token,
+      };
+
+      const route = 'user/update/info';
+      const api = new API();
+      api
+        .onCallAPI('post', route, {}, param, header)
+        .then((res) => {
+          if (res.data.error_code !== 0) {
+            alert(res.data.message);
+          } else {
+            dispatch({
+              type: types.Accept_Friend,
+              buttonFriend: {
+                title: 'Friend',
+                icon: 'user-friends',
+              },
+              buttonMessage: {
+                title: 'Send a message',
+                icon: 'facebook-messenger',
+              },
+              relationShip: true,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {}
+    dispatch({type: types.Clear_Store_Other});
+  };
+};

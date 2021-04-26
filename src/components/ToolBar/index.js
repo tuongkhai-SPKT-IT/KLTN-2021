@@ -18,7 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Modal from 'react-native-modalbox';
 import DropDownPicker from 'react-native-dropdown-picker';
-import * as StatusServices from '../../Services/status';
+import * as StatusServices from '../../services/status';
 import {useDispatch, useSelector} from 'react-redux';
 import {ReloadHome} from '../Redux/Actions/Home.Action';
 export default function ToolBar() {

@@ -5,7 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {useDispatch, useSelector} from 'react-redux';
 import Modal from 'react-native-modal';
 import {Searchbar, List, Appbar, Avatar} from 'react-native-paper';
-import {GetUsers} from '../../Services/user';
+import {GetUsers} from '../../services/user';
 import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
 
 export default function index(props) {
