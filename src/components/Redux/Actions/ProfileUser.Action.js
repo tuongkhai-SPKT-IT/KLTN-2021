@@ -16,16 +16,19 @@ export const Get_IntroUser = () => {
             Authorization: 'bearer' + val,
           };
           var api = new API();
+          console.log(route, {}, params, headers);
+
           api
             .onCallAPI('get', route, {}, params, headers)
             .then((res) => {
+              console.log(1);
               if (res.data.error_code !== 0) {
                 dispatch({
                   type: types.Get_IntroUser_Failed,
                   err: res.data.message,
                 });
               } else {
-                // console.log(res.data.data)
+                console.log(res.data.data);
                 dispatch({
                   type: types.Get_IntroUser_Success,
                   data: res.data.data,
@@ -45,6 +48,7 @@ export const Get_IntroUser = () => {
                 type: types.Get_IntroUser_Failed,
                 err: err,
               });
+              console.log(err);
             });
         } else {
           dispatch({
@@ -58,6 +62,7 @@ export const Get_IntroUser = () => {
         type: types.Get_IntroUser_Failed,
         err: err,
       });
+      console.log(err);
     }
   };
 };

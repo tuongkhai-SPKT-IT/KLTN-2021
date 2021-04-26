@@ -20,10 +20,16 @@ import {
   Get_Intro_Other,
   Get_Status_Other,
   Clear_Store_Other,
+  Check_Relationship,
+  Add_Friend,
+  Cancel_Friend,
+  Accept_Friend,
 } from '../Redux/Actions/OtherProfile.Action';
 import ContentStatus from '../ContentStatus';
-import API from '../API/API';
-import HeaderApp from '../HeaderApp';
+import {ActivityIndicator} from 'react-native';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
@@ -176,6 +182,12 @@ const OtherProfile = ({route, navigation}) => {
                 title={
                   relationShip ? buttonMessenger.title : buttonFriend.title
                 }
+<<<<<<< HEAD
+=======
+                onPress={() => dispatch(Accept_Friend(route.params.userId))}
+                title={'Confirm'}
+                titleStyle={{color: 'black'}}
+>>>>>>> c5587dc... ca ro
               />
 
               <Button
@@ -196,7 +208,9 @@ const OtherProfile = ({route, navigation}) => {
                     />
                   )
                 }
-                onPress={() => alert('click')}
+                onPress={() => dispatch(Cancel_Friend(route.params.userId))}
+                title={'Delete Request'}
+                titleStyle={{color: 'black'}}
               />
             </View>
             <View
