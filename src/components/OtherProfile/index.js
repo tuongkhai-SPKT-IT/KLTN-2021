@@ -20,10 +20,14 @@ import {
   Get_Intro_Other,
   Get_Status_Other,
   Clear_Store_Other,
+  Check_Relationship,
+  Add_Friend,
+  Cancel_Friend,
+  Accept_Friend,
 } from '../Redux/Actions/OtherProfile.Action';
 import ContentStatus from '../ContentStatus';
-import API from '../API/API';
-import HeaderApp from '../HeaderApp';
+import {ActivityIndicator} from 'react-native';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
@@ -34,6 +38,7 @@ const OtherProfile = ({route, navigation}) => {
       dispatch(Clear_Store_Other());
       dispatch(Get_Intro_Other(route.params.userId));
       dispatch(Get_Status_Other(route.params.userId));
+      dispatch(Check_Relationship(route.params.userId));
     }
   }, [route.params]);
   const mainProfile = ({navigation}) => {
@@ -46,69 +51,7 @@ const OtherProfile = ({route, navigation}) => {
       // icon: 'user-plus',
     });
     const [buttonMessenger, setButtonMessenger] = useState({});
-    const checkRelationship = () => {
-      if (OtherProfile.intro.user_id) {
-        const route = 'user/check-relationship';
-        const param = {
-          friend_id: OtherProfile.intro.user_id,
-        };
-        const header = {
-          Authorization: 'bearer' + token,
-        };
-        const api = new API();
-        api
-          .onCallAPI('get', route, {}, param, header)
-          .then((res) => {
-            if (res.data.error_code !== 0) {
-              window.alert(res.data.message);
-            } else {
-              if (res.data.data === 0) {
-                //bạn bè
-                setButtonFriend({
-                  title: 'Friend',
-                  icon: 'user-friends',
-                });
-                setRelationShip(true);
-              }
-
-              if (res.data.data === 1) {
-                console.log('đã gửi yêu cầu kb');
-                setButtonFriend({
-                  title: 'Requested',
-                  icon: 'user-times',
-                });
-                setRelationShip(false);
-              }
-
-              if (res.data.data === 2) {
-                console.log('chờ người ta xác nhận');
-                setButtonFriend({
-                  title: 'Confirm',
-                  icon: 'user-check',
-                });
-                setRelationShip(false);
-              }
-
-              if (res.data.data === 3) {
-                console.log('không là bạn bè');
-                setButtonFriend({
-                  title: 'Add friend',
-                  icon: 'user-plus',
-                });
-                setRelationShip(false);
-              }
-              setButtonMessenger({
-                title: 'Send a message',
-                icon: 'facebook-messenger', //MaterialCommunityIcons
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    };
-    const showstatus = () => {
+      const showstatus = () => {
       const srcData = OtherProfile.status;
 
       if (srcData.length > 0) {
@@ -128,9 +71,7 @@ const OtherProfile = ({route, navigation}) => {
     const createRoom = () => {
       navigation.jumpTo('Messengers');
     };
-    useEffect(() => {
-      checkRelationship();
-    }, [OtherProfile.intro]);
+    
     return (
       <>
         <View style={{position: 'relative'}}>
@@ -176,6 +117,9 @@ const OtherProfile = ({route, navigation}) => {
                 title={
                   relationShip ? buttonMessenger.title : buttonFriend.title
                 }
+                onPress={() => dispatch(Accept_Friend(route.params.userId))}
+                title={'Confirm'}
+                titleStyle={{color: 'black'}}
               />
 
               <Button
@@ -196,7 +140,9 @@ const OtherProfile = ({route, navigation}) => {
                     />
                   )
                 }
-                onPress={() => alert('click')}
+                onPress={() => dispatch(Cancel_Friend(route.params.userId))}
+                title={'Delete Request'}
+                titleStyle={{color: 'black'}}
               />
             </View>
             <View
