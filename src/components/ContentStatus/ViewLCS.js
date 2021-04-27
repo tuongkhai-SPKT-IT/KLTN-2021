@@ -8,6 +8,7 @@ import {
   Image,
   Pressable,
   Dimensions,
+  StyleSheet
 } from 'react-native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesome5nIcon from 'react-native-vector-icons/FontAwesome5';
@@ -19,6 +20,10 @@ import SwipeDownModal from 'react-native-swipe-down';
 import * as keys from '../Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
+import { SOCKET } from '../../config';
+import moment from 'moment';
+import {Avatar} from "react-native-paper";
+
 export default function ViewLCS(props) {
   const [listLike, setListLike] = useState(props.likeList);
   const [likeNumber, setLikeNumber] = useState(props.likeNumber);
@@ -60,9 +65,29 @@ export default function ViewLCS(props) {
       }
     });
   }, []);
+
+  //for testing
+  const makeid = (length) => {
+    var result = [];
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result.push(characters.charAt(Math.floor(Math.random() *
+        charactersLength)));
+    }
+    return result.join('');
+  }
+
   const Like = async () => {
     setLoadding(true);
     if (!liked) {
+      const name = makeid(10);
+      SOCKET.emit("subscribe-friend-chanel", { name: userInfo.current.user_ProLink, room: "1234567890" }, err => {
+        if (err) {
+          console.log("error noti: ", err)
+        }
+      })
+
       const route = 'status/update-status';
       const param = {
         status_id: props.index,
@@ -83,6 +108,18 @@ export default function ViewLCS(props) {
               setLiked(true);
               setLoadding(false);
               setLikeNumber(likeNumber + 1);
+
+              //push notification
+              let notificationData = {
+                current_user_name: userInfo.current.user_ProLink,
+                status_id: props.index,
+                owner_id: props.userID, //owner of status
+                content: `${userInfo.current.user_name} liked your status`,
+                current_user_avatar: userInfo.current.user_avatar,
+                moment: moment().fromNow()
+              }
+              SOCKET.emit("client-liked-status",notificationData);
+
             }
           })
           .catch((err) => {
@@ -127,7 +164,7 @@ export default function ViewLCS(props) {
           multiline
           ref={textComment}
           onChangeText={(e) => setInputCmt(e)}
-          placeholder="Viết 1 bình luận"
+          placeholder="Write comment"
           style={[styles.stylesViewLCS.textCmt, {maxHeight: 100}]}
           value={inputCmt}
         />
@@ -339,7 +376,7 @@ export default function ViewLCS(props) {
           loadingProps={{animating: true, color: '#999'}}
           loadingStyle={{borderColor: 'black'}}
           onPress={() => Like()}
-          title={'Thích'}
+          title={'Like'}
           titleStyle={[
             {
               marginHorizontal: 5,
@@ -360,7 +397,7 @@ export default function ViewLCS(props) {
             />
           }
           loadingProps={{animating: true}}
-          title="Bình luận"
+          title="Comments"
           onPress={() => {
             if (textComment.current) textComment.current.focus();
             // AsyncStorage.clear();
@@ -378,3 +415,32 @@ export default function ViewLCS(props) {
     </>
   );
 }
+const styless = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: 92,
+  },
+  row: {
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    width: '100%',
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingRight: 11,
+    paddingLeft: 11,
+    alignItems: 'center',
+  },
+  input: {
+    height: 50,
+    flex: 1,
+    paddingTop: -20,
+    paddingBottom: -20,
+    paddingLeft: 20,
+    paddingRight: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,.5)',
+    borderRadius: 30,
+    height: 35,
+    justifyContent: 'space-around',
+  }
+});

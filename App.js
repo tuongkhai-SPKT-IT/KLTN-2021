@@ -18,12 +18,16 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {Provider as PaperProvider} from 'react-native-paper';
 import API from './src/components/API/API';
-import OtherProfile from './src/components/OtherProfile';
+import {SOCKET} from "./src/config";
+import FlashMessage from "react-native-flash-message";
+import Entypo from "react-native-vector-icons/Entypo"
+
 const Tab = createMaterialBottomTabNavigator();
 
 const App = () => {
   const [logged, setLogged] = useState(false);
   const [allUserRoute, setAllUserRoute] = useState([]);
+
   useEffect(() => {
     AsyncStorage.getItem(myConst.User_Token).then((value) => {
       if (value) {
@@ -56,6 +60,7 @@ const App = () => {
           })
           .catch((err) => {
             console.log(err);
+            console.log(err);
             AsyncStorage.clear();
             setLogged(false);
           });
@@ -79,6 +84,11 @@ const App = () => {
           </PaperProvider>
         </NativeRouter>
       </StoreProvider>
+      <FlashMessage 
+        titleStyle={{marginTop: 15, textAlign: "justify"}}
+        position="top" 
+        style={{borderRadius: 12, backgroundColor: "rgb(244,244,244)", margin: 10}}
+      />
     </SafeAreaProvider>
   );
 };
