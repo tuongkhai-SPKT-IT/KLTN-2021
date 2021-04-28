@@ -1,12 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as keys from '../Constant.ActionType';
-var initState = {
-  introUser: [],
+const initState = {
+  introUser: {},
   statusUser: [],
   err_code: '',
 };
 
-var UserInfo = (state = initState, action) => {
+const UserInfo = (state = initState, action) => {
   switch (action.type) {
     case keys.Get_IntroUser_Success: {
       const {data} = action;

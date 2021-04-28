@@ -181,11 +181,11 @@ export const Clear_Store_Other = () => {
     try {
       dispatch({type: types.Clear_Store_Other});
     } catch (err) {}
-    dispatch({type: types.Clear_Store_Other});
+    console.log(err);
   };
 };
 
-export const Add_Friend = (userId) => {
+export const call_Add_Friend = (userId) => {
   return async (dispatch) => {
     try {
       let token = '';
