@@ -1,12 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as keys from '../Constant.ActionType';
 var initState = {
-  intro: [],
+  intro: {},
   status: [],
   err_code: '',
-  buttonFriend: {},
-  buttonMessage: {},
-  relationShip: false,
 };
 
 var OtherProfile = (state = initState, action) => {
@@ -20,20 +17,30 @@ var OtherProfile = (state = initState, action) => {
       const {buttonFriend, buttonMessage, relationShip} = action;
       return {
         ...state,
-        buttonFriend,
-        buttonMessage,
+        buttonFriend: buttonFriend,
+        buttonMessage: buttonMessage,
         err_code: '',
-        relationShip,
+        relationShip: relationShip,
       };
     }
-    case keys.Add_Friend: {
+    case keys.Add_Friend:
+    case keys.Cancel_Friend: {
       const {buttonFriend, relationShip, buttonMessage} = action;
+      console.log(state);
+      const test = {
+        ...state,
+        buttonFriend: buttonFriend,
+        buttonMessage: buttonMessage,
+        err_code: '',
+        relationShip: relationShip,
+      };
+      console.log(test);
       return {
         ...state,
-        buttonFriend,
+        buttonFriend: buttonFriend,
+        buttonMessage: buttonMessage,
         err_code: '',
-        relationShip,
-        buttonMessage,
+        relationShip: relationShip,
       };
     }
     case keys.Get_IntroOther_Success: {
@@ -54,7 +61,7 @@ var OtherProfile = (state = initState, action) => {
       return {...state, intro: [], err_code: err};
     }
     case keys.Clear_Store_Other: {
-      return {intro: [], status: [], err: ''};
+      return {intro: {}, status: [], err: ''};
     }
     default:
       return state;

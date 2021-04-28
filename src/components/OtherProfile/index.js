@@ -19,7 +19,7 @@ import {
   Get_Status_Other,
   Clear_Store_Other,
   Check_Relationship,
-  Add_Friend,
+  call_Add_Friend,
   Cancel_Friend,
   Accept_Friend,
 } from '../Redux/Actions/OtherProfile.Action';
@@ -32,19 +32,17 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
   const dispatch = useDispatch();
-
   useEffect(() => {
-    if (route.params) {
+    if (route.params.userId) {
       dispatch(Clear_Store_Other());
       dispatch(Get_Intro_Other(route.params.userId));
       dispatch(Get_Status_Other(route.params.userId));
       dispatch(Check_Relationship(route.params.userId));
     }
-  }, [route.params]);
+  }, []);
   const mainProfile = ({navigation}) => {
     const OtherProfile = useSelector((state) => state.OtherProfile);
     const {buttonFriend, buttonMessage, relationShip} = OtherProfile;
-    console.log(buttonFriend, buttonMessage, relationShip);
     const [visiblePopup, setVisiblePopup] = useState(false);
     const showstatus = () => {
       const srcData = OtherProfile.status;
@@ -70,7 +68,11 @@ const OtherProfile = ({route, navigation}) => {
     };
 
     // useEffect(() => {}, [OtherProfile.intro]);
-    if (buttonFriend !== undefined && buttonMessage !== undefined) {
+    if (
+      buttonFriend !== undefined &&
+      buttonMessage !== undefined &&
+      Object.keys(OtherProfile.intro).length !== 0
+    ) {
       return (
         <>
           <Modal
@@ -185,7 +187,7 @@ const OtherProfile = ({route, navigation}) => {
                         setVisiblePopup(true);
                       }
                       if (buttonFriend.title === 'Add friend') {
-                        dispatch(Add_Friend(route.params.userId));
+                        dispatch(call_Add_Friend(route.params.userId));
                       }
                     }
                   }}
