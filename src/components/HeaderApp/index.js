@@ -7,11 +7,12 @@ import Modal from 'react-native-modal';
 import {Searchbar, List, Appbar, Avatar} from 'react-native-paper';
 import {GetUsers} from '../../services/user';
 import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
-
+// import {Clear_Store_Other} from '../Redux/Actions/OtherProfile.Action';
 export default function index(props) {
   const [isVisibleSearchModal, setIsVisibleSearchModal] = useState(false);
   const [searchContent, setSearchContent] = useState('');
   const [usersList, setUsersList] = useState([]);
+  // const dispatch = useDispatch();
   const handleOnChangeSearchBar = (query) => {
     setSearchContent(query);
     if (searchContent) {
@@ -63,10 +64,11 @@ export default function index(props) {
             />
           )}
           onPress={() => {
+            setIsVisibleSearchModal(false);
             props.navigation.push('OtherUser', {
               userId: item.user_id,
             });
-            setIsVisibleSearchModal(false);
+            setSearchContent('');
           }}
         />
       );

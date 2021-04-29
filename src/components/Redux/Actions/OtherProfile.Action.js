@@ -26,10 +26,10 @@ export const Get_Intro_Other = (userId) => {
           }
         })
         .catch((err) => {
-          dispatch({type: types.Get_IntroOther_Failed, err: err});
+          // dispatch({type: types.Get_IntroOther_Failed, err: err});
           console.log(err);
         });
-    } catch (err) {
+    } catch (error) {
       dispatch({type: types.Get_IntroOther_Failed, err: err});
     }
   };
@@ -58,7 +58,7 @@ export const Check_Relationship = (userId) => {
           if (res.data.error_code !== 0) {
             dispatch({
               type: types.checkRelationship_Failed,
-              error_code: res.data.message,
+              err_code: res.data.message,
             });
           } else {
             if (res.data.data === 0) {
@@ -123,13 +123,13 @@ export const Check_Relationship = (userId) => {
         .catch((err) => {
           dispatch({
             type: types.checkRelationship_Failed,
-            error_code: err,
+            err_code: err,
           });
         });
-    } catch (err) {
+    } catch (error) {
       dispatch({
         type: types.checkRelationship_Failed,
-        error_code: err,
+        err_code: error,
       });
     }
   };
@@ -167,10 +167,10 @@ export const Get_Status_Other = (userId) => {
 
           console.log(err);
         });
-    } catch (err) {
+    } catch (error) {
       dispatch({
         type: types.GetStatusOther_Failed,
-        err: err,
+        err: error,
       });
     }
   };
@@ -180,8 +180,10 @@ export const Clear_Store_Other = () => {
   return async (dispatch) => {
     try {
       dispatch({type: types.Clear_Store_Other});
-    } catch (err) {}
-    console.log(err);
+    } catch (error) {
+      dispatch({type: types.Clear_Store_Other});
+      console.log(error);
+    }
   };
 };
 
@@ -223,8 +225,9 @@ export const call_Add_Friend = (userId) => {
         .catch((err) => {
           console.log(err);
         });
-    } catch (err) {}
-    dispatch({type: types.Clear_Store_Other});
+    } catch (error) {
+      dispatch({type: types.Clear_Store_Other});
+    }
   };
 };
 
@@ -266,8 +269,9 @@ export const Cancel_Friend = (userId) => {
         .catch((err) => {
           console.log(err);
         });
-    } catch (err) {}
-    dispatch({type: types.Clear_Store_Other});
+    } catch (error) {
+      dispatch({type: types.Clear_Store_Other});
+    }
   };
 };
 
@@ -311,7 +315,8 @@ export const Accept_Friend = (userId) => {
         .catch((err) => {
           console.log(err);
         });
-    } catch (err) {}
-    dispatch({type: types.Clear_Store_Other});
+    } catch (error) {
+      dispatch({type: types.Clear_Store_Other});
+    }
   };
 };

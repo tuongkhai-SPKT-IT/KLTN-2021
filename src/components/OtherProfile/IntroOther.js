@@ -8,11 +8,11 @@ import {Button, Text} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {Image} from 'react-native';
 import {TouchableOpacity} from 'react-native';
+// import {Clear_Store_Other} from '../Redux/Actions/OtherProfile.Action';
 
 const IntroProfile = ({navigation}) => {
   const OtherProfile = useSelector((state) => state.OtherProfile);
   const [introUser, setIntroUser] = useState({});
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (OtherProfile.intro) setIntroUser(OtherProfile.intro);
@@ -102,23 +102,35 @@ const IntroProfile = ({navigation}) => {
       </View>
       <View style={{borderTopWidth: 0.8}}>
         <Text h3 h3Style={{padding: 15, paddingVertical: 0}}>
-          Bạn bè
+          Bạn bè &nbsp;
+          {introUser.friend_array ? (
+            <Text
+              h4
+              style={{
+                fontSize: 20,
+                color: 'gray',
+                opacity: 0.99,
+                paddingLeft: 15,
+                fontWeight: 'normal',
+              }}>
+              {introUser.friend_array.length > 1
+                ? introUser.friend_array.length + ' friends'
+                : '1 friend'}
+            </Text>
+          ) : (
+            <Text
+              h4
+              style={{
+                fontSize: 20,
+                color: 'gray',
+                opacity: 0.99,
+                paddingLeft: 15,
+                fontWeight: 'normal',
+              }}>
+              0 friend
+            </Text>
+          )}
         </Text>
-        {introUser.friend_array ? (
-          <Text
-            style={{
-              fontSize: 20,
-              color: 'gray',
-              opacity: 0.99,
-              paddingLeft: 15,
-            }}>
-            {introUser.friend_array.length > 1
-              ? introUser.friend_array.length + ' friends'
-              : introUser.friend_array.length + ' friend'}
-          </Text>
-        ) : (
-          <></>
-        )}
         <View
           style={{
             margin: 10,

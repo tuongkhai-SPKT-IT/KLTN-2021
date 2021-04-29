@@ -9,11 +9,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   Get_IntroUser,
   Get_StatusProfile,
+  Clear_Store_Profile,
 } from '../Redux/Actions/ProfileUser.Action';
 import IntroProfile from './IntroProfile';
 import ContentStatus from '../ContentStatus';
 import HeaderApp from '../HeaderApp';
 import {ActivityIndicator} from 'react-native';
+import {RefreshControl} from 'react-native';
 const mainProfile = ({navigation}) => {
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
   const userInfo = useSelector((state) => state.UserInfo);
@@ -48,8 +50,39 @@ const mainProfile = ({navigation}) => {
   const getIntro = () => {
     dispatch(Get_IntroUser());
   };
-  console.log(ProfileInfo.introUser);
-
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    setRefreshing(true);
+    getStatus();
+    getIntro();
+    clearStoreProfile();
+    if (Object.keys(ProfileInfo.introUser).length !== 0) setRefreshing(false);
+    // setTimeout(() => {}, 2000);
+  };
+  const clearStoreProfile = () => {
+    dispatch(Clear_Store_Profile());
+  };
+  const ButtonShowAll = () => {
+    if (ProfileInfo.introUser)
+      if (ProfileInfo.introUser.friend_array)
+        return (
+          ProfileInfo.introUser.friend_array.length > 6 && (
+            <Button
+              buttonStyle={{
+                backgroundColor: 'rgba(0,0,0,.09555)',
+                marginVertical: 10,
+                zIndex: 999,
+              }}
+              containerStyle={{
+                width: '100%',
+              }}
+              onPress={() => navigation.push('fullfriends')}
+              title="See All Friends"
+              titleStyle={{color: 'black'}}
+            />
+          )
+        );
+  };
   if (Object.keys(ProfileInfo.introUser).length !== 0) {
     return (
       <>
@@ -62,7 +95,10 @@ const mainProfile = ({navigation}) => {
             }}>
             <HeaderApp navigation={navigation} />
           </View>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
             <HeaderProfile
               setImgPopup={setImgPopup}
               imgPopup={imgPopup}
@@ -98,21 +134,7 @@ const mainProfile = ({navigation}) => {
                 borderBottomWidth: 0.8,
                 marginBottom: 20,
               }}>
-              {ProfileInfo.introUser.friend_array.length > 6 && (
-                <Button
-                  buttonStyle={{
-                    backgroundColor: 'rgba(0,0,0,.09555)',
-                    marginVertical: 10,
-                    zIndex: 999,
-                  }}
-                  containerStyle={{
-                    width: '100%',
-                  }}
-                  onPress={() => navigation.push('fullfriends')}
-                  title="See All Friends"
-                  titleStyle={{color: 'black'}}
-                />
-              )}
+              {ButtonShowAll()}
             </View>
             <View
               style={{

@@ -28,6 +28,9 @@ const UserInfo = (state = initState, action) => {
       const {err} = action;
       return {...state, statusUser: [], err_code: err};
     }
+    case keys.Clear_Store_Profile: {
+      return {introUser: {}, statusUser: [], err_code: ''};
+    }
     default:
       return state;
   }

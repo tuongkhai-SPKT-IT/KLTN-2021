@@ -12,6 +12,8 @@ export const ReloadHome_Success = 'ReloadHome_Success';
 export const GetStatusProfile_Failed = 'GetStatusProfile_Failed';
 export const GetStatusProfile_Success = 'GetStatusProfile_Success';
 
+export const Clear_Store_Profile = 'Clear_Store_Profile';
+
 export const Get_IntroUser_Success = 'Get_IntroUser_Success';
 export const Get_IntroUser_Failed = 'Get_IntroUser_Failed';
 

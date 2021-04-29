@@ -20,14 +20,12 @@ export const Get_IntroUser = () => {
           api
             .onCallAPI('get', route, {}, params, headers)
             .then((res) => {
-              console.log(1);
               if (res.data.error_code !== 0) {
                 dispatch({
                   type: types.Get_IntroUser_Failed,
                   err: res.data.message,
                 });
               } else {
-                console.log(res.data.data);
                 dispatch({
                   type: types.Get_IntroUser_Success,
                   data: res.data.data,
@@ -65,6 +63,18 @@ export const Get_IntroUser = () => {
     }
   };
 };
+
+export const Clear_Store_Profile = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({type: types.Clear_Store_Profile});
+    } catch (err) {
+      alert(err);
+      dispatch({type: types.Clear_Store_Profile});
+    }
+  };
+};
+
 export const Get_StatusProfile = () => {
   return async (dispatch) => {
     try {
@@ -88,7 +98,6 @@ export const Get_StatusProfile = () => {
                   data: res.data.data,
                   err: '',
                 });
-                console.log(res.data.data);
               }
             })
             .catch((err) => {
