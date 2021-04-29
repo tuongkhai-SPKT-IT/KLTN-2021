@@ -26,8 +26,6 @@ import {
 import ContentStatus from '../ContentStatus';
 import {ActivityIndicator} from 'react-native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
