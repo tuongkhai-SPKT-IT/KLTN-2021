@@ -7,30 +7,33 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Button, Text} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {Image} from 'react-native';
-import {Pressable} from 'react-native';
-import {
-  Get_Intro_Other,
-  Get_Status_Other,
-  Clear_Store_Other,
-} from '../Redux/Actions/OtherProfile.Action';
+// import {Clear_Store_Other} from '../Redux/Actions/OtherProfile.Action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useHistory} from 'react-router-native';
+import {DevSettings} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const IntroProfile = (props) => {
-  const history = useHistory();
+const IntroProfile = ({navigation}) => {
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
-  const OtherProfile = useSelector((state) => state.OtherProfile);
   const [introUser, setIntroUser] = useState({});
+  // const dispatch = useDispatch();
 
-  const dispatch = useDispatch();
   useEffect(() => {
     if (ProfileInfo.introUser) setIntroUser(ProfileInfo.introUser);
+    console.log(ProfileInfo.introUser);
   }, [ProfileInfo.introUser]);
+  // const showFriend = (friends) => {
+  //   if (friends) {
+  //     const slice = friends.slice(0, 3);
+  //     console.log(slice.length);
+  //   }
+  // };
   const blockFriend = (friend, i) => {
+    // const slice = friends.slice(0, 3);
+    // console.log(slice.length);
     return (
-      <Pressable
+      <TouchableOpacity
         onPress={() => {
-          props.navigation.push('OtherUser', {
+          navigation.push('OtherUser', {
             userId: friend.user_id,
           });
         }}
@@ -43,7 +46,7 @@ const IntroProfile = (props) => {
         <Text h4 h4Style={{fontSize: 15}} style={{textAlign: 'center'}}>
           {friend.user_name}
         </Text>
-      </Pressable>
+      </TouchableOpacity>
     );
   };
 
@@ -125,35 +128,51 @@ const IntroProfile = (props) => {
         }
         onPress={() => {
           AsyncStorage.clear();
+          DevSettings.reload();
         }}
         title="Edit Information Details"
         titleStyle={{color: 'black'}}
       />
       <View style={{borderTopWidth: 0.8}}>
         <Text h3 h3Style={{padding: 15, paddingVertical: 0}}>
-          Bạn bè
+        Bạn bè &nbsp;
+          {introUser.friend_array ? (
+            <Text
+              h4
+              style={{
+                fontSize: 20,
+                color: 'gray',
+                opacity: 0.99,
+                paddingLeft: 15,
+                fontWeight: 'normal',
+              }}>
+              {introUser.friend_array.length > 1
+                ? introUser.friend_array.length + ' friends'
+                : '1 friend'}
+            </Text>
+          ) : (
+            <Text
+              h4
+              style={{
+                fontSize: 20,
+                color: 'gray',
+                opacity: 0.99,
+                paddingLeft: 15,
+                fontWeight: 'normal',
+              }}>
+              0 friend
+            </Text>
+          )}
         </Text>
-        {introUser.friend_array ? (
-          <Text
-            style={{
-              fontSize: 20,
-              color: 'gray',
-              opacity: 0.99,
-              paddingLeft: 15,
-            }}>
-            {introUser.friend_array.length > 1
-              ? introUser.friend_array.length + ' friends'
-              : introUser.friend_array.length + ' friend'}
-          </Text>
-        ) : (
-          <></>
-        )}
+
         <View
           style={{
             margin: 10,
-            flexDirection: 'row',
             justifyContent: 'space-around',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
           }}>
+          {/* {showFriend(introUser.friend_array)} */}
           {introUser.friend_array ? (
             introUser.friend_array.map(blockFriend)
           ) : (

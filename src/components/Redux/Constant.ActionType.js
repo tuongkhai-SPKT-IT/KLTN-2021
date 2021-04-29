@@ -12,6 +12,8 @@ export const ReloadHome_Success = 'ReloadHome_Success';
 export const GetStatusProfile_Failed = 'GetStatusProfile_Failed';
 export const GetStatusProfile_Success = 'GetStatusProfile_Success';
 
+export const Clear_Store_Profile = 'Clear_Store_Profile';
+
 export const Get_IntroUser_Success = 'Get_IntroUser_Success';
 export const Get_IntroUser_Failed = 'Get_IntroUser_Failed';
 
@@ -25,3 +27,11 @@ export const Clear_Store_Other = 'Clear_Store_Other';
 
 export const Get_Group_Chat = 'Get_Group_Chat';
 export const Create_Group_Chat = 'Create_Group_Chat';
+
+export const checkRelationship_Success = 'checkRelationship_Success';
+export const checkRelationship_Failed = 'checkRelationship_Failed';
+
+export const Add_Friend = 'Add_Friend';
+export const Accept_Friend = 'Accept_Friend';
+export const Cancel_Friend = 'Cancel_Friend';
+export const Delete_Friend = 'Delete_Friend';

@@ -59,7 +59,6 @@ const App = () => {
             }
           })
           .catch((err) => {
-            console.log(err);
             AsyncStorage.clear();
             setLogged(false);
           });

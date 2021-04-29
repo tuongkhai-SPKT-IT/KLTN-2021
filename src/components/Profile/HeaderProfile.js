@@ -10,7 +10,6 @@ import {useSelector} from 'react-redux';
 export default function HeaderProfile(props) {
   const userInfo = useSelector((state) => state.UserInfo);
   const [imageProfile, setImageProfile] = useState({});
-  const [declarePopUp, setDeclarePopUp] = useState(true);
   //true: avatar, false: cover props.imgPopup
   useEffect(() => {
     if (userInfo.information.length > 0) {

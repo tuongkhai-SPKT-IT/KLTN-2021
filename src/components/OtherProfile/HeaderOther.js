@@ -1,14 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Dimensions} from 'react-native';
-import {View, Image, Pressable} from 'react-native';
+import {View, Image, TouchableOpacity} from 'react-native';
 import {Avatar, Button, Text} from 'react-native-elements';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
-
 import Modal from 'react-native-modal';
 import {useSelector} from 'react-redux';
 
 export default function HeaderProfile(props) {
-  // const userInfo = useSelector((state) => state.UserInfo);
   const userInfo = useSelector((state) => state.OtherProfile);
   console.log(userInfo);
   const [imageProfile, setImageProfile] = useState({});
@@ -64,7 +61,7 @@ export default function HeaderProfile(props) {
           position: 'relative',
           height: 200,
         }}>
-        <Pressable
+        <TouchableOpacity
           onPress={() => {
             setImgPopup(true);
             setTypeImg(false);
@@ -80,7 +77,7 @@ export default function HeaderProfile(props) {
               resizeMode="stretch"
             />
           </View>
-        </Pressable>
+        </TouchableOpacity>
         <View
           style={{
             position: 'absolute',

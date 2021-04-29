@@ -2,15 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
-  BackHandler,
   ScrollView,
   DevSettings,
   Pressable,
+  RefreshControl,
 } from 'react-native';
 import HeaderOther from './HeaderOther';
 import Modal from 'react-native-modal';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Avatar, Button, Text, SearchBar} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import IntroOther from './IntroOther';
@@ -28,6 +26,7 @@ import {
 import ContentStatus from '../ContentStatus';
 import {ActivityIndicator} from 'react-native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
@@ -43,6 +42,20 @@ const OtherProfile = ({route, navigation}) => {
   const mainProfile = ({navigation}) => {
     const OtherProfile = useSelector((state) => state.OtherProfile);
     const {buttonFriend, buttonMessage, relationShip} = OtherProfile;
+    const [refreshing, setRefreshing] = useState(false);
+    const onRefresh = () => {
+      setRefreshing(true);
+      dispatch(Clear_Store_Other());
+      dispatch(Get_Intro_Other(route.params.userId));
+      dispatch(Get_Status_Other(route.params.userId));
+      dispatch(Check_Relationship(route.params.userId));
+      if (
+        buttonFriend !== undefined &&
+        buttonMessage !== undefined &&
+        Object.keys(OtherProfile.intro).length !== 0
+      )
+        setRefreshing(false);
+    };
     const [visiblePopup, setVisiblePopup] = useState(false);
     const showstatus = () => {
       const srcData = OtherProfile.status;
@@ -63,9 +76,13 @@ const OtherProfile = ({route, navigation}) => {
     };
     const createRoom = () => {
       navigation.jumpTo('Messengers');
+      navigation.push('DetailMessages', {chat_group_id: 'con cá'});
+      navigation.goBack();
     };
 
-    // useEffect(() => {}, [OtherProfile.intro]);
+    if (OtherProfile.err_code) {
+      return <Text h1>There has an error when you use our system</Text>;
+    }
     if (
       buttonFriend !== undefined &&
       buttonMessage !== undefined &&
@@ -90,75 +107,58 @@ const OtherProfile = ({route, navigation}) => {
             backdropOpacity={0.5}>
             <View
               style={{
-                width: '100%',
-                height: 50,
-                // marginBottom: 10,
-              }}></View>
-            <Text
-              h4
-              style={{
-                textAlign: 'center',
-                marginBottom: 10,
+                backgroundColor: 'white',
+                position: 'absolute',
+                right: 0,
+                left: 0,
+                bottom: 0,
               }}>
-              {OtherProfile.intro.user_name}
-            </Text>
-            <View
-              style={{flexDirection: 'row', width: '100%', marginBottom: 10}}>
               <Button
-                buttonStyle={{backgroundColor: '#E4E6EB'}}
-                titleStyle={{color: 'black'}}
-                containerStyle={{marginHorizontal: 10, flex: 10}}
-                loadingProps={{animating: true}}
+                buttonStyle={{
+                  backgroundColor: 'white',
+                  justifyContent: 'flex-start',
+                  padding: 20,
+                }}
                 icon={
-                  relationShip ? (
-                    <MaterialCommunityIcons
-                      name={buttonMessenger.icon}
-                      style={{marginRight: 10}}
-                      size={20}
-                    />
-                  ) : (
-                    <FontAwesome5
-                      name={buttonFriend.icon}
-                      style={{marginRight: 10}}
-                      size={20}
-                    />
-                  )
-                }
-                onPress={() => alert('click')}
-                title={
-                  relationShip ? buttonMessenger.title : buttonFriend.title
+                  <FontAwesome5Icon
+                    name="user-check"
+                    style={{marginRight: 5}}
+                    color="black" //"#050505"
+                    size={30}
+                  />
                 }
                 onPress={() => dispatch(Accept_Friend(route.params.userId))}
+                //dispatch(Accept_Friend(route.params.userId))
                 title={'Confirm'}
                 titleStyle={{color: 'black'}}
               />
-
               <Button
                 buttonStyle={{
-                  backgroundColor: '#E4E6EB',
-                  width: 40,
+                  backgroundColor: 'white',
+                  // width: "100%"
+                  justifyContent: 'flex-start',
+                  padding: 20,
                 }}
-                titleStyle={{color: 'black'}}
-                containerStyle={{marginHorizontal: 10}}
-                loadingProps={{animating: true}}
                 icon={
-                  relationShip ? (
-                    <FontAwesome5 name={buttonFriend.icon} size={20} />
-                  ) : (
-                    <MaterialCommunityIcons
-                      name={buttonMessenger.icon}
-                      size={20}
-                    />
-                  )
+                  <FontAwesome5Icon
+                    name="times"
+                    style={{marginRight: 5}}
+                    color="#050505"
+                    size={30}
+                  />
                 }
-                onPress={() => dispatch(Cancel_Friend(route.params.userId))}
+                onPress={() => alert('cancel')}
+                // dispatch(Cancel_Friend(route.params.userId))
                 title={'Delete Request'}
                 titleStyle={{color: 'black'}}
               />
             </View>
           </Modal>
           <View style={{position: 'relative'}}>
-            <ScrollView>
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }>
               <HeaderOther />
               <View
                 style={{
@@ -189,7 +189,7 @@ const OtherProfile = ({route, navigation}) => {
                         size={20}
                       />
                     ) : (
-                      <FontAwesome5
+                      <FontAwesome5Icon
                         name={buttonFriend.icon}
                         style={{marginRight: 10}}
                         size={20}
@@ -247,45 +247,71 @@ const OtherProfile = ({route, navigation}) => {
                 }}
               />
               <IntroOther navigation={navigation} />
-              {/*  direction={() => navigation.push('OtherUser')} /> */}
 
-            <View
-              style={{
-                paddingBottom: 10,
-                borderBottomWidth: 0.8,
-                marginBottom: 20,
-              }}>
-              {OtherProfile.intro.friend_array ? (
-                OtherProfile.intro.friend_array.length > 6 && (
-                  <Button
-                    buttonStyle={{
-                      backgroundColor: 'rgba(0,0,0,.09555)',
-                      marginVertical: 10,
-                      zIndex: 999,
-                    }}
-                    containerStyle={{
-                      width: '100%',
-                    }}
-                    onPress={() => navigation.push('fullfriends')}
-                    title="See All Friends"
-                    titleStyle={{color: 'black'}}
-                  />
-                )
-              ) : (
-                <></>
-              )}
-            </View>
-            <View
-              style={{
-                backgroundColor: 'gray',
-                height: 20,
-                width: '100%',
-                opacity: 0.6,
-              }}></View>
-            {showstatus()}
-          </ScrollView>
-        </View>
-      </>
+              <View
+                style={{
+                  paddingBottom: 10,
+                  borderBottomWidth: 0.8,
+                  marginBottom: 20,
+                }}>
+                {OtherProfile.intro.friend_array ? (
+                  OtherProfile.intro.friend_array.length > 6 && (
+                    <Button
+                      buttonStyle={{
+                        backgroundColor: 'rgba(0,0,0,.09555)',
+                        marginVertical: 10,
+                        zIndex: 999,
+                      }}
+                      containerStyle={{
+                        width: '100%',
+                      }}
+                      onPress={() => navigation.push('fullfriends')}
+                      title="See All Friends"
+                      titleStyle={{color: 'black'}}
+                    />
+                  )
+                ) : (
+                  <></>
+                )}
+              </View>
+              <View
+                style={{
+                  backgroundColor: 'gray',
+                  height: 20,
+                  width: '100%',
+                  opacity: 0.6,
+                }}></View>
+              {showstatus()}
+            </ScrollView>
+          </View>
+        </>
+      );
+    }
+
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignContent: 'center',
+          backgroundColor: '#1877F2',
+          width: 150,
+          height: 150,
+          zIndex: 999,
+          position: 'absolute',
+          top: '30%',
+          alignSelf: 'center',
+        }}>
+        <ActivityIndicator size="large" color="white" />
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: 'white',
+          }}>
+          Loadding
+        </Text>
+      </View>
     );
   };
   return (
