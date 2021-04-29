@@ -98,6 +98,7 @@ export const Get_StatusProfile = () => {
                   data: res.data.data,
                   err: '',
                 });
+                console.log(res.data.data);
               }
             })
             .catch((err) => {

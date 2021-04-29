@@ -321,7 +321,7 @@ export const Accept_Friend = (userId) => {
   };
 };
 
-export const Add_Friend = (userId) => {
+export const call_Add_Friend = (userId) => {
   return async (dispatch) => {
     try {
       let token = '';

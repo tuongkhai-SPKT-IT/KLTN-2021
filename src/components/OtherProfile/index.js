@@ -31,7 +31,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (route.params.userId) {
       dispatch(Clear_Store_Other());
