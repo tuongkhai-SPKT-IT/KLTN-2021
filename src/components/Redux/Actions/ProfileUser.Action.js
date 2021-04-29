@@ -1,7 +1,7 @@
 import * as types from '../Constant.ActionType';
-import API from '../../API/API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as storeKeys from '../../Constants';
+import API from '../../API/API';
 export const Get_IntroUser = () => {
   return async (dispatch) => {
     try {
@@ -15,8 +15,7 @@ export const Get_IntroUser = () => {
           const headers = {
             Authorization: 'bearer' + val,
           };
-          var api = new API();
-          console.log(route, {}, params, headers);
+          const api = new API();
 
           api
             .onCallAPI('get', route, {}, params, headers)
@@ -89,6 +88,7 @@ export const Get_StatusProfile = () => {
                   data: res.data.data,
                   err: '',
                 });
+                console.log(res.data.data);
               }
             })
             .catch((err) => {

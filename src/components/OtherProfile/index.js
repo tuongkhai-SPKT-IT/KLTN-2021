@@ -21,7 +21,7 @@ import {
   Get_Status_Other,
   Clear_Store_Other,
   Check_Relationship,
-  Add_Friend,
+  call_Add_Friend,
   Cancel_Friend,
   Accept_Friend,
 } from '../Redux/Actions/OtherProfile.Action';
@@ -32,26 +32,19 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
   const dispatch = useDispatch();
-
   useEffect(() => {
-    if (route.params) {
+    if (route.params.userId) {
       dispatch(Clear_Store_Other());
       dispatch(Get_Intro_Other(route.params.userId));
       dispatch(Get_Status_Other(route.params.userId));
       dispatch(Check_Relationship(route.params.userId));
     }
-  }, [route.params]);
+  }, []);
   const mainProfile = ({navigation}) => {
     const OtherProfile = useSelector((state) => state.OtherProfile);
-    const userInfo = useSelector((state) => state.UserInfo);
-    const token = userInfo.information[3].value;
-    const [relationShip, setRelationShip] = useState(false); // true: friend, false: requested, not friend
-    const [buttonFriend, setButtonFriend] = useState({
-      // title: 'Add friend',
-      // icon: 'user-plus',
-    });
-    const [buttonMessenger, setButtonMessenger] = useState({});
-      const showstatus = () => {
+    const {buttonFriend, buttonMessage, relationShip} = OtherProfile;
+    const [visiblePopup, setVisiblePopup] = useState(false);
+    const showstatus = () => {
       const srcData = OtherProfile.status;
 
       if (srcData.length > 0) {
@@ -71,12 +64,30 @@ const OtherProfile = ({route, navigation}) => {
     const createRoom = () => {
       navigation.jumpTo('Messengers');
     };
-    
-    return (
-      <>
-        <View style={{position: 'relative'}}>
-          <ScrollView>
-            <HeaderOther />
+
+    // useEffect(() => {}, [OtherProfile.intro]);
+    if (
+      buttonFriend !== undefined &&
+      buttonMessage !== undefined &&
+      Object.keys(OtherProfile.intro).length !== 0
+    ) {
+      return (
+        <>
+          <Modal
+            isVisible={visiblePopup}
+            animationIn="slideInUp"
+            onBackButtonPress={() => setVisiblePopup(false)}
+            animationOut="slideOutDown"
+            swipeDirection={['up', 'down']}
+            swipeThreshold={150}
+            onSwipeComplete={() => setVisiblePopup(false)}
+            onBackdropPress={() => setVisiblePopup(false)}
+            onSwipeCancel={() => setVisiblePopup(true)}
+            style={{
+              backgroundColor: 'transparent',
+              margin: 0,
+            }}
+            backdropOpacity={0.5}>
             <View
               style={{
                 width: '100%',
@@ -145,14 +156,98 @@ const OtherProfile = ({route, navigation}) => {
                 titleStyle={{color: 'black'}}
               />
             </View>
-            <View
-              style={{
-                borderBottomColor: 'black',
-                borderBottomWidth: 1,
-                opacity: 0.5,
-              }}
-            />
-            <IntroOther direction={() => navigation.push('OtherUser')} />
+          </Modal>
+          <View style={{position: 'relative'}}>
+            <ScrollView>
+              <HeaderOther />
+              <View
+                style={{
+                  width: '100%',
+                  height: 50,
+                  // marginBottom: 10,
+                }}></View>
+              <Text
+                h4
+                style={{
+                  textAlign: 'center',
+                  marginBottom: 10,
+                }}>
+                {OtherProfile.intro.user_name}
+              </Text>
+              <View
+                style={{flexDirection: 'row', width: '100%', marginBottom: 10}}>
+                <Button
+                  buttonStyle={{backgroundColor: '#E4E6EB'}}
+                  titleStyle={{color: 'black'}}
+                  containerStyle={{marginHorizontal: 10, flex: 10}}
+                  loadingProps={{animating: true}}
+                  icon={
+                    relationShip ? (
+                      <MaterialCommunityIcons
+                        name={buttonMessage.icon}
+                        style={{marginRight: 10}}
+                        size={20}
+                      />
+                    ) : (
+                      <FontAwesome5
+                        name={buttonFriend.icon}
+                        style={{marginRight: 10}}
+                        size={20}
+                      />
+                    )
+                  }
+                  onPress={() => {
+                    if (relationShip) createRoom();
+                    else {
+                      // fasle button to là friends, true button to là messenger
+                      if (buttonFriend.title === 'Requested') {
+                        dispatch(Cancel_Friend(route.params.userId));
+                      }
+                      if (buttonFriend.title === 'Confirm') {
+                        setVisiblePopup(true);
+                      }
+                      if (buttonFriend.title === 'Add friend') {
+                        dispatch(call_Add_Friend(route.params.userId));
+                      }
+                    }
+                  }}
+                  title={
+                    relationShip ? buttonMessage.title : buttonFriend.title
+                  }
+                />
+
+                <Button
+                  buttonStyle={{
+                    backgroundColor: '#E4E6EB',
+                    width: 40,
+                  }}
+                  titleStyle={{color: 'black'}}
+                  containerStyle={{marginHorizontal: 10}}
+                  loadingProps={{animating: true}}
+                  icon={
+                    relationShip ? (
+                      <FontAwesome5Icon name={buttonFriend.icon} size={20} />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name={buttonMessage.icon}
+                        size={20}
+                      />
+                    )
+                  }
+                  onPress={() =>
+                    relationShip ? alert('Unfriends friends') : createRoom()
+                  }
+                />
+              </View>
+              <View
+                style={{
+                  borderBottomColor: 'black',
+                  borderBottomWidth: 1,
+                  opacity: 0.5,
+                }}
+              />
+              <IntroOther navigation={navigation} />
+              {/*  direction={() => navigation.push('OtherUser')} /> */}
 
             <View
               style={{
