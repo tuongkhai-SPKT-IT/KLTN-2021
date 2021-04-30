@@ -684,7 +684,7 @@ const ImageGrid = (props) => {
         <View
           onLayout={(e) => {
             setLayoutModal(e.nativeEvent.layout);
-            console.log(e.nativeEvent.layout);
+            // console.log(e.nativeEvent.layout);
           }}
           style={{width: '100%', height: '100%', backgroundColor: 'white'}}>
           <ScrollView

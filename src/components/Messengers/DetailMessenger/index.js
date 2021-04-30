@@ -7,19 +7,27 @@ import Messages from './Messages';
 import InputMessage from './Input';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as keys from '../../Constants';
-import {Keyboard} from 'react-native';
+import {SOCKET} from '../../../config';
+// import {Keyboard} from 'react-native';
 
 const DetailMessenger = ({route, navigation}) => {
   const {chat_group_id, avatar, friend_chat} = route.params;
   const [messages, setMessages] = useState([]);
   const [visibleScroll, setVisibleScroll] = useState(false);
   const messagesScroll = useRef();
-  let userToken = '';
   useEffect(() => {
-    AsyncStorage.getItem(keys.User_Token).then((val) => {
-      if (val) userToken = val;
-    });
-  }, []);
+    const joinRoomChat = async () => {
+      const name = await AsyncStorage.getItem(keys.User_ProfLink);
+      const room = route.params.chat_group_id;
+      if (room) {
+        SOCKET.emit('join', {name, room}, (err) => {
+          if (err) alert(err);
+        });
+      }
+    };
+    joinRoomChat();
+  }, [route.params]);
+
   const [selfName, setSelfName] = useState('');
   useEffect(() => {
     AsyncStorage.getItem(keys.User_ProfLink).then((val) => {
@@ -55,41 +63,25 @@ const DetailMessenger = ({route, navigation}) => {
   }, [chat_group_id]);
   // if (messages.length > 0) console.log(messages);
   const [message, setMessage] = useState('');
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (message.trim() === '') return;
     if (message) {
-      // socket.emit('sendMessage', message, selfName, () => setMessage(''));
-      const messageAfterInput = [...messages];
-      messageAfterInput.push({user: selfName, text: message});
-      setMessages(messageAfterInput);
-      setMessage('');
+      const userAvatar = await AsyncStorage.getItem(keys.User_Avatar);
+      SOCKET.emit('sendMessage', message, selfName, userAvatar, () =>
+        setMessage(''),
+      );
     }
-
-    // if (message) {
-    //   var route = 'chat/save-message';
-    //   if (message.trim() === '') {
-    //     return;
-    //   }
-    //   var param = {
-    //     chat_group_id: room,
-    //     content: message,
-    //   };
-    //   var header = {
-    //     Authorization: 'bearer' + localStorage.getItem('UserToken'),
-    //   };
-    //   var api = new API();
-
-    //   api.onCallAPI('post', route, {}, param, header).then((res) => {
-    //     if (res.data.error_code !== 0) {
-    //       window.alert(res.data.message);
-    //     } else {
-    //       if (res.data.data) {
-    //         // console.log(res.data.data);
-    //       }
-    //     }
-    //   });
-    // }
   };
+  useEffect(() => {
+    SOCKET.on('message', async (message) => {
+      const messageText = {
+        user: message.user,
+        text: message.text,
+        avatar: message.avatar,
+      };
+      setMessages((messages) => [...messages, messageText]);
+    });
+  }, []);
   return (
     <View
       style={{

@@ -80,7 +80,7 @@ const fullFriend = ({navigation}) => {
         inputContainerStyle={{borderRadius: 50}}
         inputStyle={{color: 'black'}}
         onChangeText={(val) => setQuerrySearch(val)}
-        onClearText={() => console.log(onClearText())}
+        // onClearText={() => console.log(onClearText())}
         placeholder="Search friends"
         placeholderTextColor="#000"
         cancelButtonTitle="Cancel"

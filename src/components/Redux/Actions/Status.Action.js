@@ -20,7 +20,6 @@ export const DisLike = (likeNumber, index) => {
       setTimeout(() => {
         AsyncStorage.getItem(storeKeys.User_Token).then((val) => {
           if (val) {
-            console.log(index);
             const route = 'status/update-status';
             const param = {
               status_id: props.index,
@@ -38,7 +37,6 @@ export const DisLike = (likeNumber, index) => {
                 if (res.data.error_code !== 0) {
                   window.alert(res.data.message);
                 } else {
-                  console.log(res.data.data);
                   dispatch({type: types.DisLike_Success, err});
                 }
               })

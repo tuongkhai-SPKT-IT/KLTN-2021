@@ -22,6 +22,7 @@ import {
   call_Add_Friend,
   Cancel_Friend,
   Accept_Friend,
+  Switch_TO_Messenger,
 } from '../Redux/Actions/OtherProfile.Action';
 import ContentStatus from '../ContentStatus';
 import {ActivityIndicator} from 'react-native';
@@ -42,7 +43,25 @@ const OtherProfile = ({route, navigation}) => {
   const mainProfile = ({navigation}) => {
     const OtherProfile = useSelector((state) => state.OtherProfile);
     const {buttonFriend, buttonMessage, relationShip} = OtherProfile;
+    const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const onPressFriendsButton = () => {
+      if (relationShip) createRoom();
+      else {
+        // fasle button to là friends, true button to là messenger
+        if (buttonFriend.title === 'Requested') {
+          setLoading(true);
+          dispatch(Cancel_Friend(route.params.userId));
+        }
+        if (buttonFriend.title === 'Confirm') {
+          setVisiblePopup(true);
+        }
+        if (buttonFriend.title === 'Add friend') {
+          setLoading(true);
+          dispatch(call_Add_Friend(route.params.userId));
+        }
+      }
+    };
     const onRefresh = () => {
       setRefreshing(true);
       dispatch(Clear_Store_Other());
@@ -74,10 +93,21 @@ const OtherProfile = ({route, navigation}) => {
         return <Text style={{padding: 20}}>Không có tin tức nào!!</Text>;
       }
     };
+    useEffect(() => {
+      if (OtherProfile.chat_room_id) {
+        navigation.navigate('Messengers', {
+          screen: 'DetailMessages',
+          params: {
+            avatar: OtherProfile.intro.user_avatar,
+            friend_chat: OtherProfile.intro.user_name,
+            chat_group_id: OtherProfile.chat_room_id,
+          },
+        });
+        navigation.popToTop();
+      }
+    }, [OtherProfile]);
     const createRoom = () => {
-      navigation.jumpTo('Messengers');
-      navigation.push('DetailMessages', {chat_group_id: 'con cá'});
-      navigation.goBack();
+      dispatch(Switch_TO_Messenger(route.params.userId));
     };
 
     if (OtherProfile.err_code) {
@@ -181,6 +211,7 @@ const OtherProfile = ({route, navigation}) => {
                   titleStyle={{color: 'black'}}
                   containerStyle={{marginHorizontal: 10, flex: 10}}
                   loadingProps={{animating: true}}
+                  loading={loading}
                   icon={
                     relationShip ? (
                       <MaterialCommunityIcons
@@ -196,21 +227,7 @@ const OtherProfile = ({route, navigation}) => {
                       />
                     )
                   }
-                  onPress={() => {
-                    if (relationShip) createRoom();
-                    else {
-                      // fasle button to là friends, true button to là messenger
-                      if (buttonFriend.title === 'Requested') {
-                        dispatch(Cancel_Friend(route.params.userId));
-                      }
-                      if (buttonFriend.title === 'Confirm') {
-                        setVisiblePopup(true);
-                      }
-                      if (buttonFriend.title === 'Add friend') {
-                        dispatch(call_Add_Friend(route.params.userId));
-                      }
-                    }
-                  }}
+                  onPress={() => onPressFriendsButton()}
                   title={
                     relationShip ? buttonMessage.title : buttonFriend.title
                   }
@@ -309,7 +326,7 @@ const OtherProfile = ({route, navigation}) => {
             fontWeight: 'bold',
             color: 'white',
           }}>
-          Loadding
+          Loading
         </Text>
       </View>
     );

@@ -2,11 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react';
 import {View, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {Text} from 'react-native-elements';
+import {SafeAreaView} from 'react-navigation';
 import API from '../API/API';
+import {Appbar} from 'react-native-paper';
 import * as keys from '../Constants';
 const SmallMessenger = ({navigation}) => {
   const [arrChatGroup, setArrChatGroup] = useState([]);
-
+  const _handleSearch = () => console.log('Searching');
   useEffect(() => {
     AsyncStorage.getItem(keys.User_Token).then((val) => {
       if (val) {
@@ -95,7 +97,12 @@ const SmallMessenger = ({navigation}) => {
     );
   };
   return (
-    <View style={{paddingTop: 5}}>
+    <SafeAreaView>
+      <Appbar.Header style={{backgroundColor: '#fff'}}>
+        <Appbar.Content title="Messengers" />
+        <Appbar.Action icon="magnify" onPress={_handleSearch} />
+      </Appbar.Header>
+
       <ScrollView>
         {arrChatGroup.length > 0 ? (
           arrChatGroup.map(singleSmallMess)
@@ -105,7 +112,7 @@ const SmallMessenger = ({navigation}) => {
           </Text>
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 export default SmallMessenger;

@@ -19,7 +19,6 @@ const IntroProfile = ({navigation}) => {
 
   useEffect(() => {
     if (ProfileInfo.introUser) setIntroUser(ProfileInfo.introUser);
-    console.log(ProfileInfo.introUser);
   }, [ProfileInfo.introUser]);
   // const showFriend = (friends) => {
   //   if (friends) {
@@ -135,7 +134,7 @@ const IntroProfile = ({navigation}) => {
       />
       <View style={{borderTopWidth: 0.8}}>
         <Text h3 h3Style={{padding: 15, paddingVertical: 0}}>
-        Bạn bè &nbsp;
+          Bạn bè &nbsp;
           {introUser.friend_array ? (
             <Text
               h4

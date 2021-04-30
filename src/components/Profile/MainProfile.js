@@ -244,7 +244,7 @@ const mainProfile = ({navigation}) => {
             fontWeight: 'bold',
             color: 'white',
           }}>
-          Loadding
+          loading
         </Text>
       </View>
     );

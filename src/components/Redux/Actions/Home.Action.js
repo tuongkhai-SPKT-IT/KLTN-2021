@@ -2,6 +2,7 @@ import * as types from '../Constant.ActionType';
 import API from '../../API/API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as storeKeys from '../../Constants';
+
 export const ReloadHome = () => {
   return async (dispatch) => {
     try {
@@ -39,6 +40,17 @@ export const ReloadHome = () => {
       });
     } catch (err) {
       dispatch({type: types.ReloadHome_Failed, err: err});
+    }
+  };
+};
+
+export const clear_Home = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({type: types.Clear_Store_HomePage});
+    } catch (err) {
+      alert(err);
+      dispatch({type: types.Clear_Store_HomePage});
     }
   };
 };

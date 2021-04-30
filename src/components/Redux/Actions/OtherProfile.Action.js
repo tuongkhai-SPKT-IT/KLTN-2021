@@ -321,133 +321,37 @@ export const Accept_Friend = (userId) => {
   };
 };
 
-export const call_Add_Friend = (userId) => {
+export const Switch_TO_Messenger = (userId) => {
   return async (dispatch) => {
     try {
-      let token = '';
-      await AsyncStorage.getItem(keys.User_Token).then((val) => {
-        if (val) token = val;
-      });
-      const route = 'request/make-friend';
-      const param = {
-        receiver: userId,
+      const token = await AsyncStorage.getItem(keys.User_Token);
+      const route = 'chat/create-chat-group';
+      const params = {
+        user_id: userId,
       };
-      const header = {
+      const headers = {
         Authorization: 'bearer' + token,
       };
       const api = new API();
       api
-        .onCallAPI('post', route, {}, param, header)
+        .onCallAPI('post', route, {}, params, headers)
         .then((res) => {
           if (res.data.error_code !== 0) {
-            alert(res.data.message);
+            window.alert(res.data.message);
           } else {
-            dispatch({
-              type: types.Add_Friend,
-              buttonFriend: {
-                title: 'Requested',
-                icon: 'user-times',
-              },
-              buttonMessage: {
-                title: 'Send a message',
-                icon: 'facebook-messenger',
-              },
-              relationShip: false,
-            });
+            if (res.data.data) {
+              // console.log(res.data.data);
+              dispatch({type: types.Get_Group_Chat, room: res.data.data});
+            }
           }
         })
         .catch((err) => {
-          console.log(err);
+          alert(err);
+          dispatch({type: types.Clear_Store_Other});
         });
-    } catch (err) {}
-    dispatch({type: types.Clear_Store_Other});
-  };
-};
-
-export const Cancel_Friend = (userId) => {
-  return async (dispatch) => {
-    try {
-      let token = '';
-      await AsyncStorage.getItem(keys.User_Token).then((val) => {
-        if (val) token = val;
-      });
-      const param = {
-        friend_id: userId,
-      };
-      const header = {
-        Authorization: 'bearer' + token,
-      };
-      const route = 'request/delete-request-profile';
-      const api = new API();
-      api
-        .onCallAPI('post', route, {}, param, header)
-        .then((res) => {
-          if (res.data.error_code !== 0) {
-            alert(res.data.message);
-          } else {
-            dispatch({
-              type: types.Cancel_Friend,
-              buttonFriend: {
-                title: 'Add friend',
-                icon: 'user-plus',
-              },
-              buttonMessage: {
-                title: 'Send a message',
-                icon: 'facebook-messenger',
-              },
-              relationShip: false,
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (err) {}
-    dispatch({type: types.Clear_Store_Other});
-  };
-};
-
-export const Accept_Friend = (userId) => {
-  return async (dispatch) => {
-    try {
-      let token = '';
-      await AsyncStorage.getItem(keys.User_Token).then((val) => {
-        if (val) token = val;
-      });
-      const param = {
-        friend_id: userId,
-        update_type: 3,
-      };
-      const header = {
-        Authorization: 'bearer' + token,
-      };
-
-      const route = 'user/update/info';
-      const api = new API();
-      api
-        .onCallAPI('post', route, {}, param, header)
-        .then((res) => {
-          if (res.data.error_code !== 0) {
-            alert(res.data.message);
-          } else {
-            dispatch({
-              type: types.Accept_Friend,
-              buttonFriend: {
-                title: 'Friend',
-                icon: 'user-friends',
-              },
-              buttonMessage: {
-                title: 'Send a message',
-                icon: 'facebook-messenger',
-              },
-              relationShip: true,
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (err) {}
-    dispatch({type: types.Clear_Store_Other});
+    } catch (err) {
+      alert(err);
+      dispatch({type: types.Clear_Store_Other});
+    }
   };
 };

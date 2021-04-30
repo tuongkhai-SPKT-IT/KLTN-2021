@@ -4,6 +4,7 @@ var initState = {
   intro: {},
   status: [],
   err_code: '',
+  chat_room_id: '',
 };
 
 var OtherProfile = (state = initState, action) => {
@@ -11,7 +12,7 @@ var OtherProfile = (state = initState, action) => {
     case keys.checkRelationship_Failed: {
       const {err_code} = action;
       alert(err_code);
-      return;
+      return {err_code: err_code};
     }
     case keys.checkRelationship_Success: {
       const {buttonFriend, buttonMessage, relationShip} = action;
@@ -26,15 +27,6 @@ var OtherProfile = (state = initState, action) => {
     case keys.Add_Friend:
     case keys.Cancel_Friend: {
       const {buttonFriend, relationShip, buttonMessage} = action;
-      console.log(state);
-      const test = {
-        ...state,
-        buttonFriend: buttonFriend,
-        buttonMessage: buttonMessage,
-        err_code: '',
-        relationShip: relationShip,
-      };
-      console.log(test);
       return {
         ...state,
         buttonFriend: buttonFriend,
@@ -51,17 +43,22 @@ var OtherProfile = (state = initState, action) => {
       const {data} = action;
       return {...state, status: data, err_code: ''};
     }
-    case keys.GetStatusOther_Failed: {
-      const {err} = action;
-      return {...state, status: [], err_code: err};
-    }
-
+    case keys.GetStatusOther_Failed:
     case keys.Get_IntroOther_Failed: {
       const {err} = action;
-      return {...state, intro: [], err_code: err};
+      return {err_code: err};
+    }
+    case keys.Get_Group_Chat: {
+      const {room} = action;
+      return {...state, chat_room_id: room, err_code: ''};
     }
     case keys.Clear_Store_Other: {
-      return {intro: {}, status: [], err: ''};
+      return {
+        intro: {},
+        status: [],
+        err_code: '',
+        chat_room_id: '',
+      };
     }
     default:
       return state;
