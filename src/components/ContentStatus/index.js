@@ -6,7 +6,6 @@ import * as styles from './Styles';
 
 const ContentStatus = (props) => {
   const {srcData} = props;
-
   // const srcData = {
   //   caption: '2 hình 1 video',
   //   created_at: [],
@@ -153,7 +152,7 @@ const ContentStatus = (props) => {
           userName={srcData.user_name}
           liked={srcData.liked}
           likeList={srcData.who_liked_status}
-          likeNumber={srcData.like_number}
+          likeNumber={srcData.who_liked_status.length}
           userAvatar={srcData.user_avatar}
           userID={srcData.user_id}
           listComment={comment}

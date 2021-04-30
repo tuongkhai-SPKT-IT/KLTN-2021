@@ -1,17 +1,20 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import SmallMessenger from './SmallMessenger';
 import {createStackNavigator} from '@react-navigation/stack';
 import DetailMessenger from './DetailMessenger';
+import {SOCKET} from '../../config';
 const Stack = createStackNavigator();
 
-const Messengers = ({navigation}) => {
+const Messengers = ({navigation, route}) => {
   return (
     <>
       <Stack.Navigator>
         <Stack.Screen
           name="SmallMessengers"
           component={SmallMessenger}
-          options={{title: 'Messengers'}}
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="DetailMessages"

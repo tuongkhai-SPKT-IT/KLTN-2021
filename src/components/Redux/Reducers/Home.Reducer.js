@@ -12,6 +12,9 @@ var HomeReducer = (state = initState, action) => {
       const {data} = action;
       return {...state, err_code: '', srcData: data};
     }
+    case types.Clear_Store_HomePage: {
+      return {srcData: [], err_code: ''};
+    }
     default:
       return state;
   }

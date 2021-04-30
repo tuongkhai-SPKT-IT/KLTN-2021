@@ -4,6 +4,10 @@ import {Avatar} from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const HeaderMessenger = (props) => {
+  const goBackButtonChat = () => {
+    props.navigation.push('SmallMessengers');
+    // props.navigation.goBack();
+  };
   return (
     <View
       style={[
@@ -15,7 +19,7 @@ const HeaderMessenger = (props) => {
         },
       ]}>
       <TouchableOpacity
-        onPress={() => props.navigation.goBack()}
+        onPress={goBackButtonChat}
         style={{
           width: 40,
           justifyContent: 'center',

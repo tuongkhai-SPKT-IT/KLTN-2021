@@ -8,6 +8,7 @@ export const Register_Fail = 'Register_Fail';
 
 export const ReloadHome_Failed = 'ReloadHome_Failed';
 export const ReloadHome_Success = 'ReloadHome_Success';
+export const Clear_Store_HomePage = 'Clear_Store_HomePage';
 
 export const GetStatusProfile_Failed = 'GetStatusProfile_Failed';
 export const GetStatusProfile_Success = 'GetStatusProfile_Success';

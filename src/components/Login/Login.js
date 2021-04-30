@@ -36,13 +36,11 @@ const Login = ({navigation}) => {
     AsyncStorage.clear();
     //const info = { user: Account.account, password: Password.password };
     if (!Account) {
-      console.log('chưa có tài khoản');
-      // AsyncStorage.clear();
+      alert('Account is required !!!');
       return;
     }
     if (!Password) {
-      console.log('chưa có mật khẩu');
-      // AsyncStorage.clear();
+      alert('Password is required !!!');
       return;
     }
     if (Account && Password) {

@@ -8,7 +8,7 @@ import {
   Image,
   Pressable,
   Dimensions,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesome5nIcon from 'react-native-vector-icons/FontAwesome5';
@@ -20,9 +20,9 @@ import SwipeDownModal from 'react-native-swipe-down';
 import * as keys from '../Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
-import { SOCKET } from '../../config';
+import {SOCKET} from '../../config';
 import moment from 'moment';
-import {Avatar} from "react-native-paper";
+import {Avatar} from 'react-native-paper';
 
 export default function ViewLCS(props) {
   const [listLike, setListLike] = useState(props.likeList);
@@ -32,7 +32,7 @@ export default function ViewLCS(props) {
   const userInfo = useRef({});
   const [visible, setVisible] = useState(false);
   const [liked, setLiked] = useState(props.liked);
-  const [loadding, setLoadding] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [inputCmt, setInputCmt] = useState('');
   const [listComment, setListComment] = useState(props.listComment);
   const [smallCmt, setSmallCmt] = useState(
@@ -69,24 +69,30 @@ export default function ViewLCS(props) {
   //for testing
   const makeid = (length) => {
     var result = [];
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
     for (var i = 0; i < length; i++) {
-      result.push(characters.charAt(Math.floor(Math.random() *
-        charactersLength)));
+      result.push(
+        characters.charAt(Math.floor(Math.random() * charactersLength)),
+      );
     }
     return result.join('');
-  }
+  };
 
   const Like = async () => {
-    setLoadding(true);
+    setLoading(true);
     if (!liked) {
       const name = makeid(10);
-      SOCKET.emit("subscribe-friend-chanel", { name: userInfo.current.user_ProLink, room: "1234567890" }, err => {
-        if (err) {
-          console.log("error noti: ", err)
-        }
-      })
+      SOCKET.emit(
+        'subscribe-friend-chanel',
+        {name: userInfo.current.user_ProLink, room: '1234567890'},
+        (err) => {
+          if (err) {
+            console.log('error noti: ', err);
+          }
+        },
+      );
 
       const route = 'status/update-status';
       const param = {
@@ -106,7 +112,7 @@ export default function ViewLCS(props) {
             } else {
               setListLike(res.data.data);
               setLiked(true);
-              setLoadding(false);
+              setLoading(false);
               setLikeNumber(likeNumber + 1);
 
               //push notification
@@ -116,10 +122,9 @@ export default function ViewLCS(props) {
                 owner_id: props.userID, //owner of status
                 content: `${userInfo.current.user_name} liked your status`,
                 current_user_avatar: userInfo.current.user_avatar,
-                moment: moment().fromNow()
-              }
-              SOCKET.emit("client-liked-status",notificationData);
-
+                moment: moment().fromNow(),
+              };
+              SOCKET.emit('client-liked-status', notificationData);
             }
           })
           .catch((err) => {
@@ -146,7 +151,7 @@ export default function ViewLCS(props) {
             } else {
               setListLike(res.data.data);
               setLiked(false);
-              setLoadding(false);
+              setLoading(false);
               setLikeNumber(likeNumber - 1);
             }
           })
@@ -231,12 +236,20 @@ export default function ViewLCS(props) {
   const whoLike = (list) => {
     var i = 0;
     var listWho = '';
+    for (i = 0; i < list.length; i++) {
+      listWho += list[i].user_name + ', ';
+    }
+    if (list.length > 2) {
+      listWho =
+        list[0].user_name +
+        ', ' +
+        list[1].user_name +
+        ' và ' +
+        (list.length - 2) +
+        ' người khác';
+    }
     if (list.length <= 2)
-      for (i = 0; i < list.length; i++) {
-        if (i + 1 < list.length)
-          listWho = list[i].user_name + ', ' + list[i + 1].user_name;
-        else listWho = list[i].user_name;
-      }
+      listWho = listWho.substring(0, listWho.lastIndexOf(','));
     return listWho;
   };
 
@@ -290,7 +303,7 @@ export default function ViewLCS(props) {
                 }}>
                 <Pressable
                   onPress={() => {
-                    console.log(listLike);
+                    // console.log(listLike);
                   }}
                   style={{
                     flexDirection: 'row',
@@ -320,7 +333,7 @@ export default function ViewLCS(props) {
                       />
                     )
                   }
-                  loading={loadding}
+                  loading={loading}
                   loadingProps={{animating: true, color: '#999'}}
                   loadingStyle={{borderColor: 'black'}}
                   onPress={() => Like()}
@@ -372,7 +385,7 @@ export default function ViewLCS(props) {
               <AntDesignIcon name="like2" size={20} color="rgba(0,0,0,.6)" />
             )
           }
-          loading={loadding}
+          loading={loading}
           loadingProps={{animating: true, color: '#999'}}
           loadingStyle={{borderColor: 'black'}}
           onPress={() => Like()}
@@ -442,5 +455,5 @@ const styless = StyleSheet.create({
     borderRadius: 30,
     height: 35,
     justifyContent: 'space-around',
-  }
+  },
 });

@@ -57,7 +57,7 @@ const Home = () => {
           <Text>{data.moment}</Text>
         </View>
       </View>
-    )
+    ) 
   }
 
   SOCKET.on("server-popup-notification",(data)=>{
