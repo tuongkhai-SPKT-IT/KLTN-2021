@@ -6,33 +6,21 @@ import {SafeAreaView} from 'react-navigation';
 import API from '../API/API';
 import {Appbar} from 'react-native-paper';
 import * as keys from '../Constants';
-const SmallMessenger = ({navigation}) => {
-  const [arrChatGroup, setArrChatGroup] = useState([]);
-  const _handleSearch = () => console.log('Searching');
-  useEffect(() => {
-    AsyncStorage.getItem(keys.User_Token).then((val) => {
-      if (val) {
-        const route = 'chat/list-messages';
-        const param = {
-          token: val,
-        };
-        const header = {
-          Authorization: 'bearer' + val,
-        };
-        const api = new API();
-        api.onCallAPI('get', route, {}, param, header).then((res) => {
-          if (res.data.error_code !== 0) {
-            window.alert(res.data.message);
-          } else {
-            if (res.data.data) {
-              setArrChatGroup(res.data.data);
-            }
-          }
-        });
-      }
-    });
-  }, []);
+import {SOCKET} from '../../config';
+import {useDispatch, useSelector} from 'react-redux';
+import {Get_Group_Chat} from '../Redux/Actions/Chat.Action';
+import {ActivityIndicator} from 'react-native';
 
+const SmallMessenger = ({navigation, route}) => {
+  const _handleSearch = () => console.log('Searching');
+  const chatReducer = useSelector((state) => state.ChatReducer);
+  const dispatch = useDispatch();
+  const getChatGroup = async () => {
+    dispatch(Get_Group_Chat());
+  };
+  useEffect(() => {
+    getChatGroup();
+  }, []);
   const singleSmallMess = (message, i) => {
     const maxlimit = 40;
     var contentCurrent = message.isCurrent
@@ -96,23 +84,52 @@ const SmallMessenger = ({navigation}) => {
       </TouchableOpacity>
     );
   };
-  return (
-    <SafeAreaView>
-      <Appbar.Header style={{backgroundColor: '#fff'}}>
-        <Appbar.Content title="Messengers" />
-        <Appbar.Action icon="magnify" onPress={_handleSearch} />
-      </Appbar.Header>
+  // return <></>;
+  if (chatReducer.ownChatGroup.length > 0) {
+    const arrChatGroup = chatReducer.ownChatGroup;
+    return (
+      <SafeAreaView>
+        <Appbar.Header style={{backgroundColor: '#fff'}}>
+          <Appbar.Content title="Messengers" />
+          <Appbar.Action icon="magnify" onPress={_handleSearch} />
+        </Appbar.Header>
 
-      <ScrollView>
-        {arrChatGroup.length > 0 ? (
-          arrChatGroup.map(singleSmallMess)
-        ) : (
-          <Text style={{padding: 20, fontSize: 16}}>
-            You haven't any messages
-          </Text>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+        <ScrollView>
+          {arrChatGroup.length > 0 ? (
+            arrChatGroup.map(singleSmallMess)
+          ) : (
+            <Text style={{padding: 20, fontSize: 16}}>
+              You don't have any messages
+            </Text>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+  return (
+    <View
+      style={{
+        justifyContent: 'center',
+        alignContent: 'center',
+        backgroundColor: '#1877F2',
+        width: 150,
+        height: 150,
+        zIndex: 999,
+        position: 'absolute',
+        top: '30%',
+        alignSelf: 'center',
+      }}>
+      <ActivityIndicator size="large" color="white" />
+      <Text
+        style={{
+          textAlign: 'center',
+          fontSize: 18,
+          fontWeight: 'bold',
+          color: 'white',
+        }}>
+        Loading
+      </Text>
+    </View>
   );
 };
 export default SmallMessenger;

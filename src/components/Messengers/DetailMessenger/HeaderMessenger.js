@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const HeaderMessenger = (props) => {
   const goBackButtonChat = () => {
-    props.navigation.push('SmallMessengers');
+    props.navigation.push('SmallMessengers', {reload: false});
     // props.navigation.goBack();
   };
   return (

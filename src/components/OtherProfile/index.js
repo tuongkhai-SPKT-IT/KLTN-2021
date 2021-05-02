@@ -95,6 +95,7 @@ const OtherProfile = ({route, navigation}) => {
     };
     useEffect(() => {
       if (OtherProfile.chat_room_id) {
+        navigation.popToTop();
         navigation.navigate('Messengers', {
           screen: 'DetailMessages',
           params: {
@@ -103,7 +104,6 @@ const OtherProfile = ({route, navigation}) => {
             chat_group_id: OtherProfile.chat_room_id,
           },
         });
-        navigation.popToTop();
       }
     }, [OtherProfile]);
     const createRoom = () => {

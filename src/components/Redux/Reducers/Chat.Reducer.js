@@ -1,19 +1,20 @@
 import * as types from '../Constant.ActionType';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as myConst from '../../Constants';
 var initState = {
   ownChatGroup: [],
   err_code: '',
 };
 
-var HomeReducer = (state = initState, action) => {
+var ChatReducer = (state = initState, action) => {
   switch (action.type) {
-    case types.ReloadHome_Success: {
+    case types.Get_Chat_List: {
       const {data} = action;
-      return {...state, err_code: '', srcData: data};
+      return {...state, err_code: '', ownChatGroup: data};
+    }
+    case types.Clear_Chat_List: {
+      return {ownChatGroup: [], err_code: ''};
     }
     default:
       return state;
   }
 };
-export default HomeReducer;
+export default ChatReducer;

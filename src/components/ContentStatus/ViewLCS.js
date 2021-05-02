@@ -108,7 +108,7 @@ export default function ViewLCS(props) {
           .onCallAPI('post', route, {}, param, header)
           .then((res) => {
             if (res.data.error_code !== 0) {
-              window.alert(res.data.message);
+              alert(res.data.message);
             } else {
               setListLike(res.data.data);
               setLiked(true);
@@ -147,7 +147,7 @@ export default function ViewLCS(props) {
           .onCallAPI('post', route, {}, param, header)
           .then((res) => {
             if (res.data.error_code !== 0) {
-              window.alert(res.data.message);
+              alert(res.data.message);
             } else {
               setListLike(res.data.data);
               setLiked(false);
@@ -236,6 +236,9 @@ export default function ViewLCS(props) {
   const whoLike = (list) => {
     var i = 0;
     var listWho = '';
+    const test =
+      'Đãbảođặttênngắnthôi MàsaoNócứ Dàinhưthếnày, Đãbảođặttênngắnthôi MàsaoNócứ Dàinhưthếnày';
+
     for (i = 0; i < list.length; i++) {
       listWho += list[i].user_name + ', ';
     }
@@ -250,7 +253,7 @@ export default function ViewLCS(props) {
     }
     if (list.length <= 2)
       listWho = listWho.substring(0, listWho.lastIndexOf(','));
-    return listWho;
+    return test;
   };
 
   const handleOnScroll = (event) => {

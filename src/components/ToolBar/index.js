@@ -10,6 +10,7 @@ import {
   Dimensions,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import Avatar from '../Avatar';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -67,14 +68,11 @@ export default function ToolBar() {
     <View style={styles.container}>
       <View style={styles.row}>
         <View style={{marginRight: 10}}>
-          <Avatar
-            isHomePage={true}
-            source={
-              userInfo.information.length !== 0
-                ? userInfo.information[0].value
-                : ''
-            }
-          />
+          {userInfo.information.length !== 0 ? (
+            <Avatar isHomePage={true} source={userInfo.information[0].value} />
+          ) : (
+            <ActivityIndicator />
+          )}
         </View>
         <Pressable style={styles.input} onPress={() => popUpStatusModal()}>
           <Text>What's on your mind?</Text>

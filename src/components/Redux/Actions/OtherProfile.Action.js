@@ -337,7 +337,7 @@ export const Switch_TO_Messenger = (userId) => {
         .onCallAPI('post', route, {}, params, headers)
         .then((res) => {
           if (res.data.error_code !== 0) {
-            window.alert(res.data.message);
+            alert(res.data.message);
           } else {
             if (res.data.data) {
               // console.log(res.data.data);

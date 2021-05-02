@@ -35,7 +35,7 @@ export const DisLike = (likeNumber, index) => {
               .onCallAPI('post', route, {}, param, header)
               .then((res) => {
                 if (res.data.error_code !== 0) {
-                  window.alert(res.data.message);
+                  alert(res.data.message);
                 } else {
                   dispatch({type: types.DisLike_Success, err});
                 }

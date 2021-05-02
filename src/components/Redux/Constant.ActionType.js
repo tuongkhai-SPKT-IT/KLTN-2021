@@ -36,3 +36,6 @@ export const Add_Friend = 'Add_Friend';
 export const Accept_Friend = 'Accept_Friend';
 export const Cancel_Friend = 'Cancel_Friend';
 export const Delete_Friend = 'Delete_Friend';
+
+export const Get_Chat_List = 'Get_Chat_List';
+export const Clear_Chat_List = 'Clear_Chat_List';

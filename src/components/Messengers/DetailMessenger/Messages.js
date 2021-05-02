@@ -7,8 +7,6 @@ const Messages = (props) => {
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
     Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
-    if (props.messagesScroll.current) {
-    }
     // cleanup function
     return () => {
       Keyboard.removeListener('keyboardDidShow', _keyboardDidShow);
@@ -16,14 +14,9 @@ const Messages = (props) => {
     };
   }, []);
 
-  const [keyboardStatus, setKeyboardStatus] = useState(false);
-  const _keyboardDidShow = () => setKeyboardStatus(true);
-  const _keyboardDidHide = () => setKeyboardStatus(false);
-  useEffect(() => {
-    if (props.messagesScroll.current) {
-      props.messagesScroll.current.scrollToEnd();
-    }
-  }, [keyboardStatus]);
+  const _keyboardDidShow = () => props.setKeyboardStatus(true);
+  const _keyboardDidHide = () => props.setKeyboardStatus(false);
+
   useEffect(() => {
     if (props.messages) {
       if (props.messagesScroll.current) {

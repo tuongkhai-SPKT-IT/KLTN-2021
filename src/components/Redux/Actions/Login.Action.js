@@ -14,7 +14,7 @@ export const Login_Request = (info) => {
         .onCallAPI('post', route, {}, params, {})
         .then((res) => {
           if (res.data.error_code !== 0) {
-            window.alert(res.data.message);
+            alert(res.data.message);
             AsyncStorage.setItem(storeKeys.Already_login, 'false');
             dispatch({
               type: types.Login_Fail,
