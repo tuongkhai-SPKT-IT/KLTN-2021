@@ -244,7 +244,7 @@ const mainProfile = ({navigation}) => {
             fontWeight: 'bold',
             color: 'white',
           }}>
-          loading
+          Loading
         </Text>
       </View>
     );
@@ -253,3 +253,4 @@ const mainProfile = ({navigation}) => {
 export default mainProfile;
 
 const styles = StyleSheet.create({});
+      

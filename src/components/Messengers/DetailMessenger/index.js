@@ -42,7 +42,7 @@ const DetailMessenger = ({route, navigation}) => {
       const api = new API();
       api.onCallAPI('get', route, {}, param, {}).then((res) => {
         if (res.data.error_code !== 0) {
-          window.alert(res.data.message);
+          alert(res.data.message);
         } else {
           if (res.data.data) {
             const messArr = [];
@@ -67,9 +67,48 @@ const DetailMessenger = ({route, navigation}) => {
     if (message.trim() === '') return;
     if (message) {
       const userAvatar = await AsyncStorage.getItem(keys.User_Avatar);
-      SOCKET.emit('sendMessage', message, selfName, userAvatar, () =>
-        setMessage(''),
-      );
+      const today = new Date();
+      const date =
+        `0${today.getDate()}`.slice(-2) +
+        '/' +
+        `0${today.getMonth() + 1}`.slice(-2) +
+        '/' +
+        `${today.getFullYear()}`;
+      let hour = today.getHours();
+      let sun;
+      if (hour > 12) {
+        hour -= 12;
+        sun = 'PM';
+      } else {
+        if (hour >= 0) sun = 'AM';
+      }
+      const time =
+        `0${hour}`.slice(-2) +
+        ':' +
+        `0${today.getMinutes()}`.slice(-2) +
+        ':' +
+        `0${today.getSeconds()}`.slice(-2);
+      const when = date + ' ' + time + ' ' + sun;
+      SOCKET.emit('sendMessage', message, selfName, userAvatar, when);
+      setMessage('')
+    }
+    if (message) {
+      const token = await AsyncStorage.getItem(keys.User_Token);
+      const route = 'chat/save-message';
+      const param = {
+        chat_group_id,
+        content: message,
+      };
+      const header = {
+        Authorization: 'bearer' + token,
+      };
+      const api = new API();
+
+      api.onCallAPI('post', route, {}, param, header).then((res) => {
+        if (res.data.error_code !== 0) {
+          alert(res.data.message);
+        }
+      });
     }
   };
   useEffect(() => {
@@ -78,10 +117,17 @@ const DetailMessenger = ({route, navigation}) => {
         user: message.user,
         text: message.text,
         avatar: message.avatar,
+        time: message.time,
       };
       setMessages((messages) => [...messages, messageText]);
     });
   }, []);
+  const [keyboardStatus, setKeyboardStatus] = useState(false);
+  useEffect(() => {
+    if (messagesScroll.current) {
+      messagesScroll.current.scrollToEnd();
+    }
+  }, [keyboardStatus]);
   return (
     <View
       style={{
@@ -95,6 +141,8 @@ const DetailMessenger = ({route, navigation}) => {
       />
       <Messages
         style={{}}
+        keyboardStatus={keyboardStatus}
+        setKeyboardStatus={setKeyboardStatus}
         messagesScroll={messagesScroll}
         messages={messages}
         setVisibleScroll={setVisibleScroll}

@@ -20,7 +20,7 @@ export const ReloadHome = () => {
             .onCallAPI('get', route, {}, param, header)
             .then((res) => {
               if (res.data.error_code !== 0) {
-                window.alert(res.data.message);
+                alert(res.data.message);
               } else {
                 dispatch({
                   type: types.ReloadHome_Success,

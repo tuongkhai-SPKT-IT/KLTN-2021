@@ -22,9 +22,10 @@ import Profile from '../Profile/';
 import Notifications from '../Notifications';
 import Messengers from '../Messengers';
 import OtherProfile from '../OtherProfile';
-import { SOCKET } from '../../config';
-import { showMessage, hideMessage } from "react-native-flash-message";
-import {Avatar} from "react-native-paper"
+import {SOCKET} from '../../config';
+import {showMessage, hideMessage} from 'react-native-flash-message';
+import {Avatar} from 'react-native-paper';
+import {Clear_List_Chat, Get_Group_Chat} from '../Redux/Actions/Chat.Action';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -46,32 +47,42 @@ const Home = () => {
   const dispatch = useDispatch();
   const storeState = useSelector((state) => state.HomePage);
 
-  const notificationTitle = (data) =>{
+  const notificationTitle = (data) => {
     return (
-      <View style={{ width: "100%", height: "100%", flexDirection: "row", alignItems: "center" }}>
-        <View style={{justifyContent: "space-around", flex: 1}}>
-          <Avatar.Image size={35} source={{ uri: data.avatar }} />
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        <View style={{justifyContent: 'space-around', flex: 1}}>
+          <Avatar.Image size={35} source={{uri: data.avatar}} />
         </View>
-        <View style={{justifyContent: "space-around", flex: 1, marginHorizontal: 5}}>
+        <View
+          style={{
+            justifyContent: 'space-around',
+            flex: 1,
+            marginHorizontal: 5,
+          }}>
           <Text>{data.content}</Text>
           <Text>{data.moment}</Text>
         </View>
       </View>
-    ) 
-  }
+    );
+  };
 
-  SOCKET.on("server-popup-notification",(data)=>{
+  SOCKET.on('server-popup-notification', (data) => {
     showMessage({
       message: notificationTitle({
         avatar: data.current_user_avatar,
         content: data.content,
-        moment: data.moment
+        moment: data.moment,
       }),
-      type: "default",
-      color: "black",
-    })
-  })
-  
+      type: 'default',
+      color: 'black',
+    });
+  });
 
   return (
     <NativeRouter>
@@ -108,6 +119,16 @@ const Home = () => {
           />
           <Tab.Screen
             name="Messengers"
+            listeners={({navigation, route}) => ({
+              tabPress: (e) => {
+                e.preventDefault();
+                dispatch(Clear_List_Chat());
+                dispatch(Get_Group_Chat());
+                navigation.navigate('Messengers', {
+                  screen: 'SmallMessengers',
+                });
+              },
+            })}
             options={{
               tabBarIcon: () => {
                 return (

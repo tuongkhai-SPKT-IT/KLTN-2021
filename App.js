@@ -26,7 +26,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 const App = () => {
   const [logged, setLogged] = useState(false);
-  const [allUserRoute, setAllUserRoute] = useState([]);
+  // const [allUserRoute, setAllUserRoute] = useState([]);
 
   useEffect(() => {
     AsyncStorage.getItem(myConst.User_Token).then((value) => {
