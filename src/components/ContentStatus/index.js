@@ -131,7 +131,6 @@ const ContentStatus = (props) => {
       linkProfile: 'facebook.com/tuongkhai191999',
     },
   ];
-  // console.log('src: ',props.srcData);
   return (
     <>
       <View style={styles.stylesIndex.container1}>

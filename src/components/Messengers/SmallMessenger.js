@@ -31,7 +31,7 @@ const SmallMessenger = ({navigation, route}) => {
       <TouchableOpacity
         key={i}
         onPress={() =>
-          navigation.push('DetailMessages', {
+          navigation.navigate('DetailMessages', {
             chat_group_id: message.room,
             avatar: message.avatar,
             friend_chat: message.friend_chat,

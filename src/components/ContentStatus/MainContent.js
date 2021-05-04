@@ -4,9 +4,12 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import ImageGrid from './ImageGrid';
-import {Button} from 'react-native-elements';
+import {Avatar, Button} from 'react-native-elements';
+import {useNavigation} from '@react-navigation/core';
+import {TouchableOpacity} from 'react-native';
 
 const MainContent = (props) => {
+  const navigation = useNavigation();
   const checkSetting = (setting) => {
     switch (setting) {
       case 'pub':
@@ -22,12 +25,24 @@ const MainContent = (props) => {
     <>
       <View>
         <View style={styles.containerInfo}>
-          <Image
-            style={{width: 45, height: 45, borderRadius: 100, marginRight: 10}}
-            source={{
-              uri: props.srcAvt,
-            }}
-          />
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('OtherUser', {
+                userId: props.userID,
+              })
+            }>
+            <Image
+              style={{
+                width: 45,
+                height: 45,
+                borderRadius: 100,
+                marginRight: 10,
+              }}
+              source={{
+                uri: props.srcAvt,
+              }}
+            />
+          </TouchableOpacity>
           <View style={{flex: 1}}>
             <Text style={{fontSize: 15, fontWeight: 'bold'}}>
               {props.userName}&nbsp;

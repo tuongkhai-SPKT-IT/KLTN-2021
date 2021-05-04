@@ -1,11 +1,14 @@
+import {useNavigation} from '@react-navigation/core';
 import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Avatar} from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const HeaderMessenger = (props) => {
+  const navigation = useNavigation();
   const goBackButtonChat = () => {
-    props.navigation.push('SmallMessengers', {reload: false});
+    console.log(1);
+    navigation.navigate('Messengers', {screen: 'SmallMessengers'});
     // props.navigation.goBack();
   };
   return (

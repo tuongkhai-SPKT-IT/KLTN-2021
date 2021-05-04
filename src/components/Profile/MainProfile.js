@@ -66,21 +66,19 @@ const mainProfile = ({navigation}) => {
     if (ProfileInfo.introUser)
       if (ProfileInfo.introUser.friend_array)
         return (
-          ProfileInfo.introUser.friend_array.length > 6 && (
-            <Button
-              buttonStyle={{
-                backgroundColor: 'rgba(0,0,0,.09555)',
-                marginVertical: 10,
-                zIndex: 999,
-              }}
-              containerStyle={{
-                width: '100%',
-              }}
-              onPress={() => navigation.push('fullfriends')}
-              title="See All Friends"
-              titleStyle={{color: 'black'}}
-            />
-          )
+          <Button
+            buttonStyle={{
+              backgroundColor: 'rgba(0,0,0,.09555)',
+              marginVertical: 10,
+              zIndex: 999,
+            }}
+            containerStyle={{
+              width: '100%',
+            }}
+            onPress={() => navigation.push('fullfriends')}
+            title="See All Friends"
+            titleStyle={{color: 'black'}}
+          />
         );
   };
   if (Object.keys(ProfileInfo.introUser).length !== 0) {
@@ -253,4 +251,3 @@ const mainProfile = ({navigation}) => {
 export default mainProfile;
 
 const styles = StyleSheet.create({});
-      

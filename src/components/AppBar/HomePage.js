@@ -67,7 +67,7 @@ const HomePage = ({navigation}) => {
   return (
     <>
       <View style={styles.containerHeader}>
-        <HeaderApp navigation={navigation} />
+        <HeaderApp />
       </View>
       <View style={styles.container}>
         <View style={styles.containerBody}>

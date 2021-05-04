@@ -2,16 +2,17 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
-import {useDispatch, useSelector} from 'react-redux';
 import Modal from 'react-native-modal';
 import {Searchbar, List, Appbar, Avatar} from 'react-native-paper';
 import {GetUsers} from '../../services/user';
-import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/core';
 // import {Clear_Store_Other} from '../Redux/Actions/OtherProfile.Action';
+
 export default function index(props) {
   const [isVisibleSearchModal, setIsVisibleSearchModal] = useState(false);
   const [searchContent, setSearchContent] = useState('');
   const [usersList, setUsersList] = useState([]);
+  const navigation = useNavigation();
   // const dispatch = useDispatch();
   const handleOnChangeSearchBar = (query) => {
     setSearchContent(query);
@@ -65,7 +66,7 @@ export default function index(props) {
           )}
           onPress={() => {
             setIsVisibleSearchModal(false);
-            props.navigation.push('OtherUser', {
+            navigation.navigate('OtherUser', {
               userId: item.user_id,
             });
             setSearchContent('');

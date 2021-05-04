@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DevSettings} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const IntroProfile = ({navigation}) => {
+const IntroProfile = (props) => {
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
   const [introUser, setIntroUser] = useState({});
   // const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const IntroProfile = ({navigation}) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.push('OtherUser', {
+          props.navigation.navigate('OtherUser', {
             userId: friend.user_id,
           });
         }}

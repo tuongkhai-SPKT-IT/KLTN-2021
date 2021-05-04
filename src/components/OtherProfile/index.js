@@ -33,13 +33,13 @@ const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(Clear_Store_Other());
     if (route.params.userId) {
-      dispatch(Clear_Store_Other());
       dispatch(Get_Intro_Other(route.params.userId));
       dispatch(Get_Status_Other(route.params.userId));
       dispatch(Check_Relationship(route.params.userId));
     }
-  }, []);
+  }, [route.params]);
   const mainProfile = ({navigation}) => {
     const OtherProfile = useSelector((state) => state.OtherProfile);
     const {buttonFriend, buttonMessage, relationShip} = OtherProfile;
@@ -95,14 +95,10 @@ const OtherProfile = ({route, navigation}) => {
     };
     useEffect(() => {
       if (OtherProfile.chat_room_id) {
-        navigation.popToTop();
-        navigation.navigate('Messengers', {
-          screen: 'DetailMessages',
-          params: {
-            avatar: OtherProfile.intro.user_avatar,
-            friend_chat: OtherProfile.intro.user_name,
-            chat_group_id: OtherProfile.chat_room_id,
-          },
+        navigation.navigate('DetailMessages', {
+          avatar: OtherProfile.intro.user_avatar,
+          friend_chat: OtherProfile.intro.user_name,
+          chat_group_id: OtherProfile.chat_room_id,
         });
       }
     }, [OtherProfile]);
@@ -340,13 +336,6 @@ const OtherProfile = ({route, navigation}) => {
             headerShown: false,
           }}
           component={mainProfile}
-        />
-        <Stack.Screen
-          name="OtherUser"
-          options={{
-            headerShown: false,
-          }}
-          component={OtherProfile}
         />
         <Stack.Screen
           name="fullfriends"

@@ -26,138 +26,154 @@ import {SOCKET} from '../../config';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 import {Avatar} from 'react-native-paper';
 import {Clear_List_Chat, Get_Group_Chat} from '../Redux/Actions/Chat.Action';
+import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
+import DetailMessenger from '../Messengers/DetailMessenger';
 
 const Tab = createMaterialBottomTabNavigator();
-
+const Stack = createStackNavigator();
 const Home = () => {
-  const [tabColor, setTabColor] = useState('#65676B');
-  const [activeHomeTab, setActiveHomeTab] = useState(true);
-  const [activeNotiTab, setActiveNotiTab] = useState(false);
-  const [activeProfileTab, setActiveProfileTab] = useState(false);
+  const HomeTabs = () => {
+    const [tabColor, setTabColor] = useState('#65676B');
+    const [activeHomeTab, setActiveHomeTab] = useState(true);
+    const [activeNotiTab, setActiveNotiTab] = useState(false);
+    const [activeProfileTab, setActiveProfileTab] = useState(false);
 
-  const history = useHistory();
-  useEffect(() => {}, []);
-  // useEffect(() => {
-  //   BackHandler.addEventListener('hardwareBackPress', () => {
-  //     history.goBack();
-  //     return true;
-  //   });
-  // }, []);
+    const dispatch = useDispatch();
+    const storeState = useSelector((state) => state.HomePage);
 
-  const dispatch = useDispatch();
-  const storeState = useSelector((state) => state.HomePage);
-
-  const notificationTitle = (data) => {
-    return (
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <View style={{justifyContent: 'space-around', flex: 1}}>
-          <Avatar.Image size={35} source={{uri: data.avatar}} />
-        </View>
+    const notificationTitle = (data) => {
+      return (
         <View
           style={{
-            justifyContent: 'space-around',
-            flex: 1,
-            marginHorizontal: 5,
+            width: '100%',
+            height: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Text>{data.content}</Text>
-          <Text>{data.moment}</Text>
+          <View style={{justifyContent: 'space-around', flex: 1}}>
+            <Avatar.Image size={35} source={{uri: data.avatar}} />
+          </View>
+          <View
+            style={{
+              justifyContent: 'space-around',
+              flex: 1,
+              marginHorizontal: 5,
+            }}>
+            <Text>{data.content}</Text>
+            <Text>{data.moment}</Text>
+          </View>
         </View>
-      </View>
+      );
+    };
+
+    SOCKET.on('server-popup-notification', (data) => {
+      showMessage({
+        message: notificationTitle({
+          avatar: data.current_user_avatar,
+          content: data.content,
+          moment: data.moment,
+        }),
+        type: 'default',
+        color: 'black',
+      });
+    });
+    return (
+      <Tab.Navigator
+        activeColor="#1877F2"
+        inactiveColor="#65676B"
+        barStyle={{backgroundColor: '#ffff'}}
+        shifting={true}>
+        <Tab.Screen
+          name="Home"
+          options={{
+            tabBarIcon: () => {
+              return (
+                <MaterialCommunityIcons name="home" color="#1877F2" size={26} />
+              );
+            },
+          }}
+          component={AppBar}
+        />
+        <Tab.Screen
+          name="Notifications"
+          options={{
+            tabBarIcon: () => {
+              return <Entypo name="bell" color="#1877F2" size={26} />;
+            },
+          }}
+          component={Notifications}
+        />
+        <Tab.Screen
+          name="Messengers"
+          listeners={({navigation, route}) => ({
+            tabPress: (e) => {
+              e.preventDefault();
+              dispatch(Clear_List_Chat());
+              dispatch(Get_Group_Chat());
+              navigation.navigate('Messengers', {
+                screen: 'SmallMessengers',
+              });
+            },
+          })}
+          keyboardHidesTabBar={true}
+          options={{
+            tabBarIcon: () => {
+              return (
+                <MaterialCommunityIcons
+                  name="facebook-messenger"
+                  color="#1877F2"
+                  size={26}
+                />
+              );
+            },
+          }}
+          component={Messengers}
+        />
+        <Tab.Screen
+          name="Profile"
+          options={{
+            tabBarIcon: () => (
+              <Ionicons
+                name="person-circle-outline"
+                color="#1877F2"
+                size={26}
+              />
+            ),
+          }}
+          component={Profile}
+        />
+      </Tab.Navigator>
     );
   };
-
-  SOCKET.on('server-popup-notification', (data) => {
-    showMessage({
-      message: notificationTitle({
-        avatar: data.current_user_avatar,
-        content: data.content,
-        moment: data.moment,
-      }),
-      type: 'default',
-      color: 'black',
-    });
-  });
-
   return (
     <NativeRouter>
       <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
-        <Tab.Navigator
-          activeColor="#1877F2"
-          inactiveColor="#65676B"
-          barStyle={{backgroundColor: '#ffff'}}
-          shifting={true}>
-          <Tab.Screen
+        <Stack.Navigator>
+          <Stack.Screen
             name="Home"
-            options={{
-              tabBarIcon: () => {
-                return (
-                  <MaterialCommunityIcons
-                    name="home"
-                    color="#1877F2"
-                    size={26}
-                  />
-                );
-              },
-            }}
-            component={AppBar}
+            options={{headerShown: false}}
+            component={HomeTabs}
           />
-          <Tab.Screen
-            name="Notifications"
+          <Stack.Screen
+            name="OtherUser"
             options={{
-              tabBarIcon: () => {
-                return <Entypo name="bell" color="#1877F2" size={26} />;
-              },
+              title: '',
+              // Thanh tìm kiếm, và tìm cách navigator được khi ở trang cá nhân cảu người khác
+              // headerLeft: (props) => (
+              //   <HeaderBackButton onPress={() => navigation.goBack()} />
+              // ),
             }}
-            component={Notifications}
+            component={OtherProfile}
           />
-          <Tab.Screen
-            name="Messengers"
-            listeners={({navigation, route}) => ({
-              tabPress: (e) => {
-                e.preventDefault();
-                dispatch(Clear_List_Chat());
-                dispatch(Get_Group_Chat());
-                navigation.navigate('Messengers', {
-                  screen: 'SmallMessengers',
-                });
-              },
-            })}
+          <Stack.Screen
+            name="DetailMessages"
+            component={DetailMessenger}
             options={{
-              tabBarIcon: () => {
-                return (
-                  <MaterialCommunityIcons
-                    name="facebook-messenger"
-                    color="#1877F2"
-                    size={26}
-                  />
-                );
-              },
+              headerShown: false,
             }}
-            component={Messengers}
           />
-          <Tab.Screen
-            name="Profile"
-            options={{
-              tabBarIcon: () => {
-                return (
-                  <Ionicons
-                    name="person-circle-outline"
-                    color="#1877F2"
-                    size={26}
-                  />
-                );
-              },
-            }}
-            component={Profile}
-          />
-        </Tab.Navigator>
+        </Stack.Navigator>
       </SafeAreaView>
     </NativeRouter>
   );
