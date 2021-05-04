@@ -21,7 +21,7 @@ const IntroProfile = ({navigation}) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.push('OtherUser', {
+          navigation.navigate('OtherUser', {
             userId: friend.user_id,
           });
         }}

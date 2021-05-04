@@ -20,14 +20,6 @@ const Messengers = ({navigation, route}) => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="DetailMessages"
-          component={DetailMessenger}
-          options={{
-            headerShown: false,
-          }}
-          getId={({params}) => params.id}
-        />
       </Stack.Navigator>
     </>
   );

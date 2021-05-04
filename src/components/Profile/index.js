@@ -9,12 +9,12 @@ import {
 } from 'react-native';
 
 import OtherProfile from '../OtherProfile';
-import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import friendsList from './friendsList';
 import HeaderApp from '../HeaderApp';
 import MainProfile from './MainProfile';
 const Stack = createStackNavigator();
-const Profile = ({navigation}) => {
+const Profile = () => {
   return (
     <>
       <Stack.Navigator>
@@ -25,21 +25,7 @@ const Profile = ({navigation}) => {
           }}
           component={MainProfile}
         />
-        <Stack.Screen
-          name="OtherUser"
-          options={{
-            title: '',
-            headerRight: (props) => (
-              <>
-                {/* <HeaderApp navigation={navigation} /> 
-                  Thanh tìm kiếm, và tìm cách navigator được khi ở trang cá nhân cảu người khác
-              */}
-              </>
-            ),
-            headerRightContainerStyle: {},
-          }}
-          component={OtherProfile}
-        />
+
         <Stack.Screen
           name="fullfriends"
           options={{
@@ -82,3 +68,13 @@ const styles = StyleSheet.create({});
 //     who_liked_status: [],
 //   },
 // ];
+// Stack.Screen
+// name="OtherUser"
+// options={{
+//   title: '',
+//   /* <HeaderApp navigation={navigation} />
+//         Thanh tìm kiếm, và tìm cách navigator được khi ở trang cá nhân cảu người khác
+//     */
+//   headerRightContainerStyle: {},
+// }}
+// component={OtherProfile}
