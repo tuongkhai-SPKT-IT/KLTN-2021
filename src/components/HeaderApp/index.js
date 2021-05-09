@@ -6,6 +6,7 @@ import Modal from 'react-native-modal';
 import {Searchbar, List, Appbar, Avatar} from 'react-native-paper';
 import {GetUsers} from '../../services/user';
 import {useNavigation} from '@react-navigation/core';
+import {navigate_To_Other} from '../Redux/Actions/OtherProfile.Action';
 // import {Clear_Store_Other} from '../Redux/Actions/OtherProfile.Action';
 
 export default function index(props) {
@@ -66,6 +67,8 @@ export default function index(props) {
           )}
           onPress={() => {
             setIsVisibleSearchModal(false);
+            dispatch(navigate_To_Other(item.user_id));
+
             navigation.navigate('OtherUser', {
               userId: item.user_id,
             });

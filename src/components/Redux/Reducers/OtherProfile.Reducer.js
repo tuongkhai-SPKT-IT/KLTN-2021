@@ -5,14 +5,16 @@ var initState = {
   status: [],
   err_code: '',
   chat_room_id: '',
+  arrPrevious: [],
 };
 
 var OtherProfile = (state = initState, action) => {
   switch (action.type) {
     case keys.checkRelationship_Failed: {
       const {err_code} = action;
+      if (err_code === 'Same UserID') return {...state, err_code: err_code};
       alert(err_code);
-      return {err_code: err_code};
+      // return {err_code: err_code};
     }
     case keys.checkRelationship_Success: {
       const {buttonFriend, buttonMessage, relationShip} = action;
@@ -43,6 +45,22 @@ var OtherProfile = (state = initState, action) => {
       const {data} = action;
       return {...state, status: data, err_code: ''};
     }
+    case keys.Push_Arr_Previous: {
+      const {userid} = action;
+      const arrUser = state.arrPrevious;
+      const value = arrUser.findIndex((x) => x === userid);
+      if (value === -1) arrUser.push(userid);
+      else {
+        arrUser.slice(value, 1);
+        arrUser.push(userid);
+      }
+      return {...state, arrPrevious: arrUser, err_code: ''};
+    }
+    case keys.Pop_Arr_Previous: {
+      const arrUser = state.arrPrevious;
+      arrUser.pop();
+      return {...state, arrPrevious: arrUser, err_code: ''};
+    }
     case keys.GetStatusOther_Failed:
     case keys.Get_IntroOther_Failed: {
       const {err} = action;
@@ -54,10 +72,12 @@ var OtherProfile = (state = initState, action) => {
     }
     case keys.Clear_Store_Other: {
       return {
+        ...state,
         intro: {},
         status: [],
         err_code: '',
         chat_room_id: '',
+        // arrPrevious: [],
       };
     }
     default:

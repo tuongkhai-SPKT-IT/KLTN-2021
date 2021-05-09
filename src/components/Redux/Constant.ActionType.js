@@ -37,5 +37,16 @@ export const Accept_Friend = 'Accept_Friend';
 export const Cancel_Friend = 'Cancel_Friend';
 export const Delete_Friend = 'Delete_Friend';
 
+export const Push_Arr_Previous = 'Push_Arr_Previous';
+export const Pop_Arr_Previous = 'Pop_Arr_Previous';
+
 export const Get_Chat_List = 'Get_Chat_List';
 export const Clear_Chat_List = 'Clear_Chat_List';
+
+export const Fetch_Data_Setting = 'Fetch_Data_Setting';
+export const Change_Data_UserName = 'Change_Data_UserName';
+export const Change_Data_Contact = 'Change_Data_Contact';
+export const Change_Data_Sex = 'Change_Data_Sex';
+export const Change_Data_Dob = 'Change_Data_Dob';
+export const Clear_Store_Settings = 'Clear_Store_Settings';
+export const Change_Setting_Failed = 'Change_Setting_Failed';

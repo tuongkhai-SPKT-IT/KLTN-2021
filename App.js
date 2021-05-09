@@ -18,10 +18,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {Provider as PaperProvider} from 'react-native-paper';
 import API from './src/components/API/API';
-import {SOCKET} from "./src/config";
-import FlashMessage from "react-native-flash-message";
-import Entypo from "react-native-vector-icons/Entypo"
-
+import {SOCKET} from './src/config';
+import FlashMessage from 'react-native-flash-message';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Camera from './src/components/CameraComponent';
 const Tab = createMaterialBottomTabNavigator();
 
 const App = () => {
@@ -82,10 +82,14 @@ const App = () => {
           </PaperProvider>
         </NativeRouter>
       </StoreProvider>
-      <FlashMessage 
-        titleStyle={{marginTop: 15, textAlign: "justify"}}
-        position="top" 
-        style={{borderRadius: 12, backgroundColor: "rgb(244,244,244)", margin: 10}}
+      <FlashMessage
+        titleStyle={{marginTop: 15, textAlign: 'justify'}}
+        position="top"
+        style={{
+          borderRadius: 12,
+          backgroundColor: 'rgb(244,244,244)',
+          margin: 10,
+        }}
       />
     </SafeAreaProvider>
   );

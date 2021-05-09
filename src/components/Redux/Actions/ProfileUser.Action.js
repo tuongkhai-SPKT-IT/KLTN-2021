@@ -5,55 +5,53 @@ import API from '../../API/API';
 export const Get_IntroUser = () => {
   return async (dispatch) => {
     try {
-      AsyncStorage.getItem(storeKeys.User_Token).then((val) => {
-        if (val) {
-          const params = {
-            type_search: '1',
-            token: val,
-          };
-          const route = 'user/search-v1';
-          const headers = {
-            Authorization: 'bearer' + val,
-          };
-          const api = new API();
+      const val = await AsyncStorage.getItem(storeKeys.User_Token);
+      const avatar = await AsyncStorage.getItem(storeKeys.User_Avatar);
+      const name = await AsyncStorage.getItem(storeKeys.User_Name);
+      const cover = await AsyncStorage.getItem(storeKeys.User_Cover);
+      const params = {
+        type_search: '1',
+        token: val,
+      };
+      const route = 'user/search-v1';
+      const headers = {
+        Authorization: 'bearer' + val,
+      };
+      const api = new API();
 
-          api
-            .onCallAPI('get', route, {}, params, headers)
-            .then((res) => {
-              if (res.data.error_code !== 0) {
-                dispatch({
-                  type: types.Get_IntroUser_Failed,
-                  err: res.data.message,
-                });
-              } else {
-                dispatch({
-                  type: types.Get_IntroUser_Success,
-                  data: res.data.data,
-                });
-                AsyncStorage.setItem(
-                  storeKeys.User_Avatar,
-                  res.data.data.user_avatar,
-                );
-                AsyncStorage.setItem(
-                  storeKeys.User_Cover,
-                  res.data.data.user_cover,
-                );
-              }
-            })
-            .catch((err) => {
-              dispatch({
-                type: types.Get_IntroUser_Failed,
-                err: err,
-              });
-              console.log(err);
+      api
+        .onCallAPI('get', route, {}, params, headers)
+        .then((res) => {
+          if (res.data.error_code !== 0) {
+            dispatch({
+              type: types.Get_IntroUser_Failed,
+              err: res.data.message,
             });
-        } else {
+          } else {
+            // console.log(res.data.data);
+            dispatch({
+              type: types.Get_IntroUser_Success,
+              data: res.data.data,
+            });
+
+            AsyncStorage.setItem(
+              storeKeys.User_Avatar,
+              res.data.data.user_avatar,
+            );
+            AsyncStorage.setItem(
+              storeKeys.User_Cover,
+              res.data.data.user_cover,
+            );
+            AsyncStorage.setItem(storeKeys.User_Name, res.data.data.user_name);
+          }
+        })
+        .catch((err) => {
           dispatch({
             type: types.Get_IntroUser_Failed,
-            err: 'No Token',
+            err: err,
           });
-        }
-      });
+          console.log(err);
+        });
     } catch (err) {
       dispatch({
         type: types.Get_IntroUser_Failed,

@@ -6,10 +6,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
 import HeaderApp from '../HeaderApp';
 import {Text, View, StyleSheet, RefreshControl} from 'react-native';
+
 const HomePage = ({navigation}) => {
   const dispatch = useDispatch();
   const storeState = useSelector((state) => state.HomePage);
   useEffect(() => {
+    // console.log(token);
     dispatch(ReloadHome());
   }, []);
   const [refreshing, setRefreshing] = useState(false);
@@ -32,7 +34,12 @@ const HomePage = ({navigation}) => {
     if (srcData.length > 0) {
       {
         return srcData.map((stt, i) => {
-          return <ContentStatus srcData={stt} key={i} />;
+          return (
+            <View key={i}>
+              <ContentStatus profilePage={false} srcData={stt} />
+              <View style={styles.divider} />
+            </View>
+          );
         });
       }
     } else {
@@ -73,7 +80,7 @@ const HomePage = ({navigation}) => {
         <View style={styles.containerBody}>
           <ScrollView style={styles.scrollView}>
             <ToolBar />
-            <View style={styles.divider}></View>
+            <View style={styles.divider} />
             {/* {statusList()} */}
             <ScrollView
               refreshControl={

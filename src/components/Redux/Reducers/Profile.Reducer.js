@@ -6,7 +6,7 @@ const initState = {
   err_code: '',
 };
 
-const UserInfo = (state = initState, action) => {
+var UserInfo = (state = initState, action) => {
   switch (action.type) {
     case keys.Get_IntroUser_Success: {
       const {data} = action;

@@ -2,6 +2,7 @@ import * as types from '../Constant.ActionType';
 import API from '../../API/API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as keys from '../../Constants';
+import jwt_decode from 'jwt-decode';
 
 export const Get_Intro_Other = (userId) => {
   return async (dispatch) => {
@@ -39,9 +40,16 @@ export const Check_Relationship = (userId) => {
   return async (dispatch) => {
     try {
       let token = '';
+      let info;
       await AsyncStorage.getItem(keys.User_Token).then((val) => {
         if (val) {
           token = val;
+          info = jwt_decode(val);
+          if (info.user_id === userId)
+            dispatch({
+              type: types.checkRelationship_Failed,
+              err_code: 'Same UserID',
+            });
         } else return;
       });
       const route = 'user/check-relationship';
@@ -351,6 +359,25 @@ export const Switch_TO_Messenger = (userId) => {
         });
     } catch (err) {
       alert(err);
+      dispatch({type: types.Clear_Store_Other});
+    }
+  };
+};
+
+export const navigate_To_Other = (userId) => {
+  return async (dispatch) => {
+    try {
+      dispatch({type: types.Push_Arr_Previous, userid: userId});
+    } catch (error) {
+      dispatch({type: types.Clear_Store_Other});
+    }
+  };
+};
+export const Back_From_Other = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({type: types.Pop_Arr_Previous});
+    } catch (error) {
       dispatch({type: types.Clear_Store_Other});
     }
   };

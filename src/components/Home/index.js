@@ -1,15 +1,6 @@
 import 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  BackHandler,
-  ScrollView,
-  StatusBar,
-} from 'react-native';
-import {NativeRouter, Route, Link, useHistory} from 'react-router-native';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View, StatusBar} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AppBar from '../AppBar';
 import {SafeAreaView} from 'react-navigation';
@@ -17,17 +8,21 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Profile from '../Profile/';
 import Notifications from '../Notifications';
 import Messengers from '../Messengers';
 import OtherProfile from '../OtherProfile';
 import {SOCKET} from '../../config';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 import {Avatar} from 'react-native-paper';
 import {Clear_List_Chat, Get_Group_Chat} from '../Redux/Actions/Chat.Action';
-import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import DetailMessenger from '../Messengers/DetailMessenger';
+import Settings from '../Settings';
+import {
+  Get_IntroUser,
+  Get_StatusProfile,
+} from '../Redux/Actions/ProfileUser.Action';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -92,7 +87,8 @@ const Home = () => {
               );
             },
           }}
-          component={AppBar}
+          component={Settings}
+          // component={AppBar}
         />
         <Tab.Screen
           name="Notifications"
@@ -131,6 +127,12 @@ const Home = () => {
         />
         <Tab.Screen
           name="Profile"
+          listeners={({navigation, route}) => ({
+            tabPress: (e) => {
+              dispatch(Get_StatusProfile());
+              dispatch(Get_IntroUser());
+            },
+          })}
           options={{
             tabBarIcon: () => (
               <Ionicons
@@ -145,24 +147,24 @@ const Home = () => {
       </Tab.Navigator>
     );
   };
+
   return (
-    <NativeRouter>
+    <>
       <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
             options={{headerShown: false}}
+            // component={Settings}
             component={HomeTabs}
           />
           <Stack.Screen
             name="OtherUser"
             options={{
-              title: '',
-              // Thanh tìm kiếm, và tìm cách navigator được khi ở trang cá nhân cảu người khác
-              // headerLeft: (props) => (
-              //   <HeaderBackButton onPress={() => navigation.goBack()} />
-              // ),
+              headerShown: false,
+              // cái chỗ thanh tìm kiếm khi ở screen của người khác
+              //  thì viết vào header screen ở trong other Profile, custom lại cái header
             }}
             component={OtherProfile}
           />
@@ -173,9 +175,16 @@ const Home = () => {
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            name="Settings"
+            component={Settings}
+            options={{
+              headerShown: false,
+            }}
+          />
         </Stack.Navigator>
       </SafeAreaView>
-    </NativeRouter>
+    </>
   );
 };
 const styles = StyleSheet.create({

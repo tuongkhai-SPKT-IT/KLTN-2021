@@ -11,8 +11,11 @@ import {Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DevSettings} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {navigate_To_Other} from '../Redux/Actions/OtherProfile.Action';
+import {useNavigation} from '@react-navigation/core';
 
 const IntroProfile = (props) => {
+  const navigation = useNavigation();
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
   const [introUser, setIntroUser] = useState({});
   // const dispatch = useDispatch();
@@ -26,13 +29,15 @@ const IntroProfile = (props) => {
   //     console.log(slice.length);
   //   }
   // };
+  const dispatch = useDispatch();
   const blockFriend = (friend, i) => {
     // const slice = friends.slice(0, 3);
     // console.log(slice.length);
     return (
       <TouchableOpacity
         onPress={() => {
-          props.navigation.navigate('OtherUser', {
+          dispatch(navigate_To_Other(friend.user_id));
+          navigation.navigate('OtherUser', {
             userId: friend.user_id,
           });
         }}
@@ -126,8 +131,7 @@ const IntroProfile = (props) => {
           />
         }
         onPress={() => {
-          AsyncStorage.clear();
-          DevSettings.reload();
+          navigation.navigate('Settings');
         }}
         title="Edit Information Details"
         titleStyle={{color: 'black'}}

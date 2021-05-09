@@ -5,6 +5,7 @@ import {View, ScrollView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {TouchableOpacity} from 'react-native';
+import {navigate_To_Other} from '../Redux/Actions/OtherProfile.Action';
 
 const fullFriend = ({navigation}) => {
   const [querrySearch, setQuerrySearch] = useState('');
@@ -12,14 +13,17 @@ const fullFriend = ({navigation}) => {
   const [filterFriends, setFilterFriends] = useState([
     ...userProfileReducer.introUser.friend_array,
   ]);
+  const dispatch = useDispatch();
   const singleFriend = (friend, i) => {
     return (
       <TouchableOpacity
-        onPress={() =>
+        onPress={() => {
+          dispatch(navigate_To_Other(friend.user_id));
+
           navigation.navigate('OtherUser', {
             userId: friend.user_id,
-          })
-        }
+          });
+        }}
         key={i}
         style={{padding: 20, flexDirection: 'row', alignItems: 'center'}}>
         <Avatar size="large" rounded source={{uri: friend.avatar}} />

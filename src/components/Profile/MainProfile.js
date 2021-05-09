@@ -18,7 +18,6 @@ import {ActivityIndicator} from 'react-native';
 import {RefreshControl} from 'react-native';
 const mainProfile = ({navigation}) => {
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
-  const userInfo = useSelector((state) => state.UserInfo);
   const dispatch = useDispatch();
   useEffect(() => {
     getStatus();
@@ -38,7 +37,7 @@ const mainProfile = ({navigation}) => {
         return srcData.map((stt, i) => {
           return (
             <View key={i} style={{backgroundColor: 'rgba(0,0,0,.3)'}}>
-              <ContentStatus srcData={stt} />
+              <ContentStatus profilePage={true} srcData={stt} />
             </View>
           );
         });
@@ -53,9 +52,9 @@ const mainProfile = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
+    clearStoreProfile();
     getStatus();
     getIntro();
-    clearStoreProfile();
     if (Object.keys(ProfileInfo.introUser).length !== 0) setRefreshing(false);
     // setTimeout(() => {}, 2000);
   };
@@ -115,7 +114,7 @@ const mainProfile = ({navigation}) => {
                 textAlign: 'center',
                 marginBottom: 10,
               }}>
-              {userInfo.information[2] ? userInfo.information[2].value : ''}
+              {ProfileInfo.introUser.user_name}
             </Text>
 
             <View
@@ -142,6 +141,7 @@ const mainProfile = ({navigation}) => {
                 opacity: 0.6,
               }}></View>
             {showstatus()}
+            <View style={styles.divider} />
           </ScrollView>
         </View>
 
@@ -217,7 +217,9 @@ const mainProfile = ({navigation}) => {
       if (Object.keys(ProfileInfo.introUser).length === 0)
         return (
           <View>
-            <Text>Hiện tại không thể tải được dữ liệu từ server</Text>
+            <Text>
+              Now, we can't connect with server. You must check your network
+            </Text>
           </View>
         );
     }, 10000);
@@ -226,7 +228,6 @@ const mainProfile = ({navigation}) => {
         style={{
           justifyContent: 'center',
           alignContent: 'center',
-          backgroundColor: '#1877F2',
           width: 150,
           height: 150,
           zIndex: 999,
@@ -234,13 +235,13 @@ const mainProfile = ({navigation}) => {
           top: '30%',
           alignSelf: 'center',
         }}>
-        <ActivityIndicator size="large" color="white" />
+        <ActivityIndicator size="large" color="black" />
         <Text
           style={{
             textAlign: 'center',
             fontSize: 18,
             fontWeight: 'bold',
-            color: 'white',
+            color: 'black',
           }}>
           Loading
         </Text>
@@ -250,4 +251,10 @@ const mainProfile = ({navigation}) => {
 };
 export default mainProfile;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  divider: {
+    width: '100%',
+    height: 15,
+    backgroundColor: '#CCCCD2',
+  },
+});

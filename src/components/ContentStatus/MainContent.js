@@ -7,6 +7,8 @@ import ImageGrid from './ImageGrid';
 import {Avatar, Button} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/core';
 import {TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {navigate_To_Other} from '../Redux/Actions/OtherProfile.Action';
 
 const MainContent = (props) => {
   const navigation = useNavigation();
@@ -21,22 +23,32 @@ const MainContent = (props) => {
     }
   };
   // console.log(props.srcImg);
+  const dispatch = useDispatch();
+  const statusPress = (e) => {
+    console.log(props);
+    if (!props.clickHeader) {
+      dispatch(navigate_To_Other(props.userID));
+      navigation.navigate('OtherUser', {
+        userId: props.userID,
+      });
+    } else e.preventDefault();
+  };
   return (
     <>
       <View>
         <View style={styles.containerInfo}>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('OtherUser', {
-                userId: props.userID,
-              })
-            }>
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: 10,
+            }}
+            onPress={statusPress}>
             <Image
               style={{
                 width: 45,
                 height: 45,
                 borderRadius: 100,
-                marginRight: 10,
               }}
               source={{
                 uri: props.srcAvt,
@@ -44,12 +56,16 @@ const MainContent = (props) => {
             />
           </TouchableOpacity>
           <View style={{flex: 1}}>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-              {props.userName}&nbsp;
-              <Text style={{fontWeight: 'normal'}}>
-                {props.header ? props.header : ''}
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              <Text
+                onPress={statusPress}
+                style={{fontSize: 18, fontWeight: 'bold'}}>
+                {props.userName}&nbsp;
+                <Text style={{fontWeight: 'normal', fontSize: 18, flex: 1}}>
+                  {props.header ? props.header : ''}
+                </Text>
               </Text>
-            </Text>
+            </View>
             <View style={{flexDirection: 'row'}}>
               <Text
                 style={{

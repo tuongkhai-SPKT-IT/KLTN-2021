@@ -16,13 +16,11 @@ import FontAwesomenIcon from 'react-native-vector-icons/FontAwesome';
 import API from '../API/API';
 import * as styles from './Styles';
 import {Button} from 'react-native-elements';
-import SwipeDownModal from 'react-native-swipe-down';
 import * as keys from '../Constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
 import {SOCKET} from '../../config';
 import moment from 'moment';
-import {Avatar} from 'react-native-paper';
 
 export default function ViewLCS(props) {
   const [listLike, setListLike] = useState(props.likeList);

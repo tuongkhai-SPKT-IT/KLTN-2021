@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import HeaderOther from './HeaderOther';
 import Modal from 'react-native-modal';
-import {Avatar, Button, Text, SearchBar} from 'react-native-elements';
+import {Avatar, Button, Text} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import IntroOther from './IntroOther';
 import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
@@ -23,17 +23,22 @@ import {
   Cancel_Friend,
   Accept_Friend,
   Switch_TO_Messenger,
+  Back_From_Other,
 } from '../Redux/Actions/OtherProfile.Action';
 import ContentStatus from '../ContentStatus';
 import {ActivityIndicator} from 'react-native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import HeaderScreen from './HeaderScreen';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Appbar, Searchbar} from 'react-native-paper';
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(Clear_Store_Other());
+
     if (route.params.userId) {
       dispatch(Get_Intro_Other(route.params.userId));
       dispatch(Get_Status_Other(route.params.userId));
@@ -42,6 +47,7 @@ const OtherProfile = ({route, navigation}) => {
   }, [route.params]);
   const mainProfile = ({navigation}) => {
     const OtherProfile = useSelector((state) => state.OtherProfile);
+    // console.log();
     const {buttonFriend, buttonMessage, relationShip} = OtherProfile;
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
@@ -84,7 +90,7 @@ const OtherProfile = ({route, navigation}) => {
           return srcData.map((stt, i) => {
             return (
               <View key={i} style={{backgroundColor: 'rgba(0,0,0,.3)'}}>
-                <ContentStatus srcData={stt} />
+                <ContentStatus srcData={stt} profilePage={true} />
               </View>
             );
           });
@@ -105,9 +111,15 @@ const OtherProfile = ({route, navigation}) => {
     const createRoom = () => {
       dispatch(Switch_TO_Messenger(route.params.userId));
     };
-
+    useEffect(() => {
+      if (OtherProfile.err_code === 'Same UserID') {
+        dispatch(Back_From_Other());
+        navigation.navigate('Profile');
+      }
+    }, [OtherProfile.err_code]);
     if (OtherProfile.err_code) {
-      return <Text h1>There has an error when you use our system</Text>;
+      if (OtherProfile.err_code !== 'Same UserID')
+        return <Text h1>There has an error when you use our system</Text>;
     }
     if (
       buttonFriend !== undefined &&
@@ -180,6 +192,8 @@ const OtherProfile = ({route, navigation}) => {
               />
             </View>
           </Modal>
+          <HeaderScreen arrPrevious={OtherProfile.arrPrevious} />
+
           <View style={{position: 'relative'}}>
             <ScrollView
               refreshControl={
@@ -300,30 +314,39 @@ const OtherProfile = ({route, navigation}) => {
         </>
       );
     }
-
+    const [searchContent, setSearchContent] = useState('');
+    const handleSearchBar = (e) => {
+      setSearchContent(e);
+    };
     return (
       <View
         style={{
-          justifyContent: 'center',
-          alignContent: 'center',
-          backgroundColor: '#1877F2',
-          width: 150,
-          height: 150,
-          zIndex: 999,
-          position: 'absolute',
-          top: '30%',
-          alignSelf: 'center',
+          position: 'relative',
+          height: '100%',
         }}>
-        <ActivityIndicator size="large" color="white" />
-        <Text
+        <Appbar.Header style={{backgroundColor: '#fff'}}>
+          <Appbar.BackAction onPress={() => navigation.goBack()} />
+        </Appbar.Header>
+        <View
           style={{
-            textAlign: 'center',
-            fontSize: 18,
-            fontWeight: 'bold',
-            color: 'white',
+            width: 150,
+            height: 150,
+            zIndex: 999,
+            position: 'absolute',
+            top: '50%',
+            alignSelf: 'center',
           }}>
-          Loading
-        </Text>
+          <ActivityIndicator size="large" color="black" />
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: 'black',
+            }}>
+            Loading
+          </Text>
+        </View>
       </View>
     );
   };
@@ -349,4 +372,10 @@ const OtherProfile = ({route, navigation}) => {
   );
 };
 export default OtherProfile;
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  divider: {
+    width: '100%',
+    height: 15,
+    backgroundColor: '#CCCCD2',
+  },
+});
