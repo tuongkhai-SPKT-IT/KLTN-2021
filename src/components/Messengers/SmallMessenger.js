@@ -111,7 +111,6 @@ const SmallMessenger = ({navigation, route}) => {
       style={{
         justifyContent: 'center',
         alignContent: 'center',
-        backgroundColor: '#1877F2',
         width: 150,
         height: 150,
         zIndex: 999,
@@ -119,13 +118,13 @@ const SmallMessenger = ({navigation, route}) => {
         top: '30%',
         alignSelf: 'center',
       }}>
-      <ActivityIndicator size="large" color="white" />
+      <ActivityIndicator size="large" color="black" />
       <Text
         style={{
           textAlign: 'center',
           fontSize: 18,
           fontWeight: 'bold',
-          color: 'white',
+          color: 'black',
         }}>
         Loading
       </Text>

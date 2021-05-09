@@ -8,12 +8,13 @@ import {Button, Text} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {Image} from 'react-native';
 import {TouchableOpacity} from 'react-native';
+import {navigate_To_Other} from '../Redux/Actions/OtherProfile.Action';
 // import {Clear_Store_Other} from '../Redux/Actions/OtherProfile.Action';
 
 const IntroProfile = ({navigation}) => {
   const OtherProfile = useSelector((state) => state.OtherProfile);
   const [introUser, setIntroUser] = useState({});
-
+  const dispatch = useDispatch();
   useEffect(() => {
     if (OtherProfile.intro) setIntroUser(OtherProfile.intro);
   }, [OtherProfile.intro]);
@@ -21,6 +22,8 @@ const IntroProfile = ({navigation}) => {
     return (
       <TouchableOpacity
         onPress={() => {
+          dispatch(navigate_To_Other(friend.user_id));
+
           navigation.navigate('OtherUser', {
             userId: friend.user_id,
           });

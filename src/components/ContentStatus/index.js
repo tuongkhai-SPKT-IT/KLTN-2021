@@ -6,6 +6,7 @@ import * as styles from './Styles';
 
 const ContentStatus = (props) => {
   const {srcData} = props;
+  const {profilePage} = props;
   // const srcData = {
   //   caption: '2 hình 1 video',
   //   created_at: [],
@@ -135,6 +136,7 @@ const ContentStatus = (props) => {
     <>
       <View style={styles.stylesIndex.container1}>
         <MainContent
+          clickHeader={profilePage}
           header={srcData?.header_content || ''}
           caption={srcData?.caption || ''}
           id={srcData.id}
