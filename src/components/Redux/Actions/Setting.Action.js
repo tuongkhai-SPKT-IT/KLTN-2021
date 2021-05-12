@@ -3,15 +3,17 @@ import API from '../../API/API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as storeKeys from '../../Constants';
 
-export const Change_Dob_Setting = (day, month, year) => {
+export const Change_Dob_Setting = (dateOfBirth, password) => {
   return async (dispatch) => {
     try {
+      dispatch({type: types.Clear_Store_Settings});
+
       const token = await AsyncStorage.getItem(storeKeys.User_Token);
       const param = {
         //'00/00/0000'
-        dOb: day + '/' + month + '/' + year,
+        dOb: dateOfBirth,
         update_type: 0,
-        password: document.getElementById('password2').value,
+        password: password,
       };
       const header = {
         Authorization: 'bearer' + token,
@@ -22,18 +24,20 @@ export const Change_Dob_Setting = (day, month, year) => {
         .onCallAPI('post', route, {}, param, header)
         .then((res) => {
           if (res.data.error_code !== 0) {
-            alert(res.data.message);
+            dispatch({
+              type: types.Change_Setting_Failed,
+              error_code: res.data.message,
+            });
           } else {
             // console.log(res.data.data)
-            document.getElementById('btnStart').click();
+            dispatch({type: types.Change_Data_Dob, date: dateOfBirth});
           }
         })
         .catch((err) => {
-          console.log(err);
+          dispatch({type: types.Change_Setting_Failed, error_code: err});
         });
     } catch (err) {
-      alert(err);
-      dispatch({type: types.Clear_Store_Settings});
+      dispatch({type: types.Change_Setting_Failed, error_code: err});
     }
   };
 };

@@ -228,6 +228,7 @@ const Login = ({navigation}) => {
               marginBottom: 28,
             }}
             placeholder="Mật khẩu"
+            autoCapitalize="none"
             onChangeText={(password) => setPassword({password})}
             secureTextEntry={true}
           />

@@ -20,11 +20,16 @@ const ImageGrid = (props) => {
   const device = Dimensions.get('window');
   const deviceWidth = Dimensions.get('window').width;
   const scrollImage = useRef(props.srcImage);
+  const {srcImage} = props;
+  const [layoutModal, setLayoutModal] = useState(device);
+  const [isScroll, setIsScroll] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [scrollOffset, setScrollOffset] = useState(0);
+
   useEffect(() => {
     scrollImage.current = [...props.srcImage];
   }, [props.srcImage]);
-  const {srcImage} = props;
-  const [layoutModal, setLayoutModal] = useState(device);
+
   if (srcImage.length === 0) {
     return <></>;
   }
@@ -536,7 +541,6 @@ const ImageGrid = (props) => {
     );
   };
   // const pausedChild = useRef(true);
-  const [isScroll, setIsScroll] = useState(false);
   const ImageScroll = (item, i) => {
     if (item.type === 'image')
       return (
@@ -567,7 +571,6 @@ const ImageGrid = (props) => {
       );
   };
 
-  const [visible, setVisible] = useState(false);
   const render1File = (file, i) => {
     if (file.type === 'image') {
       return (
@@ -641,7 +644,6 @@ const ImageGrid = (props) => {
     }
   };
 
-  const [scrollOffset, setScrollOffset] = useState(0);
   const handleOnScroll = (event) => {
     setIsScroll(true);
     if (event.nativeEvent.contentOffset.x)

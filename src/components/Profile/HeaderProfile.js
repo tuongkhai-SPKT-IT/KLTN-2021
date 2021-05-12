@@ -56,7 +56,7 @@ export default function HeaderProfile(props) {
       <Modal
         isVisible={props.imgPopup}
         backdropColor="#000"
-        swipeDirection={['up', 'down', 'left', 'right']}
+        swipeDirection={['up', 'down']}
         backdropOpacity={1}
         animationIn="zoomInDown"
         animationOut="zoomOutUp"
