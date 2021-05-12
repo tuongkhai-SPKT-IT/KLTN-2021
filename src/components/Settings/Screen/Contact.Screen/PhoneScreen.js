@@ -5,7 +5,11 @@ import {Text, Input, Button} from 'react-native-elements';
 // import {TextInput} from 'react-native';
 import {ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Change_User_Contact} from '../../../Redux/Actions/Setting.Action';
+import {
+  Change_User_Contact,
+  Clear_Setting,
+  Fetch_Setting,
+} from '../../../Redux/Actions/Setting.Action';
 
 export default function PhoneScreen({navigation}) {
   const [phoneInput, setPhoneInput] = useState('');
@@ -17,8 +21,10 @@ export default function PhoneScreen({navigation}) {
   });
 
   const dispatch = useDispatch();
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     dispatch(Change_User_Contact('', phoneInput, passwordInput));
+    await dispatch(Clear_Setting());
+    await dispatch(Fetch_Setting());
     navigation.goBack();
   };
   const onChangeTextPassword = (e) => {
@@ -56,6 +62,7 @@ export default function PhoneScreen({navigation}) {
       </Text>
       <View style={styles.inputBox}>
         <TextInput
+          keyboardType="numeric"
           onChangeText={onChangeTextPhone}
           placeholder={Setting.phone}
           value={phoneInput}
@@ -84,6 +91,7 @@ export default function PhoneScreen({navigation}) {
           onChangeText={onChangeTextPassword}
           placeholder={'Type your password here...'}
           value={passwordInput}
+          autoCapitalize="none"
           style={styles.inputText}
           secureTextEntry={true}
           onBlur={() => setVisible({phone: false, password: false})}

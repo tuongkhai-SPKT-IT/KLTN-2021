@@ -51,6 +51,9 @@ const OtherProfile = ({route, navigation}) => {
     const {buttonFriend, buttonMessage, relationShip} = OtherProfile;
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const [visiblePopup, setVisiblePopup] = useState(false);
+    const [searchContent, setSearchContent] = useState('');
+
     const onPressFriendsButton = () => {
       if (relationShip) createRoom();
       else {
@@ -81,7 +84,6 @@ const OtherProfile = ({route, navigation}) => {
       )
         setRefreshing(false);
     };
-    const [visiblePopup, setVisiblePopup] = useState(false);
     const showstatus = () => {
       const srcData = OtherProfile.status;
 
@@ -314,7 +316,6 @@ const OtherProfile = ({route, navigation}) => {
         </>
       );
     }
-    const [searchContent, setSearchContent] = useState('');
     const handleSearchBar = (e) => {
       setSearchContent(e);
     };

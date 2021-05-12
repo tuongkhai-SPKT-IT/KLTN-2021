@@ -8,6 +8,7 @@ import {TextInput} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   Change_User_Name,
+  Clear_Setting,
   Fetch_Setting,
 } from '../../../Redux/Actions/Setting.Action';
 export default function CheckPassword(props) {
@@ -15,13 +16,14 @@ export default function CheckPassword(props) {
   const dispatch = useDispatch();
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
-  const accecptChange = (e) => {
+  const accecptChange = async (e) => {
     if (checked === 0)
       //0: last name + first name, 1: first name + last name
       dispatch(Change_User_Name(props.firstName, props.lastName, password));
     if (checked === 1)
       dispatch(Change_User_Name(props.lastName, props.firstName, password));
-    dispatch(Fetch_Setting());
+    await dispatch(Clear_Setting());
+    await dispatch(Fetch_Setting());
     navigation.goBack();
   };
   const cancelChange = (e) => {

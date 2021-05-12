@@ -1,51 +1,255 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import {TextInput, TouchableOpacity} from 'react-native';
+import {ScrollView} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import {Button, Text} from 'react-native-elements';
+import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/core';
+import {useDispatch} from 'react-redux';
+import {
+  Change_Dob_Setting,
+  Clear_Setting,
+  Fetch_Setting,
+} from '../../../Redux/Actions/Setting.Action';
 
 export default function DateDropDown(props) {
-  let dateValue = [{value: props.day, label: props.day, icon: () => <></>}],
-    monthValue = [],
-    yearValue = [];
+  const today = new Date(props.year, props.month - 1, props.day);
+  const [date, setDate] = useState(today);
+  const [visible, setVisible] = useState(false);
+  const [visiblePassword, setVisiblePassword] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const navigation = useNavigation();
+  const comparedDate = (date) => {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 4);
+    // console.log(today);
+    return today.getTime() >= date.getTime();
+  };
+  const formatDateTime = (e) => {
+    var ngay = e.getDate();
+    var thang = e.getMonth() + 1;
+    var nam = e.getFullYear();
+    ngay = `0${ngay}`.slice(-2);
+    thang = `0${thang}`.slice(-2);
+    return ngay + '/' + thang + '/' + nam;
+  };
+  const alertDob = () => {
+    return (
+      <>
+        <View style={{width: '100%', paddingHorizontal: 15}}>
+          <Text
+            style={{
+              color: 'black',
+              fontSize: 20,
+              fontWeight: '800',
+              paddingBottom: 10,
+              textAlign: 'center',
+            }}>
+            Warning !!!
+          </Text>
+          <Text
+            style={{
+              color: 'black',
+              fontSize: 18,
+              fontWeight: '800',
+              paddingBottom: 10,
+              textAlign: 'center',
+            }}>
+            Your birth day is not valid
+          </Text>
+        </View>
+        <View style={{width: '100%', flexDirection: 'row'}}>
+          <Button
+            buttonStyle={{borderColor: 'black'}}
+            containerStyle={{
+              marginHorizontal: 10,
+              marginVertical: 5,
+              flex: 1,
+            }}
+            onPress={() => setVisible(false)}
+            title="OK"
+            titleStyle={{marginHorizontal: 5}}
+          />
+        </View>
+      </>
+    );
+  };
+  const dispatch = useDispatch();
+  const handleSubmit = async () => {
+    setVisible(false);
+    dispatch(Change_Dob_Setting(formatDateTime(date), passwordInput));
+    await dispatch(Clear_Setting());
+    await dispatch(Fetch_Setting());
+    navigation.goBack();
+  };
 
-  const thisYear = new Date().getFullYear();
-  useEffect(() => {
-    for (var i = 1; i < 32; i++) {
-      dateValue.push({
-        value: `0${i}`.slice(-2),
-        label: `0${i}`.slice(-2),
-        icon: () => <></>,
-      });
-    }
-    for (var i = 1; i < 13; i++) {
-      monthValue.push({
-        value: `0${i}`.slice(-2),
-        label: `0${i}`.slice(-2),
-        icon: () => <></>,
-      });
-    }
-    for (var i = 1905; i < thisYear + 1; i++) {
-      yearValue.push({
-        value: i.toString(),
-        label: i.toString(),
-        icon: () => <></>,
-      });
-    }
-  }, []);
+  const onChangeTextPassword = (e) => {
+    setVisiblePassword(true);
+    setPasswordInput(e);
+    if (e.length === 0) setVisiblePassword(false);
+  };
+  const passwordSubmit = () => {
+    return (
+      <>
+        <Text style={{padding: 10, fontSize: 20}}>
+          Please enter password for submit
+        </Text>
+        <Text h4 h4Style={{padding: 10}}>
+          Password
+        </Text>
+        <View style={styles.inputBox}>
+          <TextInput
+            onChangeText={onChangeTextPassword}
+            placeholder={'Type your password here...'}
+            value={passwordInput}
+            autoCapitalize="none"
+            style={styles.inputText}
+            secureTextEntry={true}
+            onBlur={() => setVisiblePassword(false)}
+          />
+          {visiblePassword && (
+            <TouchableOpacity
+              style={styles.rigthInputIcon}
+              onPress={() => {
+                setPasswordInput('');
+                setVisiblePassword(false);
+              }}>
+              <Icon name="close" size={22} />
+            </TouchableOpacity>
+          )}
+        </View>
+        <Button
+          buttonStyle={{}}
+          containerStyle={{
+            marginHorizontal: 10,
+            marginVertical: 5,
+          }}
+          onPress={handleSubmit}
+          title="Submit change"
+          titleStyle={{marginHorizontal: 5}}
+        />
+        <Button
+          type="outline"
+          buttonStyle={{backgroundColor: 'white', borderColor: 'black'}}
+          containerStyle={{
+            marginHorizontal: 10,
+            marginVertical: 5,
+          }}
+          onPress={() => {
+            setVisible(false);
+            setPasswordInput('');
+          }}
+          title="Cancel"
+          titleStyle={{marginHorizontal: 5}}
+        />
+      </>
+    );
+  };
   return (
-    <View style={{flexDirection: 'row'}}>
-      <DropDownPicker //day
-        items={dateValue}
-        defaultValue={props.day}
-        containerStyle={{height: 30, width: 115}}
-        style={styles.statusButton}
-        itemStyle={{
-          justifyContent: 'flex-start',
-        }}
-        dropDownStyle={{backgroundColor: '#fafafa'}}
-        onChangeItem={(item) => props.setValueDate(1, item.value)}
-      />
-    </View>
+    <>
+      <Modal
+        isVisible={visible}
+        backdropColor="#000"
+        swipeDirection={['up', 'down']}
+        animationIn="zoomInDown"
+        animationOut="zoomOutUp"
+        avoidKeyboard
+        onSwipeComplete={() => setVisible(false)}
+        onSwipeCancel={() => setVisible(true)}
+        animationInTiming={600}
+        style={{margin: 0}}
+        backdropOpacity={0.5}
+        animationOutTiming={1000}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            paddingBottom: 10,
+            justifyContent: 'center',
+          }}>
+          {comparedDate(date) ? passwordSubmit() : alertDob()}
+        </View>
+      </Modal>
+      <ScrollView>
+        <View
+          style={{
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+          }}>
+          <Text h4 h4Style={{padding: 10}}>
+            Manage your birth day
+          </Text>
+          <Text style={{fontSize: 15, paddingBottom: 15, textAlign: 'center'}}>
+            This will display on your profile and all of user will see this.
+          </Text>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+            }}>
+            <DatePicker
+              date={date}
+              style={{flex: 1}}
+              locale="vi"
+              onDateChange={(e) => {
+                setDate(e);
+              }}
+              mode="date"
+            />
+          </View>
+          <View style={{width: '100%', height: 20}} />
+          <Button
+            buttonStyle={{}}
+            containerStyle={{
+              marginHorizontal: 10,
+              marginVertical: 5,
+              width: '100%',
+            }}
+            onPress={() => setVisible(true)}
+            title="Confirm"
+            titleStyle={{marginHorizontal: 5}}
+          />
+          <Button
+            type="outline"
+            buttonStyle={{backgroundColor: 'white', borderColor: 'black'}}
+            containerStyle={{
+              marginHorizontal: 10,
+              marginVertical: 5,
+              width: '100%',
+            }}
+            onPress={() => navigation.goBack()}
+            title="Cancel"
+            titleStyle={{marginHorizontal: 5}}
+          />
+        </View>
+      </ScrollView>
+    </>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  inputBox: {
+    borderWidth: 1,
+    borderColor: 'black',
+    flexDirection: 'row',
+    padding: 5,
+    alignItems: 'center',
+    marginHorizontal: 10,
+    marginBottom: 15,
+  },
+  inputText: {
+    fontSize: 18,
+    flex: 1,
+    paddingRight: 23,
+  },
+  rigthInputIcon: {
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 5,
+    zIndex: 999,
+  },
+});

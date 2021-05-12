@@ -5,10 +5,11 @@ import DateDropDown from './DateDropDown';
 
 export default function index({navigation}) {
   const Setting = useSelector((state) => state.Setting);
-  
-  const [day, setDay] = useState('01');
-  const [month, setMonth] = useState('01');
-  const [year, setYear] = useState('0001');
+  const dateOfBirth = Setting.dob;
+  const [day, setDay] = useState(dateOfBirth.slice(0, 2));
+  const [month, setMonth] = useState(dateOfBirth.slice(3, 5));
+  const [year, setYear] = useState(dateOfBirth.slice(-4));
+
   const setValueDate = (a, value) => {
     if (a === 1) {
       setDay(value);
@@ -19,7 +20,9 @@ export default function index({navigation}) {
     if (a === 3) {
       setYear(value);
     }
+    console.log(1);
   };
+
   return (
     <View>
       <DateDropDown

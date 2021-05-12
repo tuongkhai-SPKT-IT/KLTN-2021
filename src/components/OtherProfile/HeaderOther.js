@@ -8,6 +8,8 @@ import {useSelector} from 'react-redux';
 export default function HeaderProfile(props) {
   const userInfo = useSelector((state) => state.OtherProfile);
   const [imageProfile, setImageProfile] = useState({});
+  const [imgPopup, setImgPopup] = useState(false);
+  const [typeImg, setTypeImg] = useState(true);
   // const [declarePopUp, setDeclarePopUp] = useState(true);
   //true: avatar, false: cover props.imgPopup
   useEffect(() => {
@@ -20,8 +22,6 @@ export default function HeaderProfile(props) {
     }
   }, [userInfo.intro]);
 
-  const [imgPopup, setImgPopup] = useState(false);
-  const [typeImg, setTypeImg] = useState(true);
   return (
     <>
       <Modal

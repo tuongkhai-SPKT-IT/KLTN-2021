@@ -15,12 +15,12 @@ const Stack = createStackNavigator();
 
 export default function index({navigation}) {
   const dispatch = useDispatch();
+  const Setting = useSelector((state) => state.Setting);
   useEffect(() => {
-    // if (Object.keys(ProfileInfo.introUser).length === 0)
     dispatch(Fetch_Setting());
   }, []);
   return (
-    <Stack.Navigator initialRouteName="SexScreen">
+    <Stack.Navigator initialRouteName="mainSettings">
       <Stack.Screen
         name="mainSettings"
         options={{title: 'Settings'}}

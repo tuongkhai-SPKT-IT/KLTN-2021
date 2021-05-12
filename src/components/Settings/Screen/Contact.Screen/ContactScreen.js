@@ -4,7 +4,7 @@ import {Text} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import {useNavigation} from '@react-navigation/core';
+import {ActivityIndicator} from 'react-native';
 
 export default function ContactScreen({navigation}) {
   const Setting = useSelector((state) => state.Setting);
@@ -35,6 +35,32 @@ export default function ContactScreen({navigation}) {
       </TouchableOpacity>
     );
   };
+  if (renderContact.email.length === 0 || renderContact.phone.length === 0)
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignContent: 'center',
+          width: 150,
+          height: 150,
+          zIndex: 999,
+          position: 'absolute',
+          top: '30%',
+          alignSelf: 'center',
+        }}>
+        <ActivityIndicator size="large" color="black" />
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: 'black',
+          }}>
+          Loading
+        </Text>
+      </View>
+    );
+
   return (
     <View>
       <Text h3 h3Style={{padding: 10}}>
@@ -67,6 +93,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginRight: 5,
     opacity: 0.5,
-    marginRight: 8
+    marginRight: 8,
   },
 });

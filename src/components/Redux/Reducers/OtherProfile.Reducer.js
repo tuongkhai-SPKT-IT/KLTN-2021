@@ -12,7 +12,8 @@ var OtherProfile = (state = initState, action) => {
   switch (action.type) {
     case keys.checkRelationship_Failed: {
       const {err_code} = action;
-      if (err_code === 'Same UserID') return {...state, err_code: err_code};
+      if (err_code === 'Same UserID')
+        return {...state, err_code: err_code, arrPrevious: []};
       alert(err_code);
       // return {err_code: err_code};
     }

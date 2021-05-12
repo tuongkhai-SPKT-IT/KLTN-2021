@@ -46,6 +46,10 @@ var Setting = (state = initState, action) => {
       alert(error_code);
       return {...state, err_code: error_code};
     }
+    case types.Change_Data_Dob: {
+      const {date} = action;
+      return {...state, dob: date};
+    }
     case types.Clear_Store_Settings: {
       return {
         userName: '',

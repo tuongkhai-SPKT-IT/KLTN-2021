@@ -5,7 +5,11 @@ import {Text, Input, Button} from 'react-native-elements';
 // import {TextInput} from 'react-native';
 import {ScrollView} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Change_User_Contact} from '../../../Redux/Actions/Setting.Action';
+import {
+  Change_User_Contact,
+  Clear_Setting,
+  Fetch_Setting,
+} from '../../../Redux/Actions/Setting.Action';
 
 export default function EmailScreen({navigation}) {
   const [emailInput, setEmailInput] = useState('');
@@ -17,8 +21,11 @@ export default function EmailScreen({navigation}) {
   });
 
   const dispatch = useDispatch();
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     dispatch(Change_User_Contact(emailInput, '', passwordInput));
+
+    await dispatch(Clear_Setting());
+    await dispatch(Fetch_Setting());
     navigation.goBack();
   };
   const onChangeTextPassword = (e) => {
@@ -56,6 +63,7 @@ export default function EmailScreen({navigation}) {
       </Text>
       <View style={styles.inputBox}>
         <TextInput
+          autoCapitalize="none"
           onChangeText={onChangeTextEmail}
           placeholder={Setting.email}
           value={emailInput}
@@ -86,6 +94,7 @@ export default function EmailScreen({navigation}) {
           value={passwordInput}
           style={styles.inputText}
           secureTextEntry={true}
+          autoCapitalize="none"
           onBlur={() => setVisible({email: false, password: false})}
         />
         {visible.password && (
