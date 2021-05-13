@@ -1,14 +1,25 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, TouchableOpacity, View, ScrollView} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {Appbar} from 'react-native-paper';
 import {Text} from 'react-native-elements';
-import { ActivityIndicator } from 'react-native';
+import {ActivityIndicator} from 'react-native';
+import {Fetch_Setting} from '../Redux/Actions/Setting.Action';
 
 export default function BlockInfo({navigation}) {
   const Setting = useSelector((state) => state.Setting);
   const renderUserName = Setting;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (Setting.userName.length === 0) {
+      dispatch(Fetch_Setting());
+    }
+    if (Setting.dob === '01/01/0001') {
+      dispatch(Fetch_Setting());
+    }
+  }, [Setting.userName, Setting.dob]);
   const handleOnPress = (e, press) => {
     e.preventDefault();
     if (press === 1) {
@@ -37,7 +48,7 @@ export default function BlockInfo({navigation}) {
           <Text style={{fontSize: 18}}>{value}</Text>
         </View>
 
-        <FontAwesome5 name="chevron-right" size={22} />
+        {title !== 'Sex' && <FontAwesome5 name="chevron-right" size={22} />}
       </TouchableOpacity>
     );
   };
@@ -52,11 +63,7 @@ export default function BlockInfo({navigation}) {
           {renderTitle('Name', renderUserName.userName, 1)}
           <View style={styles.hr} />
 
-          {renderTitle(
-            'Contact Info',
-            'Manage your phone numbers and emails',
-            2,
-          )}
+          {renderTitle('Contact Info', 'Manage your phone number and email', 2)}
           <View style={styles.hr} />
 
           {renderTitle('Sex', renderUserName.sex ? 'Male' : 'Female', 3)}

@@ -1,15 +1,12 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react';
 import {View, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {Text} from 'react-native-elements';
 import {SafeAreaView} from 'react-navigation';
-import API from '../API/API';
 import {Appbar} from 'react-native-paper';
-import * as keys from '../Constants';
-import {SOCKET} from '../../config';
 import {useDispatch, useSelector} from 'react-redux';
 import {Get_Group_Chat} from '../Redux/Actions/Chat.Action';
 import {ActivityIndicator} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const SmallMessenger = ({navigation, route}) => {
   const _handleSearch = () => console.log('Searching');
@@ -90,6 +87,11 @@ const SmallMessenger = ({navigation, route}) => {
     return (
       <SafeAreaView>
         <Appbar.Header style={{backgroundColor: '#fff'}}>
+          <TouchableOpacity
+            onPress={() => navigation.toggleDrawer()}
+            style={{justifyContent: 'center', marginRight: 10}}>
+            <Ionicons name="ios-menu-sharp" size={30} />
+          </TouchableOpacity>
           <Appbar.Content title="Messengers" />
           <Appbar.Action icon="magnify" onPress={_handleSearch} />
         </Appbar.Header>

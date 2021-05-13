@@ -18,14 +18,21 @@ import {Avatar} from 'react-native-paper';
 import {Clear_List_Chat, Get_Group_Chat} from '../Redux/Actions/Chat.Action';
 import {createStackNavigator} from '@react-navigation/stack';
 import DetailMessenger from '../Messengers/DetailMessenger';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import Settings from '../Settings';
 import {
   Get_IntroUser,
   Get_StatusProfile,
 } from '../Redux/Actions/ProfileUser.Action';
-
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/core';
+import DrawerContent from './DrawerContent';
+import {LogBox} from 'react-native';
+LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
 const Home = () => {
   const HomeTabs = () => {
     const [tabColor, setTabColor] = useState('#65676B');
@@ -148,41 +155,49 @@ const Home = () => {
     );
   };
 
+  const StackNavigator = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          options={{headerShown: false}}
+          // component={Settings}
+          component={HomeTabs}
+        />
+        <Stack.Screen
+          name="OtherUser"
+          options={{
+            headerShown: false,
+            // cái chỗ thanh tìm kiếm khi ở screen của người khác
+            //  thì viết vào header screen ở trong other Profile, custom lại cái header
+          }}
+          component={OtherProfile}
+        />
+        <Stack.Screen
+          name="DetailMessages"
+          component={DetailMessenger}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={Settings}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
+    );
+  };
   return (
     <>
       <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            options={{headerShown: false}}
-            // component={Settings}
-            component={HomeTabs}
-          />
-          <Stack.Screen
-            name="OtherUser"
-            options={{
-              headerShown: false,
-              // cái chỗ thanh tìm kiếm khi ở screen của người khác
-              //  thì viết vào header screen ở trong other Profile, custom lại cái header
-            }}
-            component={OtherProfile}
-          />
-          <Stack.Screen
-            name="DetailMessages"
-            component={DetailMessenger}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="Settings"
-            component={Settings}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
+        <Drawer.Navigator
+          drawerContent={(props) => <DrawerContent {...props} />}>
+          <Drawer.Screen name="test2" component={StackNavigator} />
+        </Drawer.Navigator>
       </SafeAreaView>
     </>
   );

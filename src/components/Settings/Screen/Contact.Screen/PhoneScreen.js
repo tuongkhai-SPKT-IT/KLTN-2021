@@ -21,10 +21,10 @@ export default function PhoneScreen({navigation}) {
   });
 
   const dispatch = useDispatch();
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     dispatch(Change_User_Contact('', phoneInput, passwordInput));
-    await dispatch(Clear_Setting());
-    await dispatch(Fetch_Setting());
+    dispatch(Clear_Setting());
+    // dispatch(Fetch_Setting());
     navigation.goBack();
   };
   const onChangeTextPassword = (e) => {

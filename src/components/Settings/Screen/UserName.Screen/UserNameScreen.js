@@ -24,7 +24,7 @@ export default function UserNameScreen({navigation}) {
     setNavigatePassword(true);
     navigation.setOptions({
       title: 'Preview your new name',
-      headerLeft: (props) => <HeaderBackButton onPress={backPassword} />,
+      // headerLeft: (props) => <HeaderBackButton onPress={backPassword} />,
     });
 
     // if (

@@ -15,7 +15,7 @@ export async function GetUsers(data) {
         .onCallAPI('get', route, {}, params, {})
         .then((res) => {
             if (res.data.error_code !== 0) {
-                response.message = res.data.message
+                response.message = r-es.data.message
                 response.data = res.data.data;
             } else {
                 response.status = true;

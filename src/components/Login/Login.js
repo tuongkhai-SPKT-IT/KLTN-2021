@@ -22,6 +22,7 @@ import {useHistory} from 'react-router-native';
 import Modal from 'react-native-modal';
 
 import API from '../API/API';
+import {DevSettings} from 'react-native';
 const Login = ({navigation}) => {
   const [Account, setAccount] = useState('');
   const [Password, setPassword] = useState('');
@@ -34,6 +35,8 @@ const Login = ({navigation}) => {
 
   const _Login = () => {
     AsyncStorage.clear();
+    // DevSettings.reload();
+
     //const info = { user: Account.account, password: Password.password };
     if (!Account) {
       alert('Account is required !!!');
@@ -185,7 +188,7 @@ const Login = ({navigation}) => {
         </View>
       </Modal>
 
-      <ScrollView style={styles.View1}>
+      <ScrollView style={styles.View1} keyboardShouldPersistTaps="handled">
         {/* <Register /> */}
 
         <View

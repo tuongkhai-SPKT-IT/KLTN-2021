@@ -2,6 +2,7 @@ import * as types from '../Constant.ActionType';
 import API from '../../API/API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as storeKeys from '../../Constants';
+import { DevSettings } from 'react-native';
 
 export const Change_Dob_Setting = (dateOfBirth, password) => {
   return async (dispatch) => {
@@ -176,39 +177,6 @@ export const Fetch_Setting = () => {
     }
   };
 };
-// export const Fetch_Setting = () => {
-//   return async (dispatch) => {
-//     try {
-//       const val = await AsyncStorage.getItem(storeKeys.User_Token);
-//       const param = {
-//         type_search: '1',
-//         token: val,
-//       };
-//       const route = 'user/search-v1';
-//       const header = {
-//         Authorization: 'bearer' + val,
-//       };
-//       const api = API();
-
-//       //   const data = {
-//       //     userName: res.data.data.userName,
-//       //     email: res.data.data.email,
-//       //     phone: res.data.data.phone,
-//       //     dob: res.data.data.dob,
-//       //     sex: res.data.data.sex,
-//       //     firstName: res.data.data.firstName,
-//       //     lastName: res.data.data.lastName,
-//       //   };
-//       dispatch({
-//         type: types.Fetch_Data_Setting,
-//         data: {},
-//         // data,
-//       });
-//     } catch (err) {
-//       alert(err);
-//     }
-//   };
-// };
 export const Clear_Setting = () => {
   return async (dispatch) => {
     try {
@@ -216,6 +184,41 @@ export const Clear_Setting = () => {
     } catch (err) {
       alert(err);
       dispatch({type: types.Clear_Store_Settings});
+    }
+  };
+};
+
+export const Change_Password = (oldPassword, newPassword) => {
+  return async (dispatch) => {
+    try {
+      const token = await AsyncStorage.getItem(storeKeys.User_Token);
+      const param = {
+        update_type: 1,
+        old_password: oldPassword,
+        new_password: newPassword,
+        token: token,
+      };
+      const route = 'user/update/info';
+      const header = {
+        Authorization: 'bearer' + token,
+      };
+      var api = new API();
+      api
+        .onCallAPI('post', route, {}, param, header)
+        .then((res) => {
+          if (res.data.error_code !== 0) {
+            window.alert(res.data.message);
+          } else {
+            AsyncStorage.clear();
+            DevSettings.reload();
+            console.log(res.data.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      dispatch({type: types.Change_Setting_Failed, error_code: err});
     }
   };
 };

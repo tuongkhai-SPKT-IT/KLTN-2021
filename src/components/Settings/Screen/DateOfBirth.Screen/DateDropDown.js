@@ -80,9 +80,10 @@ export default function DateDropDown(props) {
   const handleSubmit = async () => {
     setVisible(false);
     dispatch(Change_Dob_Setting(formatDateTime(date), passwordInput));
-    await dispatch(Clear_Setting());
-    await dispatch(Fetch_Setting());
-    navigation.goBack();
+    dispatch(Clear_Setting());
+    setTimeout(() => {
+      navigation.goBack();
+    }, 600);
   };
 
   const onChangeTextPassword = (e) => {
@@ -147,21 +148,34 @@ export default function DateDropDown(props) {
       </>
     );
   };
+  const backdropPress = (e) => {
+    if (comparedDate(date)) {
+      setVisible(false);
+      setPasswordInput('');
+    } else e.preventDefault();
+  };
+  const confirmPress = (e) => {
+    if (date === today) {
+      e.preventDefault();
+      alert('You have to change date');
+    } else setVisible(true);
+  };
   return (
     <>
       <Modal
         isVisible={visible}
         backdropColor="#000"
         swipeDirection={['up', 'down']}
-        animationIn="zoomInDown"
-        animationOut="zoomOutUp"
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
         avoidKeyboard
         onSwipeComplete={() => setVisible(false)}
         onSwipeCancel={() => setVisible(true)}
-        animationInTiming={600}
         style={{margin: 0}}
-        backdropOpacity={0.5}
-        animationOutTiming={1000}>
+        onBackdropPress={backdropPress}
+        animationInTiming={600}
+        animationOutTiming={600}
+        backdropOpacity={0.5}>
         <View
           style={{
             backgroundColor: 'white',
@@ -207,7 +221,7 @@ export default function DateDropDown(props) {
               marginVertical: 5,
               width: '100%',
             }}
-            onPress={() => setVisible(true)}
+            onPress={confirmPress}
             title="Confirm"
             titleStyle={{marginHorizontal: 5}}
           />

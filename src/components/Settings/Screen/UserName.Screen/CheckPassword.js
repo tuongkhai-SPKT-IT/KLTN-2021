@@ -22,8 +22,8 @@ export default function CheckPassword(props) {
       dispatch(Change_User_Name(props.firstName, props.lastName, password));
     if (checked === 1)
       dispatch(Change_User_Name(props.lastName, props.firstName, password));
-    await dispatch(Clear_Setting());
-    await dispatch(Fetch_Setting());
+    dispatch(Clear_Setting());
+    // await dispatch(Fetch_Setting());
     navigation.goBack();
   };
   const cancelChange = (e) => {
