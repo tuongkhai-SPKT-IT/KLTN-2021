@@ -1,14 +1,22 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-elements';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {ActivityIndicator} from 'react-native';
+import {Fetch_Setting} from '../../../Redux/Actions/Setting.Action';
 
 export default function ContactScreen({navigation}) {
   const Setting = useSelector((state) => state.Setting);
   const renderContact = Setting;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (Setting.phone.length === 0 || Setting.email.length === 0) {
+      dispatch(Fetch_Setting());
+    }
+  }, [Setting.phone, Setting.email]);
   const handleOnPress = (e, press) => {
     e.preventDefault();
     if (press === 1) {

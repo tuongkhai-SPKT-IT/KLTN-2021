@@ -8,7 +8,7 @@ import {GetUsers} from '../../services/user';
 import {useNavigation} from '@react-navigation/core';
 import {navigate_To_Other} from '../Redux/Actions/OtherProfile.Action';
 // import {Clear_Store_Other} from '../Redux/Actions/OtherProfile.Action';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 export default function index(props) {
   const [isVisibleSearchModal, setIsVisibleSearchModal] = useState(false);
   const [searchContent, setSearchContent] = useState('');
@@ -21,6 +21,7 @@ export default function index(props) {
       setUsersList([]);
     }
   };
+
   useEffect(() => {
     loadUsers();
   }, [searchContent]);
@@ -79,10 +80,15 @@ export default function index(props) {
     }
     return <></>;
   };
-
+  // const navigation = useNavigation();
   return (
     <>
       <View style={styles.row}>
+        <TouchableOpacity
+          onPress={() => navigation.toggleDrawer()}
+          style={{justifyContent: 'center', marginRight: 10}}>
+          <Ionicons name="ios-menu-sharp" size={30} />
+        </TouchableOpacity>
         <View style={styles.appName}>
           <Text style={styles.appName}>facebook</Text>
         </View>

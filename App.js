@@ -1,28 +1,17 @@
 import 'react-native-gesture-handler';
-import {
-  NativeRouter,
-  Route,
-  Link,
-  useHistory,
-  Redirect,
-} from 'react-router-native';
-import React, {Component, useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
-import {Provider as StoreProvider, useSelector} from 'react-redux';
+import {NativeRouter, Route, Redirect} from 'react-router-native';
+import React, {useState, useEffect} from 'react';
+import {Provider as StoreProvider} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Login, Home} from './src/components';
 import store from './src/components/Redux/Store';
 import * as myConst from './src/components/Constants';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {NavigationContainer} from '@react-navigation/native';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {Provider as PaperProvider} from 'react-native-paper';
 import API from './src/components/API/API';
-import {SOCKET} from './src/config';
 import FlashMessage from 'react-native-flash-message';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Camera from './src/components/CameraComponent';
-const Tab = createMaterialBottomTabNavigator();
+import {DevSettings} from 'react-native';
 
 const App = () => {
   const [logged, setLogged] = useState(false);
@@ -53,6 +42,7 @@ const App = () => {
           .then((res) => {
             if (res.data.error_code !== 0) {
               AsyncStorage.clear();
+              DevSettings.reload();
               setLogged(false);
             } else {
               setLogged(true);
@@ -60,6 +50,7 @@ const App = () => {
           })
           .catch((err) => {
             AsyncStorage.clear();
+            DevSettings.reload();
             setLogged(false);
           });
       } else {

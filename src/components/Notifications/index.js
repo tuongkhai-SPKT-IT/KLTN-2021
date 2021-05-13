@@ -1,7 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {ScrollView, Text} from 'react-native';
-import {StyleSheet} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import {
   Appbar,
   IconButton,
@@ -16,6 +20,7 @@ import {SafeAreaView} from 'react-navigation';
 import {useSelector} from 'react-redux';
 import {SOCKET} from '../../config';
 import jwt_decode from 'jwt-decode';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function Notifications() {
   const [visible, setVisible] = useState(false);
@@ -63,6 +68,11 @@ export default function Notifications() {
   return (
     <SafeAreaView style={styles.container}>
       <Appbar.Header style={{backgroundColor: '#fff'}}>
+        <TouchableOpacity
+          onPress={() => navigation.toggleDrawer()}
+          style={{justifyContent: 'center', marginRight: 10}}>
+          <Ionicons name="ios-menu-sharp" size={30} />
+        </TouchableOpacity>
         <Appbar.Content title="Notifications" />
         <Appbar.Action icon="magnify" onPress={_handleSearch} />
       </Appbar.Header>

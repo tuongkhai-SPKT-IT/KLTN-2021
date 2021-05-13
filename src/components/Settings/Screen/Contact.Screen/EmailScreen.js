@@ -21,11 +21,11 @@ export default function EmailScreen({navigation}) {
   });
 
   const dispatch = useDispatch();
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     dispatch(Change_User_Contact(emailInput, '', passwordInput));
 
-    await dispatch(Clear_Setting());
-    await dispatch(Fetch_Setting());
+    dispatch(Clear_Setting());
+    // await dispatch(Fetch_Setting());
     navigation.goBack();
   };
   const onChangeTextPassword = (e) => {
