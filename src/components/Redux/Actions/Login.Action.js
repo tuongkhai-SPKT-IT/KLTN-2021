@@ -81,12 +81,11 @@ export const Register_Request = (info) => {
         .onCallAPI('post', route, {}, params, {})
         .then((res) => {
           if (res.data.error_code !== 0) {
-            alert(res.data.message);
             dispatch({
               type: types.Register_Fail,
-              err: err,
+              err: res.data.message,
             });
-            return;
+            // return;
           } else {
             dispatch({type: types.Register_Success, err: ''});
           }

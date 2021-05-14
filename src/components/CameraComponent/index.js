@@ -1,8 +1,9 @@
-import React, {PureComponent} from 'react';
-import { View } from 'react-native';
+import React, {Component} from 'react';
+import {View} from 'react-native';
 import {Text} from 'react-native';
 import {TouchableOpacity} from 'react-native';
 import {StyleSheet} from 'react-native';
+import {RNCamera} from 'react-native-camera';
 
 const PendingView = () => (
   <View
@@ -16,7 +17,7 @@ const PendingView = () => (
   </View>
 );
 
-class ExampleApp extends PureComponent {
+class ExampleApp extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -46,7 +47,6 @@ class ExampleApp extends PureComponent {
   takePicture = async function (camera) {
     const options = {quality: 0.5, base64: true};
     const data = await camera.takePictureAsync(options);
-    //  eslint-disable-next-line
     console.log(data.uri);
   };
 }

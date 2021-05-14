@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useRef, useLayoutEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -15,9 +15,15 @@ import {Drawer} from 'react-native-paper';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as keys from '../Constants';
+import CameraComponent from '../CameraComponent';
+import {useHistory} from 'react-router';
+import Modal from 'react-native-modal';
+import ImagePicker from 'react-native-image-crop-picker';
 
 export default function DrawerContent(props) {
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
@@ -25,6 +31,8 @@ export default function DrawerContent(props) {
   const {introUser} = ProfileInfo;
   const [tabDropDown, setTabDropDown] = useState(false);
   const dispatch = useDispatch();
+  const [isCameraOn, setisCameraOn] = useState(false);
+  const cameraRef = useRef();
   // const navigation = useNavigation();
   useLayoutEffect(() => {
     dispatch(Get_IntroUser());
@@ -50,6 +58,9 @@ export default function DrawerContent(props) {
       props.navigation.jumpTo('Profile');
       props.navigation.closeDrawer();
     }
+    if (type === 5) {
+      props.navigation.navigate('Settings');
+    }
   };
   const renderTab = (title, icon, typePress) => {
     return (
@@ -73,7 +84,33 @@ export default function DrawerContent(props) {
       </TouchableOpacity>
     );
   };
-  const signOut = () => {};
+  const history = useHistory();
+  const signOut = async (e) => {
+    // const route = 'user/log-out';
+    // const token = await AsyncStorage.getItem(keys.User_Token);
+    // const header = {
+    //   authorization: 'bearer' + token,
+    // };
+    // const param = {
+    //   api_token: token,
+    // };
+    // var api = new API();
+    // api
+    //   .onCallAPI('post', route, {}, param, header)
+    //   .then((res) => {
+    //     if (res.data.error_code !== 0) {
+    //       alert(res.data.message);
+    //     }
+    AsyncStorage.clear();
+    const test = await AsyncStorage.getItem(keys.User_Token);
+    console.log(test);
+    history.push('/Login');
+    // console.log(history.location); //= '/';
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
+  };
   //   console.log(introUser);
   if (Object.keys(introUser).length !== 0)
     return (
@@ -101,20 +138,33 @@ export default function DrawerContent(props) {
         </View>
 
         <DrawerContentScrollView {...props}>
-          <Button
-            containerStyle={{ borderRadius: 0, marginTop: 10}}
-            buttonStyle={{paddingLeft: 0, backgroundColor: 'rgba(0,0,0,.3)'}}
-            icon={
-              <Ionicons
-                name={'information-circle-outline'}
-                style={{paddingRight: 10}}
-                size={25}
-              />
-            }
-            titleStyle={[styles.btnInforTitle, styles.btnDropDownTitle]}
-            onPress={() => setInfoDropDown(!infoDropDown)}
-            title="Information"
-          />
+          <View
+            style={{
+              position: 'relative',
+              // backgroundColor: 'red',
+              marginTop: 10,
+              justifyContent: 'center',
+            }}>
+            <Ionicons
+              name={infoDropDown ? 'caret-up' : 'caret-down'}
+              size={20}
+              style={{position: 'absolute', right: 0}}
+            />
+            <Button
+              containerStyle={{borderRadius: 0}}
+              buttonStyle={{paddingLeft: 5, backgroundColor: 'rgba(0,0,0,.3)'}}
+              icon={
+                <Ionicons
+                  name={'information-circle-outline'}
+                  style={{paddingRight: 10}}
+                  size={25}
+                />
+              }
+              titleStyle={[styles.btnInforTitle, styles.btnDropDownTitle]}
+              onPress={() => setInfoDropDown(!infoDropDown)}
+              title="Information"
+            />
+          </View>
 
           {infoDropDown && (
             <View
@@ -199,20 +249,33 @@ export default function DrawerContent(props) {
             </View>
           )}
 
-          <Button
-            containerStyle={{ borderRadius: 0, marginTop: 10}}
-            buttonStyle={{paddingLeft: 0, backgroundColor: 'rgba(0,0,0,.3)'}}
-            icon={
-              <Icon
-                name="table-of-contents"
-                style={{paddingRight: 10}}
-                size={25}
-              />
-            }
-            titleStyle={[styles.btnInforTitle, styles.btnDropDownTitle]}
-            onPress={() => setTabDropDown(!tabDropDown)}
-            title="Tab"
-          />
+          <View
+            style={{
+              position: 'relative',
+              // backgroundColor: 'red',
+              marginTop: 10,
+              justifyContent: 'center',
+            }}>
+            <Ionicons
+              name={tabDropDown ? 'caret-up' : 'caret-down'}
+              size={20}
+              style={{position: 'absolute', right: 0}}
+            />
+            <Button
+              containerStyle={{borderRadius: 0}}
+              buttonStyle={{paddingLeft: 5, backgroundColor: 'rgba(0,0,0,.3)'}}
+              icon={
+                <Icon
+                  name="table-of-contents"
+                  style={{paddingRight: 10}}
+                  size={25}
+                />
+              }
+              titleStyle={[styles.btnInforTitle, styles.btnDropDownTitle]}
+              onPress={() => setTabDropDown(!tabDropDown)}
+              title="Tab"
+            />
+          </View>
 
           {tabDropDown && (
             <View
@@ -227,15 +290,39 @@ export default function DrawerContent(props) {
           )}
 
           <Button
-            containerStyle={{ borderRadius: 0, marginTop: 10}}
-            buttonStyle={{paddingLeft: 0, backgroundColor: 'rgba(0,0,0,.3)'}}
+            containerStyle={{borderRadius: 0, marginTop: 10}}
+            buttonStyle={{paddingLeft: 5, backgroundColor: 'rgba(0,0,0,.3)'}}
             icon={<AntDesign name="setting" size={25} />}
             iconContainerStyle={{}}
             titleStyle={styles.btnInforTitle}
-            onPress={() => props.navigation.navigate('Settings')}
+            onPress={() => navigatePress(5)}
             title="Edit information"
           />
+          <Button
+            containerStyle={{borderRadius: 0, marginTop: 10}}
+            buttonStyle={{paddingLeft: 5, backgroundColor: 'rgba(0,0,0,.3)'}}
+            icon={<FontAwesome name="camera" size={25} />}
+            iconContainerStyle={{}}
+            titleStyle={styles.btnInforTitle}
+            onPress={() => setisCameraOn(true)}
+            title="Open Camera"
+          />
         </DrawerContentScrollView>
+
+        <Modal
+          isVisible={isCameraOn}
+          hasBackdrop={false}
+          onBackdropPress={() => setisCameraOn(false)}
+          onSwipeCancel={() => setisCameraOn(true)}
+          onSwipeComplete={() => setisCameraOn(false)}
+          onBackButtonPress={() => setisCameraOn(false)}
+          animationOut="slideOutDown"
+          propagateSwipe={true}
+          // avoidKeyboard
+          hideModalContentWhileAnimating
+          style={{margin: 0}}>
+          <CameraComponent ref={cameraRef} />
+        </Modal>
         <Drawer.Section style={styles.bottomDrawerSection}>
           <DrawerItem
             icon={({color, size}) => (

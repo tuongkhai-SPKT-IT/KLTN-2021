@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, StatusBar} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AppBar from '../AppBar';
@@ -28,6 +28,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/core';
 import DrawerContent from './DrawerContent';
 import {LogBox} from 'react-native';
+import {useHistory} from 'react-router';
 LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -67,6 +68,7 @@ const Home = () => {
         </View>
       );
     };
+    const history = useHistory();
 
     SOCKET.on('server-popup-notification', (data) => {
       showMessage({
