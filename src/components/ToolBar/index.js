@@ -148,229 +148,227 @@ export default function ToolBar() {
           </TouchableOpacity>
           {/* <TextInput placeholder="Bạn đang nghĩ gì?" style={styles.input} onFocus={() => popUpStatusModal()} /> */}
         </View>
-        <View style={styles.divider}>
-          <View style={styles.row}>
-            <TouchableOpacity
-              style={{backgroundColor: 'red', width: 20, height: 20}}
-              onPress={() => pressLiveCamera()}></TouchableOpacity>
-            <TouchableOpacity
+        <View style={styles.row}>
+          <TouchableOpacity
+            style={{backgroundColor: 'red', width: 20, height: 20}}
+            onPress={() => pressLiveCamera()}></TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => pressLiveCamera()}
+            style={styles.menu}>
+            <Ionicons.Button
               onPress={() => pressLiveCamera()}
-              style={styles.menu}>
-              <Ionicons.Button
-                onPress={() => pressLiveCamera()}
-                style={styles.memuButton}
-                name="ios-videocam"
-                size={22}
-                color="#f44337">
-                Live
-              </Ionicons.Button>
-              <View style={styles.separator}></View>
-            </TouchableOpacity>
+              style={styles.memuButton}
+              name="ios-videocam"
+              size={22}
+              color="#f44337">
+              Live
+            </Ionicons.Button>
+            <View style={styles.separator}></View>
+          </TouchableOpacity>
 
-            <View style={styles.menu}>
-              <MaterialIcons.Button
-                style={styles.memuButton}
-                name="photo-size-select-actual"
-                size={20}
-                color="#4caf50">
-                Photo
-              </MaterialIcons.Button>
-              <View style={styles.separator}></View>
-            </View>
-
-            <View style={styles.menu}>
-              <Entypo.Button
-                style={styles.memuButton}
-                name="location-pin"
-                size={22}
-                color="#e141fc">
-                Check in
-              </Entypo.Button>
-              <View style={styles.separator}></View>
-            </View>
+          <View style={styles.menu}>
+            <MaterialIcons.Button
+              style={styles.memuButton}
+              name="photo-size-select-actual"
+              size={20}
+              color="#4caf50">
+              Photo
+            </MaterialIcons.Button>
+            <View style={styles.separator}></View>
           </View>
 
-          <Modal
-            isVisible={visible}
-            hasBackdrop={false}
-            swipeDirection={['down']}
-            animationIn="slideInUp"
-            onBackdropPress={() => setVisible(false)}
-            onSwipeCancel={() => setVisible(true)}
-            onSwipeComplete={() => setVisible(false)}
-            onBackButtonPress={() => setVisible(false)}
-            animationOut="slideOutDown"
-            propagateSwipe={true}
-            animationInTiming={600}
-            animationOutTiming={600}
-            // avoidKeyboard
-            hideModalContentWhileAnimating
-            style={{margin: 0}}>
-            {/* <Modal position="center" swipeToClose={true} ref={initRef} coverScreen> */}
-            <View
-              onLayout={(e) => setLayoutModal(e.nativeEvent.layout)}
-              style={{
-                backgroundColor: 'white',
-                width: '100%',
-                height: '100%',
-              }}>
-              <ScrollView>
-                <View style={styles.popupStatus}>
+          <View style={styles.menu}>
+            <Entypo.Button
+              style={styles.memuButton}
+              name="location-pin"
+              size={22}
+              color="#e141fc">
+              Check in
+            </Entypo.Button>
+            <View style={styles.separator}></View>
+          </View>
+        </View>
+
+        <Modal
+          isVisible={visible}
+          hasBackdrop={false}
+          swipeDirection={['down']}
+          animationIn="slideInUp"
+          onBackdropPress={() => setVisible(false)}
+          onSwipeCancel={() => setVisible(true)}
+          onSwipeComplete={() => setVisible(false)}
+          onBackButtonPress={() => setVisible(false)}
+          animationOut="slideOutDown"
+          propagateSwipe={true}
+          animationInTiming={600}
+          animationOutTiming={600}
+          // avoidKeyboard
+          hideModalContentWhileAnimating
+          style={{margin: 0}}>
+          {/* <Modal position="center" swipeToClose={true} ref={initRef} coverScreen> */}
+          <View
+            onLayout={(e) => setLayoutModal(e.nativeEvent.layout)}
+            style={{
+              backgroundColor: 'white',
+              width: '100%',
+              height: '100%',
+            }}>
+            <ScrollView>
+              <View style={styles.popupStatus}>
+                <View
+                  style={[
+                    styles.popupStatusHeader,
+                    {
+                      position: 'relative',
+                    },
+                  ]}>
+                  <View style={styles.popupStatusHeaderBack}>
+                    <Ionicons
+                      name="arrow-back"
+                      color="black"
+                      size={22}
+                      onPress={() => {
+                        // initRef.current.close();
+                        setVisible(false);
+                        setStatus('');
+                      }}
+                    />
+                  </View>
                   <View
                     style={[
-                      styles.popupStatusHeader,
-                      {
-                        position: 'relative',
-                      },
+                      styles.popupStatusHeaderContent,
+                      {justifyContent: 'center'},
                     ]}>
-                    <View style={styles.popupStatusHeaderBack}>
-                      <Ionicons
-                        name="arrow-back"
-                        color="black"
-                        size={22}
-                        onPress={() => {
-                          // initRef.current.close();
-                          setVisible(false);
-                          setStatus('');
-                        }}
-                      />
-                    </View>
-                    <View
+                    <Text
+                      style={{
+                        fontSize: 20,
+                      }}>
+                      Tạo bài viết
+                    </Text>
+                  </View>
+                  <View
+                    style={[
+                      styles.popupStatusHeaderButtonSubmit,
+                      {justifyContent: 'center'},
+                    ]}>
+                    <TouchableOpacity
                       style={[
-                        styles.popupStatusHeaderContent,
-                        {justifyContent: 'center'},
-                      ]}>
+                        styles.submitButton,
+                        {
+                          backgroundColor:
+                            status === '' ? '#EEEEEE' : '#1058B0',
+                        },
+                      ]}
+                      onPress={() => {
+                        postStatus();
+                      }}>
                       <Text
                         style={{
-                          fontSize: 20,
+                          color: status !== '' ? '#f9f3f3' : '#bbbbbb',
                         }}>
-                        Tạo bài viết
+                        Đăng
                       </Text>
-                    </View>
-                    <View
-                      style={[
-                        styles.popupStatusHeaderButtonSubmit,
-                        {justifyContent: 'center'},
-                      ]}>
-                      <TouchableOpacity
-                        style={[
-                          styles.submitButton,
-                          {
-                            backgroundColor:
-                              status === '' ? '#EEEEEE' : '#1058B0',
-                          },
-                        ]}
-                        onPress={() => {
-                          postStatus();
-                        }}>
-                        <Text
-                          style={{
-                            color: status !== '' ? '#f9f3f3' : '#bbbbbb',
-                          }}>
-                          Đăng
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+                    </TouchableOpacity>
                   </View>
-                  <View style={styles.divider}></View>
-                  <View style={styles.popupStatusContent}>
-                    <View style={styles.popupStatusUser}>
-                      <View style={styles.avatarBlock}>
-                        <Avatar
-                          isHomePage={false}
-                          source={userInfoRef.current.avatar}
-                        />
-                      </View>
-                      <View style={styles.statusUserRestBlock}>
-                        <View style={styles.statusUserName}>
-                          <Text style={{fontSize: 19}}>
-                            {userInfoRef.current.userName}
-                          </Text>
-                        </View>
-                        <View style={styles.statusOption}>
-                          <DropDownPicker
-                            items={[
-                              {
-                                label: 'Public',
-                                value: 'pub',
-                                icon: () => (
-                                  <Ionicons
-                                    name="earth-outline"
-                                    size={18}
-                                    color="#bbbbbb"
-                                  />
-                                ),
-                              },
-                              {
-                                label: 'Private',
-                                value: 'priv',
-                                icon: () => (
-                                  <Feather
-                                    name="lock"
-                                    size={18}
-                                    color="#bbbbbb"
-                                  />
-                                ),
-                              },
-                              {
-                                label: 'Friends',
-                                value: 'friend',
-                                icon: () => (
-                                  <Ionicons
-                                    name="people-outline"
-                                    size={18}
-                                    color="#bbbbbb"
-                                  />
-                                ),
-                              },
-                            ]}
-                            defaultValue={option}
-                            containerStyle={{height: 30, width: 115}}
-                            style={styles.statusButton}
-                            itemStyle={{
-                              justifyContent: 'flex-start',
-                            }}
-                            dropDownStyle={{backgroundColor: '#fafafa'}}
-                            onChangeItem={(item) => setOption(item.value)}
-                          />
-                        </View>
-                      </View>
-                    </View>
-                    <View style={[styles.popupStatusMainContent]}>
-                      <TextInput
-                        placeholder="What's on your mind?"
-                        multiline={true}
-                        ref={inputTextRef}
-                        style={{
-                          textAlign: 'justify',
-                          textAlignVertical: 'top',
-                          fontSize: 17,
-                        }}
-                        value={status}
-                        onChangeText={setStatus}
+                </View>
+                <View style={styles.divider}></View>
+                <View style={styles.popupStatusContent}>
+                  <View style={styles.popupStatusUser}>
+                    <View style={styles.avatarBlock}>
+                      <Avatar
+                        isHomePage={false}
+                        source={userInfoRef.current.avatar}
                       />
                     </View>
+                    <View style={styles.statusUserRestBlock}>
+                      <View style={styles.statusUserName}>
+                        <Text style={{fontSize: 19}}>
+                          {userInfoRef.current.userName}
+                        </Text>
+                      </View>
+                      <View style={styles.statusOption}>
+                        <DropDownPicker
+                          items={[
+                            {
+                              label: 'Public',
+                              value: 'pub',
+                              icon: () => (
+                                <Ionicons
+                                  name="earth-outline"
+                                  size={18}
+                                  color="#bbbbbb"
+                                />
+                              ),
+                            },
+                            {
+                              label: 'Private',
+                              value: 'priv',
+                              icon: () => (
+                                <Feather
+                                  name="lock"
+                                  size={18}
+                                  color="#bbbbbb"
+                                />
+                              ),
+                            },
+                            {
+                              label: 'Friends',
+                              value: 'friend',
+                              icon: () => (
+                                <Ionicons
+                                  name="people-outline"
+                                  size={18}
+                                  color="#bbbbbb"
+                                />
+                              ),
+                            },
+                          ]}
+                          defaultValue={option}
+                          containerStyle={{height: 30, width: 115}}
+                          style={styles.statusButton}
+                          itemStyle={{
+                            justifyContent: 'flex-start',
+                          }}
+                          dropDownStyle={{backgroundColor: '#fafafa'}}
+                          onChangeItem={(item) => setOption(item.value)}
+                        />
+                      </View>
+                    </View>
                   </View>
-                  <Button
-                    buttonStyle={{width: 150}}
-                    containerStyle={{margin: 5}}
-                    onPress={() => requestCameraPermission()}
-                    title="Hello"
-                    titleStyle={{marginHorizontal: 5}}
-                  />
+                  <View style={[styles.popupStatusMainContent]}>
+                    <TextInput
+                      placeholder="What's on your mind?"
+                      multiline={true}
+                      ref={inputTextRef}
+                      style={{
+                        textAlign: 'justify',
+                        textAlignVertical: 'top',
+                        fontSize: 17,
+                      }}
+                      value={status}
+                      onChangeText={setStatus}
+                    />
+                  </View>
                 </View>
-                <Pressable
-                  onPress={() => inputTextRef.current.focus()}
-                  style={{
-                    backgroundColor: 'transparent',
-                    height: layoutModal.height * 0.8,
-                    width: '100%',
-                  }}
+                <Button
+                  buttonStyle={{width: 150}}
+                  containerStyle={{margin: 5}}
+                  onPress={() => requestCameraPermission()}
+                  title="Hello"
+                  titleStyle={{marginHorizontal: 5}}
                 />
-              </ScrollView>
-            </View>
-          </Modal>
-        </View>
+              </View>
+              <Pressable
+                onPress={() => inputTextRef.current.focus()}
+                style={{
+                  backgroundColor: 'transparent',
+                  height: layoutModal.height * 0.8,
+                  width: '100%',
+                }}
+              />
+            </ScrollView>
+          </View>
+        </Modal>
       </View>
     </>
   );

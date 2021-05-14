@@ -133,8 +133,10 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
+        vectorDrawables.useSupportLibrary = true
         versionName "1.0"
         multiDexEnabled true
+        targetSdkVersion 29
         missingDimensionStrategy 'react-native-camera', 'general' // <--- insert this line
     }
     splits {

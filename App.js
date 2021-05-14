@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import {NativeRouter, Route, Redirect} from 'react-router-native';
+import {NativeRouter, Route, Redirect, useHistory} from 'react-router-native';
 import React, {useState, useEffect} from 'react';
 import {Provider as StoreProvider} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,7 +16,6 @@ import {DevSettings} from 'react-native';
 const App = () => {
   const [logged, setLogged] = useState(false);
   // const [allUserRoute, setAllUserRoute] = useState([]);
-
   useEffect(() => {
     AsyncStorage.getItem(myConst.User_Token).then((value) => {
       if (value) {
@@ -66,8 +65,10 @@ const App = () => {
           <PaperProvider>
             <NavigationContainer>
               <Route path="/Home" exact component={Home} />
+
+              <Route path="/Login" exact component={Login} />
               <Route exact path="/">
-                {logged ? <Redirect to="/Home" /> : <Login />}
+                {logged ? <Redirect to="/Home" /> : <Redirect to="/Login" />}
               </Route>
             </NavigationContainer>
           </PaperProvider>

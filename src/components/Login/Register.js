@@ -50,15 +50,13 @@ const Register = ({navigation}) => {
         email: formData.email.trimEnd(), //mật khẩu cho phép " "
       });
       dispatch(Register_Request(formData));
-      if (storeState.err_code === '') {
-        navigation.goBack();
-      } else {
-        console.log(storeState.err_code);
-      }
     } catch (err) {
       console.log('error signing up: ', err);
     }
   };
+  useEffect(() => {
+    console.log(storeState);
+  }, [storeState]);
   const formatDateTime = (e) => {
     var ngay = e.getDate();
     var thang = e.getMonth() + 1;
@@ -110,6 +108,7 @@ const Register = ({navigation}) => {
     const [lastName, setLastName] = useState(formData.last_name);
     return (
       <ScrollView
+        keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         style={{
           width: '100%',
@@ -322,8 +321,8 @@ const Register = ({navigation}) => {
     );
   };
   const setPhoneEmail = ({navigation}) => {
-    const [phone, setPhone] = useState(formData.email);
-    const [email, setEmail] = useState(formData.phone);
+    const [phone, setPhone] = useState(formData.phone);
+    const [email, setEmail] = useState(formData.email);
     return (
       <View
         style={{
@@ -425,6 +424,7 @@ const Register = ({navigation}) => {
           onPress={() => {
             navigation.navigate('doneRegister');
             setformData({...formData, password: passWord});
+            console.log(formData);
           }}
           style={styles.appButtonContainer}>
           <Text style={styles.appButtonText}>Tiếp theo</Text>

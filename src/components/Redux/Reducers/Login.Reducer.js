@@ -27,6 +27,7 @@ var LoginReducer = (state = initState, action) => {
     }
     case types.Register_Fail: {
       const {err} = action;
+      alert(err);
       return {...state, signingUp: false, err_code: err};
     }
     default:
