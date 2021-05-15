@@ -29,6 +29,7 @@ import {useNavigation} from '@react-navigation/core';
 import DrawerContent from './DrawerContent';
 import {LogBox} from 'react-native';
 import {useHistory} from 'react-router';
+import UpStatusScreen from '../ToolBar/UpStatusScreen';
 LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -159,7 +160,7 @@ const Home = () => {
 
   const StackNavigator = () => {
     return (
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
           options={{headerShown: false}}
@@ -185,6 +186,13 @@ const Home = () => {
         <Stack.Screen
           name="Settings"
           component={Settings}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="subToolBar"
+          component={UpStatusScreen}
           options={{
             headerShown: false,
           }}

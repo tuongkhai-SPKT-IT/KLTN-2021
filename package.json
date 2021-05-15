@@ -33,6 +33,7 @@
     "react-native-gesture-handler": "^1.10.3",
     "react-native-i18n": "^2.0.15",
     "react-native-image-crop-picker": "^0.36.2",
+    "react-native-media-controls": "^2.3.0",
     "react-native-modal": "^11.9.0",
     "react-native-modalbox": "^2.0.2",
     "react-native-orientation-locker": "^1.2.0",
