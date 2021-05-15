@@ -7,15 +7,12 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import Video from 'react-native-video';
-import SwipeDownModal from 'react-native-swipe-down';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
-
-// import Slideshow from 'react-native-slideshow';
 import * as styles from './Styles';
 import VideoNative from './Video.Native.js';
+import Video from './VideoExample';
+
 const ImageGrid = (props) => {
   const device = Dimensions.get('window');
   const deviceWidth = Dimensions.get('window').width;
