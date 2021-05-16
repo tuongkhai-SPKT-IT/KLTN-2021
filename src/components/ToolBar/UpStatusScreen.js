@@ -16,23 +16,32 @@ import * as StatusServices from '../../services/status';
 import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as keys from '../Constants';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import {Image} from 'react-native';
 import {useDispatch} from 'react-redux';
+import Modal from 'react-native-modal';
+import ImageGrid from '../ContentStatus/ImageGrid';
+import {DocumentPicker} from 'react-native-document-picker';
 
-export default function UpStatusScreen({navigation}) {
+export default function UpStatusScreen({navigation, route}) {
   const [status, setStatus] = useState('');
   const [option, setOption] = useState('pub');
   const [userInfo, setUserInfo] = useState({});
   const inputTextRef = useRef(null);
   const [files, setFiles] = useState([]);
-
+  const [visible, setVisible] = useState(false);
+  // const gridRef = useRef();
+  const [imageGrid, setImageGrid] = useState([]);
   const dispatch = useDispatch();
-
   useEffect(() => {
-    if (inputTextRef.current) inputTextRef.current.focus();
-  }, [inputTextRef.current]);
+    if (route.params.isPhotoPress) {
+      //photoPress();
+      library();
+    } else return;
+  }, []);
+  // useEffect(() => {
+  //   if (inputTextRef.current) inputTextRef.current.focus();
+  // }, [inputTextRef.current]);
   useEffect(() => {
     const getInfoOwner = async () => {
       const avatar = await AsyncStorage.getItem(keys.User_Avatar);
@@ -45,29 +54,78 @@ export default function UpStatusScreen({navigation}) {
     getInfoOwner();
   }, []);
 
-  const fileShowRender = (file, i) => {
-    // console.log(file, files);
-    // return;
-    return (
-      <View key={i}>
-        <Image
-          source={{uri: file.path}}
-          style={{
-            width: Math.ceil(file.width / 3),
-            height: Math.ceil(file.height / 3),
-          }}
-        />
-      </View>
-    );
+  // const fileShowRender = (file, i) => {
+  //   // console.log(file);
+  //   // return; //<></>;
+  //   return (
+  //     <View key={i}>
+  //       <Image
+  //         source={{uri: file.path}}
+  //         style={{
+  //           width: 200,
+  //           height: 200,
+  //         }}
+  //       />
+  //     </View>
+  //   );
+  // };
+
+  const selectFile = async () => {
+    // Opening Document Picker to select one file
+    try {
+      const res = await DocumentPicker.pick({
+        // Provide which type of file you want user to pick
+        type: [DocumentPicker.types.allFiles],
+        // There can me more options as well
+        // DocumentPicker.types.allFiles
+        // DocumentPicker.types.images
+        // DocumentPicker.types.plainText
+        // DocumentPicker.types.audio
+        // DocumentPicker.types.pdf
+      });
+      // Printing the log realted to the file
+      console.log('res : ' + JSON.stringify(res));
+      // Setting the state to show single file attributes
+      // setSingleFile(res);
+    } catch (err) {
+      setSingleFile(null);
+      // Handling any exception (If any)
+      if (DocumentPicker.isCancel(err)) {
+        // If user canceled the document selection
+        alert('Canceled');
+      } else {
+        // For Unknown Error
+        alert('Unknown Error: ' + JSON.stringify(err));
+        throw err;
+      }
+    }
   };
   const postStatus = async () => {
-    if (status && option) {
-      let params = {
+    // console.log(imageGrid);
+    // return;
+    if (status || files.length > 0) {
+      const params = {
         caption: status,
         status_setting: option,
+        type: 2,
+        option: 2,
       };
+      const formdata = new FormData();
+      if (files.length !== 0) {
+        for (var i = 0; i < files.length; i++) {
+          const today = new Date();
+          const file = {
+            uri: files[i].path,
+            name: `IMG_${today.getDate()}_${today.getMonth()}_${today.getFullYear()}_${today.getMilliseconds()}`,
+            type: files[i].mime,
+          };
+          formdata.append('file[]', file);
+        }
+      }
+      console.log(formdata);
 
-      const upStatusResponse = await StatusServices.PostStatus(params);
+      // return;
+      const upStatusResponse = StatusServices.PostStatus(params, formdata);
 
       if (upStatusResponse.status) {
         dispatch(clear_Home());
@@ -79,161 +137,241 @@ export default function UpStatusScreen({navigation}) {
       }
     }
   };
-  const photoPress = async () => {
-    const image = await ImageCropPicker.openPicker({
+  const camera = (mediaType = 'photo') => {
+    ImageCropPicker.openCamera({
+      width: 500,
+      height: 500,
+      // cropping: true,
+    })
+      .then((image) => {
+        const arr = [...files];
+        const temp = [...imageGrid];
+        const value = {
+          type: image.mime.includes('image') ? 'image' : 'video',
+          uri: image.path,
+        };
+        arr.push(image);
+        temp.push(value);
+        setFiles(arr);
+        setImageGrid(temp);
+      })
+      .catch((err) => console.log(err));
+  };
+  const library = () => {
+    ImageCropPicker.openPicker({
       multiple: true,
       waitAnimationEnd: false,
       sortOrder: 'desc',
-      includeExif: true,
-      forceJpg: true,
-    });
-    setFiles([...files, ...image]);
+      // includeExif: true,
+      // forceJpg: true,
+    })
+      .then((images) => {
+        setFiles([...files, ...images]);
+        const temp = [...imageGrid];
+        images.map((image) => {
+          const value = {
+            type: image.mime.includes('image') ? 'image' : 'video',
+            uri: image.path,
+          };
+          temp.push(value);
+        });
+        setImageGrid(temp);
+      })
+      .catch((e) => console.log(e));
   };
+
   if (Object.keys(userInfo).length !== 0)
     return (
-      <View
-        style={{
-          backgroundColor: 'white',
-          width: '100%',
-          height: '100%',
-        }}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={[styles.popupStatus]}>
-            <View style={styles.popupStatus}>
-              <View
-                style={[
-                  styles.popupStatusHeader,
-                  {
-                    position: 'relative',
-                  },
-                ]}>
-                <TouchableOpacity
-                  onPress={() => navigation.goBack()}
-                  style={styles.popupStatusHeaderBack}>
-                  <Ionicons name="arrow-back" color="black" size={22} />
-                </TouchableOpacity>
+      <>
+        <Modal
+          isVisible={visible}
+          swipeDirection={['up', 'down']}
+          animationIn="zoomInUp"
+          onBackdropPress={() => setVisible(false)}
+          onSwipeCancel={() => setVisible(true)}
+          onSwipeComplete={() => setVisible(false)}
+          onBackButtonPress={() => setVisible(false)}
+          animationOut="zoomOutDown"
+          animationInTiming={600}
+          backdropOpacity={0.5}
+          animationOutTiming={600}
+          hideModalContentWhileAnimating
+          style={{margin: 0}}>
+          <View style={{backgroundColor: 'white'}}>
+            <Text h1>Hello</Text>
+          </View>
+        </Modal>
+        <View
+          style={{
+            backgroundColor: 'white',
+            width: '100%',
+            height: '100%',
+          }}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <View style={[styles.popupStatus]}>
+              <View style={styles.popupStatus}>
                 <View
                   style={[
-                    styles.popupStatusHeaderContent,
-                    {justifyContent: 'center'},
-                  ]}>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                    }}>
-                    Tạo bài viết
-                  </Text>
-                </View>
-                <View
-                  style={[
-                    styles.popupStatusHeaderButtonSubmit,
-                    {justifyContent: 'center'},
+                    styles.popupStatusHeader,
+                    {
+                      position: 'relative',
+                    },
                   ]}>
                   <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={styles.popupStatusHeaderBack}>
+                    <Ionicons name="arrow-back" color="black" size={22} />
+                  </TouchableOpacity>
+                  <View
                     style={[
-                      styles.submitButton,
-                      {
-                        backgroundColor: status === '' ? '#EEEEEE' : '#1058B0',
-                      },
-                    ]}
-                    onPress={() => {
-                      postStatus();
-                    }}>
+                      styles.popupStatusHeaderContent,
+                      {justifyContent: 'center'},
+                    ]}>
                     <Text
                       style={{
-                        color: status !== '' ? '#f9f3f3' : '#bbbbbb',
+                        fontSize: 20,
                       }}>
-                      Đăng
+                      Tạo bài viết
                     </Text>
-                  </TouchableOpacity>
+                  </View>
+                  <View
+                    style={[
+                      styles.popupStatusHeaderButtonSubmit,
+                      {justifyContent: 'center'},
+                    ]}>
+                    <TouchableOpacity
+                      style={[
+                        styles.submitButton,
+                        {
+                          backgroundColor:
+                            status === '' ? '#EEEEEE' : '#1058B0',
+                        },
+                      ]}
+                      onPress={() => postStatus()}>
+                      <Text
+                        style={{
+                          color: status !== '' ? '#f9f3f3' : '#bbbbbb',
+                        }}>
+                        Đăng
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-              <View style={styles.divider}></View>
+                <View style={styles.divider}></View>
 
-              <View style={styles.divider}></View>
-              <View style={[styles.popupStatusContent]}>
-                <View style={[styles.popupStatusUser]}>
-                  <View style={styles.avatarBlock}>
-                    <Avatar isHomePage={false} source={userInfo.avatar} />
+                <View style={styles.divider}></View>
+                <View style={[styles.popupStatusContent]}>
+                  <View style={[styles.popupStatusUser]}>
+                    <View style={styles.avatarBlock}>
+                      <Avatar isHomePage={false} source={userInfo.avatar} />
+                    </View>
+                    <View style={styles.statusUserRestBlock}>
+                      <View style={styles.statusUserName}>
+                        <Text style={{fontSize: 19}}>{userInfo.userName}</Text>
+                      </View>
+                      <View style={styles.statusOption}>
+                        <DropDownPicker
+                          items={[
+                            {
+                              label: 'Public',
+                              value: 'pub',
+                              icon: () => (
+                                <Ionicons
+                                  name="earth-outline"
+                                  size={18}
+                                  color="#bbbbbb"
+                                />
+                              ),
+                            },
+                            {
+                              label: 'Private',
+                              value: 'priv',
+                              icon: () => (
+                                <Feather
+                                  name="lock"
+                                  size={18}
+                                  color="#bbbbbb"
+                                />
+                              ),
+                            },
+                            {
+                              label: 'Friends',
+                              value: 'friend',
+                              icon: () => (
+                                <Ionicons
+                                  name="people-outline"
+                                  size={18}
+                                  color="#bbbbbb"
+                                />
+                              ),
+                            },
+                          ]}
+                          defaultValue={option}
+                          containerStyle={{height: 30, width: 115}}
+                          style={styles.statusButton}
+                          itemStyle={{
+                            justifyContent: 'flex-start',
+                          }}
+                          dropDownStyle={{backgroundColor: '#fafafa'}}
+                          onChangeItem={(item) => setOption(item.value)}
+                        />
+                      </View>
+                    </View>
                   </View>
-                  <View style={styles.statusUserRestBlock}>
-                    <View style={styles.statusUserName}>
-                      <Text style={{fontSize: 19}}>{userInfo.userName}</Text>
-                    </View>
-                    <View style={styles.statusOption}>
-                      <DropDownPicker
-                        items={[
-                          {
-                            label: 'Public',
-                            value: 'pub',
-                            icon: () => (
-                              <Ionicons
-                                name="earth-outline"
-                                size={18}
-                                color="#bbbbbb"
-                              />
-                            ),
-                          },
-                          {
-                            label: 'Private',
-                            value: 'priv',
-                            icon: () => (
-                              <Feather name="lock" size={18} color="#bbbbbb" />
-                            ),
-                          },
-                          {
-                            label: 'Friends',
-                            value: 'friend',
-                            icon: () => (
-                              <Ionicons
-                                name="people-outline"
-                                size={18}
-                                color="#bbbbbb"
-                              />
-                            ),
-                          },
-                        ]}
-                        defaultValue={option}
-                        containerStyle={{height: 30, width: 115}}
-                        style={styles.statusButton}
-                        itemStyle={{
-                          justifyContent: 'flex-start',
-                        }}
-                        dropDownStyle={{backgroundColor: '#fafafa'}}
-                        onChangeItem={(item) => setOption(item.value)}
-                      />
-                    </View>
+                  <View style={[styles.popupStatusMainContent]}>
+                    <TextInput
+                      placeholder="What's on your mind?"
+                      multiline={true}
+                      ref={inputTextRef}
+                      style={{
+                        textAlign: 'justify',
+                        textAlignVertical: 'top',
+                        fontSize: 17,
+                      }}
+                      value={status}
+                      onChangeText={setStatus}
+                    />
                   </View>
                 </View>
-                <View style={[styles.popupStatusMainContent]}>
-                  <TextInput
-                    placeholder="What's on your mind?"
-                    multiline={true}
-                    ref={inputTextRef}
-                    style={{
-                      textAlign: 'justify',
-                      textAlignVertical: 'top',
-                      fontSize: 17,
-                    }}
-                    value={status}
-                    onChangeText={setStatus}
+                <TouchableOpacity
+                  onPress={library}
+                  style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <FontAwesome
+                    name="plus-circle"
+                    style={{padding: 3, marginLeft: 10}}
+                    size={25}
+                    color="blue"
                   />
-                </View>
-              </View>
-              <TouchableOpacity
-                onPress={photoPress}
-                style={{flexDirection: 'row', alignItems: 'center'}}>
-                <AntDesign name="pluscircle" size={20} color="blue" />
-                <Text h4 h4Style={{padding: 10}}>
-                  Thêm ảnh hoặc video
-                </Text>
-              </TouchableOpacity>
-            </View>
+                  <Text h4 h4Style={{padding: 10}}>
+                    Images / Videos
+                  </Text>
+                </TouchableOpacity>
 
-            <ScrollView>{files.map(fileShowRender)}</ScrollView>
-          </View>
-        </ScrollView>
-      </View>
+                <TouchableOpacity
+                  onPress={camera}
+                  style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <FontAwesome
+                    name="camera"
+                    style={{padding: 3, marginLeft: 10}}
+                    size={20}
+                    color="blue"
+                  />
+
+                  <Text h4 h4Style={{padding: 10}}>
+                    Camera
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                {/* {files.map(fileShowRender)} */}
+
+                <ImageGrid srcImage={imageGrid} />
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      </>
     );
   else return <></>;
 }

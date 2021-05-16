@@ -29,7 +29,14 @@ export default function ToolBar() {
   }, []);
 
   const popUpStatusModal = () => {
-    navigation.navigate('subToolBar');
+    navigation.navigate('subToolBar', {
+      isPhotoPress: false,
+    });
+  };
+  const photoPress = () => {
+    navigation.navigate('subToolBar', {
+      isPhotoPress: true,
+    });
   };
 
   const pressLiveCamera = (e) => {
@@ -94,7 +101,9 @@ export default function ToolBar() {
             <Text style={{padding: 5, fontWeight: '900'}}>Live</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.menu, {borderEndWidth: 0.2}]}>
+          <TouchableOpacity
+            onPress={() => photoPress()}
+            style={[styles.menu, {borderEndWidth: 0.2}]}>
             <MaterialIcons
               name="photo-size-select-actual"
               size={20}
