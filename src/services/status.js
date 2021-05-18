@@ -2,23 +2,16 @@ import * as types from '../components/Redux/Constant.ActionType';
 import API from '../components/API/API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as storeKeys from '../components/Constants';
-import {useState} from 'react';
+import { useState } from 'react';
 
-export function PostStatus(statusParams, formData) {
+export asycn function PostStatus(statusParams, formData) {
   //đã dùng then thì không cần await/async
   var params = statusParams;
   let response = {
     status: false,
     message: '',
   };
-  let token = '';
-  AsyncStorage.getItem(storeKeys.User_Token).then(function (val) {
-    if (val) {
-      token = val;
-    } else {
-      return 'No token';
-    }
-  });
+  let token = await AsyncStorage.getItem(storeKeys.User_Token);
 
   params = {
     ...params,
