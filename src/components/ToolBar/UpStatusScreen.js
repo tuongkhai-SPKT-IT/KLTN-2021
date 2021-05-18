@@ -61,6 +61,7 @@ export default function UpStatusScreen({navigation, route}) {
         type: 2,
         option: 2,
       };
+      let upStatusResponse;
       const formdata = new FormData();
       if (files.length !== 0) {
         for (var i = 0; i < files.length; i++) {
@@ -75,11 +76,12 @@ export default function UpStatusScreen({navigation, route}) {
           };
           formdata.append('file[]', file);
         }
-      }
-      console.log(formdata);
+        upStatusResponse = await StatusServices.PostStatus(params, formdata);
+      } else upStatusResponse = await StatusServices.PostStatus(params, {});
 
       // return;
-      const upStatusResponse = StatusServices.PostStatus(params, formdata);
+      // console.log(formdata);
+      console.log(upStatusResponse);
 
       if (upStatusResponse.status) {
         dispatch(clear_Home());
