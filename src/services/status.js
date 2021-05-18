@@ -5,7 +5,6 @@ import * as storeKeys from '../components/Constants';
 import { useState } from 'react';
 
 export async function PostStatus(statusParams, formData) {
-  //đã dùng then thì không cần await/async
   var params = statusParams;
   let response = {
     status: false,
