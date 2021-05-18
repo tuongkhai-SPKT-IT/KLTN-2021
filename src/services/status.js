@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as storeKeys from '../components/Constants';
 import { useState } from 'react';
 
-export asycn function PostStatus(statusParams, formData) {
+export async function PostStatus(statusParams, formData) {
   //đã dùng then thì không cần await/async
   var params = statusParams;
   let response = {
