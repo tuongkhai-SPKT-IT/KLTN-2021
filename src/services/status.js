@@ -4,21 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as storeKeys from '../components/Constants';
 import {useState} from 'react';
 
-export function PostStatus(statusParams, formData) {
-  //đã dùng then thì không cần await/async
+export async function PostStatus(statusParams, formData) {
   var params = statusParams;
   let response = {
     status: false,
     message: '',
   };
-  let token = '';
-  AsyncStorage.getItem(storeKeys.User_Token).then(function (val) {
-    if (val) {
-      token = val;
-    } else {
-      return 'No token';
-    }
-  });
+  let token = await AsyncStorage.getItem(storeKeys.User_Token);
 
   params = {
     ...params,
@@ -31,9 +23,12 @@ export function PostStatus(statusParams, formData) {
     'Content-Type': 'multipart/form-data',
     // Accept: 'application/x-www-form-urlencoded',
   };
+  console.log(header);
+
+  // return;
 
   var api = new API();
-  api
+  await api
     .onCallAPI('post', route, formData, params, header)
     .then((res) => {
       if (res.data.error_code !== 0) {

@@ -35,7 +35,6 @@ export default function UpStatusScreen({navigation, route}) {
   const dispatch = useDispatch();
   useEffect(() => {
     if (route.params.isPhotoPress) {
-      //photoPress();
       library();
     } else return;
   }, []);
@@ -54,55 +53,7 @@ export default function UpStatusScreen({navigation, route}) {
     getInfoOwner();
   }, []);
 
-  // const fileShowRender = (file, i) => {
-  //   // console.log(file);
-  //   // return; //<></>;
-  //   return (
-  //     <View key={i}>
-  //       <Image
-  //         source={{uri: file.path}}
-  //         style={{
-  //           width: 200,
-  //           height: 200,
-  //         }}
-  //       />
-  //     </View>
-  //   );
-  // };
-
-  const selectFile = async () => {
-    // Opening Document Picker to select one file
-    try {
-      const res = await DocumentPicker.pick({
-        // Provide which type of file you want user to pick
-        type: [DocumentPicker.types.allFiles],
-        // There can me more options as well
-        // DocumentPicker.types.allFiles
-        // DocumentPicker.types.images
-        // DocumentPicker.types.plainText
-        // DocumentPicker.types.audio
-        // DocumentPicker.types.pdf
-      });
-      // Printing the log realted to the file
-      console.log('res : ' + JSON.stringify(res));
-      // Setting the state to show single file attributes
-      // setSingleFile(res);
-    } catch (err) {
-      setSingleFile(null);
-      // Handling any exception (If any)
-      if (DocumentPicker.isCancel(err)) {
-        // If user canceled the document selection
-        alert('Canceled');
-      } else {
-        // For Unknown Error
-        alert('Unknown Error: ' + JSON.stringify(err));
-        throw err;
-      }
-    }
-  };
   const postStatus = async () => {
-    // console.log(imageGrid);
-    // return;
     if (status || files.length > 0) {
       const params = {
         caption: status,
@@ -114,9 +65,12 @@ export default function UpStatusScreen({navigation, route}) {
       if (files.length !== 0) {
         for (var i = 0; i < files.length; i++) {
           const today = new Date();
+          const str = files[i].path;
+          var n = str.lastIndexOf('/');
+          var res = str.substr(n + 1);
           const file = {
             uri: files[i].path,
-            name: `IMG_${today.getDate()}_${today.getMonth()}_${today.getFullYear()}_${today.getMilliseconds()}`,
+            name: res,
             type: files[i].mime,
           };
           formdata.append('file[]', file);
