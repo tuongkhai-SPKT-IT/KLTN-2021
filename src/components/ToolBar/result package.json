@@ -1,0 +1,39 @@
+[
+  {
+    "type": "image",
+    "uri": "http://api.facebook-kltn.alphawolf.io/image/sdp1bPnwf9DyMcfjSyLBwuxQCsrBHL.jpeg"
+  },
+  {
+    "type": "image",
+    "uri": "http://api.facebook-kltn.alphawolf.io/image/OFPlqJLIp41VAgBr8fekaAYFIALTDe.jpg"
+  },
+  {
+    "type": "image",
+    "uri": "http://api.facebook-kltn.alphawolf.io/image/gcJr7JBM413BehAD14sJYjUVkl6ogW.jpg"
+  },
+  {
+    // data: image crop picker
+    "height": 1920,
+    "mime": "image/jpeg",
+    "modificationDate": "1621154613000",
+    "path": "file:///data/user/0/com.firstreactnative/cache/react-native-image-crop-picker/IMG_20210514_174511.jpg",
+    "size": 73406,
+    "width": 1080
+  },
+  {
+    //data : document  picker
+    "fileCopyUri": "content://com.android.providers.media.documents/document/image%3A32",
+    "name": "IMG_20210514_174511.jpg",
+    "size": 73406,
+    "type": "image/jpeg",
+    "uri": "content://com.android.providers.media.documents/document/image%3A32"
+  },
+
+  {
+    "lastModified": 1615943247758,
+    "lastModifiedDate": "Wed Mar 17 2021 08:07:27 GMT+0700 (Indochina Time)",
+    "name": "1110016.jpg",
+    "size": 326505,
+    "type": "image/jpeg"
+  }
+]

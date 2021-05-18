@@ -18,6 +18,7 @@ const ImageGrid = (props) => {
   const deviceWidth = Dimensions.get('window').width;
   const scrollImage = useRef(props.srcImage);
   const {srcImage} = props;
+  const scrollViewRef = useRef(null);
   const [layoutModal, setLayoutModal] = useState(device);
   const [isScroll, setIsScroll] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -31,7 +32,6 @@ const ImageGrid = (props) => {
     return <></>;
   }
   // const modalRef = useRef(null);
-  const scrollViewRef = useRef(null);
   const render2File = (src) => {
     return (
       <View style={[styles.stylesImageGrid.container]}>
