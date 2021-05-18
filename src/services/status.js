@@ -2,7 +2,7 @@ import * as types from '../components/Redux/Constant.ActionType';
 import API from '../components/API/API';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as storeKeys from '../components/Constants';
-import {useState} from 'react';
+import { useState } from 'react';
 
 export async function PostStatus(statusParams, formData) {
   var params = statusParams;
