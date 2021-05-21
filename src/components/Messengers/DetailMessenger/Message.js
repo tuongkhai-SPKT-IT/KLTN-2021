@@ -53,7 +53,7 @@ const Message = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text style={{textAlign: 'center', fontSize: 16}}>
+        <Text style={{ fontSize: 16}}>
           {props.message.text}
         </Text>
       </View>

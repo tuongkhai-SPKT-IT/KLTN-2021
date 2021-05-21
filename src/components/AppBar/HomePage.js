@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
 import HeaderApp from '../HeaderApp';
 import {Text, View, StyleSheet, RefreshControl} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 
 const HomePage = ({navigation}) => {
   const dispatch = useDispatch();
@@ -42,7 +43,8 @@ const HomePage = ({navigation}) => {
           );
         });
       }
-    } else {
+    }
+    if (srcData.length === 0) {
       return (
         <Text style={{padding: 20, fontSize: 20, textAlign: 'center'}}>
           There doesn't have any news in your newsfeed! Post your first status
@@ -50,6 +52,30 @@ const HomePage = ({navigation}) => {
         </Text>
       );
     }
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignContent: 'center',
+          width: 150,
+          height: 150,
+          zIndex: 999,
+          position: 'absolute',
+          top: '30%',
+          alignSelf: 'center',
+        }}>
+        <ActivityIndicator size="large" color="black" />
+        <Text
+          style={{
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: 'black',
+          }}>
+          Loading
+        </Text>
+      </View>
+    );
   };
 
   // const statusList = () => {

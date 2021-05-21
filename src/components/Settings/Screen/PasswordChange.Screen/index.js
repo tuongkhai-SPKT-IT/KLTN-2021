@@ -1,15 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {TextInput} from 'react-native';
-import {StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
-import {Button, Text} from 'react-native-elements';
+import React, { useEffect, useState } from 'react';
+import { TextInput } from 'react-native';
+import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Button, Text } from 'react-native-elements';
 import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {Change_Password} from '../../../Redux/Actions/Setting.Action';
-import {useDispatch} from 'react-redux';
+import { Change_Password } from '../../../Redux/Actions/Setting.Action';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useDispatch } from 'react-redux';
 
 export default function index() {
   const [oldPassword, setOldPassword] = useState('');
   const [seeOldPassword, setSeeOldPassword] = useState(true);
+  const [oldVisible, setOldVisible] = useState(false);
 
   const [newPassword, setNewPassword] = useState('');
   const [seeNewPassword, setSeeNewPassword] = useState(true);
@@ -19,6 +21,10 @@ export default function index() {
 
   const [checkRetype, setCheckRetype] = useState(false);
   const dispatch = useDispatch();
+
+  const visibleClear = (visible, setVisible) => {
+    
+  };
   useEffect(() => {
     if (newPassword !== retypePassword) setCheckRetype(false);
     else setCheckRetype(true);
@@ -47,11 +53,11 @@ export default function index() {
       return <></>;
     }
   };
-  const renderInputName = (title, value, setValue, see, setSee) => {
+  const renderInputName = (title, value, setValue, see, setSee, visile, setVisible) => {
     return (
       <>
         <Text style={styles.titleInput}>{title}</Text>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={styles.inputBox}>
             <TextInput
               style={styles.inputText}
@@ -74,6 +80,10 @@ export default function index() {
                 <Octicons name={see ? 'eye' : 'eye-closed'} size={18} />
               </TouchableOpacity>
             )}
+
+            <TouchableOpacity onPress={() => visibleClear(visile, setVisible)}>
+              <MaterialIcons name="close" size={25} />
+            </TouchableOpacity>
           </View>
           {renderCheckType(title)}
         </View>
@@ -88,10 +98,10 @@ export default function index() {
     //     alert('You can not change same password');
     // }
   };
-  const cancelChange = (e) => {};
+  const cancelChange = (e) => { };
   return (
     <ScrollView keyboardShouldPersistTaps="handled">
-      <Text h4 h4Style={{textAlign: 'center', paddingVertical: 10}}>
+      <Text h4 h4Style={{ textAlign: 'center', paddingVertical: 10 }}>
         This screen help you change your password account
       </Text>
       {renderInputName(
@@ -117,11 +127,11 @@ export default function index() {
       )}
       <View>
         <Button
-          buttonStyle={{borderWidth: 1, borderColor: 'black'}}
-          containerStyle={{marginHorizontal: 10, marginTop: 10}}
+          buttonStyle={{ borderWidth: 1, borderColor: 'black' }}
+          containerStyle={{ marginHorizontal: 10, marginTop: 10 }}
           onPress={accecptChange}
           title="Submit change"
-          titleStyle={{marginHorizontal: 5}}
+          titleStyle={{ marginHorizontal: 5 }}
         />
         <Button
           type="outline"
@@ -129,10 +139,10 @@ export default function index() {
             backgroundColor: 'white',
             borderColor: 'black',
           }}
-          containerStyle={{marginHorizontal: 10, marginTop: 10}}
+          containerStyle={{ marginHorizontal: 10, marginTop: 10 }}
           onPress={cancelChange}
           title="Cancel"
-          titleStyle={{marginHorizontal: 5, color: 'black'}}
+          titleStyle={{ marginHorizontal: 5, color: 'black' }}
         />
       </View>
     </ScrollView>

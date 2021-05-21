@@ -7,7 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function Input(props) {
   const [heightInput, setHeightInput] = useState(0);
-
+  const [input, setInput] = useState('');
   return (
     <>
       {props.visibleScroll && (
@@ -50,7 +50,10 @@ export default function Input(props) {
         }}>
         <TextInput
           multiline
-          onChangeText={(e) => props.setMessage(e)}
+          onChangeText={(e) => {
+            props.setMessage(e.trimEnd());
+            setInput(e);
+          }}
           onContentSizeChange={(e) =>
             setHeightInput(
               e.nativeEvent.contentSize.height > 100
@@ -60,7 +63,7 @@ export default function Input(props) {
           }
           placeholder="Nhập tin nhắn..."
           // style={[styles.stylesViewLCS.textCmt, {maxHeight: 100}]}
-          value={props.message}
+          value={input}
           style={{
             flex: 10,
             fontSize: 16,
@@ -74,7 +77,10 @@ export default function Input(props) {
             backgroundColor: 'transparent',
           }}
           containerStyle={{position: 'absolute', bottom: 0, right: 0}}
-          onPress={() => props.sendMessage()}
+          onPress={() => {
+            props.sendMessage();
+            setInput('');
+          }}
           icon={<FontAwesome name="paper-plane" size={25} color="black" />}
           style={{flex: 1}}
         />

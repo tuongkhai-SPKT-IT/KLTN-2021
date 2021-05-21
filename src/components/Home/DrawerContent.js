@@ -20,20 +20,21 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as keys from '../Constants';
-import CameraComponent from '../CameraComponent';
 import {useHistory} from 'react-router';
-import Modal from 'react-native-modal';
-import ImagePicker from 'react-native-image-crop-picker';
+import API from '../API/API';
 
 export default function DrawerContent(props) {
   const ProfileInfo = useSelector((state) => state.ProfileInfo);
   const [infoDropDown, setInfoDropDown] = useState(false);
   const {introUser} = ProfileInfo;
-  const [tabDropDown, setTabDropDown] = useState(false);
+  // console.log(introUser);
   const dispatch = useDispatch();
-  const [isCameraOn, setisCameraOn] = useState(false);
-  const cameraRef = useRef();
-  // const navigation = useNavigation();
+  // useEffect(() => {
+  //  if(introUser) dispatch(Get_IntroUser());
+  // }, [introUser]);
+  const [tabDropDown, setTabDropDown] = useState(false);
+  const limit = 15;
+  const userName = introUser.user_name;
   useLayoutEffect(() => {
     dispatch(Get_IntroUser());
   }, []);
@@ -47,6 +48,7 @@ export default function DrawerContent(props) {
     if (type === 2) {
       props.navigation.navigate('Messengers', {
         screen: 'SmallMessengers',
+        resetTime: true,
       });
       props.navigation.closeDrawer();
     }
@@ -86,35 +88,34 @@ export default function DrawerContent(props) {
   };
   const history = useHistory();
   const signOut = async (e) => {
-    // const route = 'user/log-out';
-    // const token = await AsyncStorage.getItem(keys.User_Token);
-    // const header = {
-    //   authorization: 'bearer' + token,
-    // };
-    // const param = {
-    //   api_token: token,
-    // };
-    // var api = new API();
-    // api
-    //   .onCallAPI('post', route, {}, param, header)
-    //   .then((res) => {
-    //     if (res.data.error_code !== 0) {
-    //       alert(res.data.message);
-    //     }
-    AsyncStorage.clear();
-    const test = await AsyncStorage.getItem(keys.User_Token);
-    console.log(test);
-    history.push('/Login');
-    // console.log(history.location); //= '/';
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
+    const route = 'user/log-out';
+    const token = await AsyncStorage.getItem(keys.User_Token);
+    const header = {
+      authorization: 'bearer' + token,
+    };
+    const param = {
+      api_token: token,
+    };
+    var api = new API();
+    api
+      .onCallAPI('post', route, {}, param, header)
+      .then((res) => {
+        if (res.data.error_code !== 0) {
+          alert(res.data.message);
+        }
+        AsyncStorage.clear();
+        // const test = await AsyncStorage.getItem(keys.User_Token);
+        history.push('/');
+        console.log(history.location); //= '/';
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   //   console.log(introUser);
   if (Object.keys(introUser).length !== 0)
     return (
-      <View style={{flex: 1, padding: 15}}>
+      <View style={{flex: 1, padding: 15, flexWrap: 'nowrap'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image
             source={{uri: introUser.user_avatar}}
@@ -125,15 +126,23 @@ export default function DrawerContent(props) {
               justifyContent: 'center',
               marginLeft: 10,
             }}>
-            <Text h4 style={{}}>
-              {introUser.user_name}
-            </Text>
-            <Text style={{fontSize: 18}}>
-              {introUser.friend_array.length}&nbsp;
-              <Text style={{color: 'rgba(0,0,0,.6)'}}>
-                {introUser.friend_array.length > 1 ? 'friends' : 'friend'}
+            <View style={{flexDirection: 'row', flexWrap: 'nowrap'}}>
+              <Text h4 style={{marginRight: 5}}>
+                {introUser.user_name.length > limit
+                  ? introUser.user_name.substr(0, limit) + '...'
+                  : introUser.user_name}
               </Text>
-            </Text>
+            </View>
+            {introUser.friend_array ? (
+              <Text style={{fontSize: 18}}>
+                {introUser.friend_array.length}&nbsp;
+                <Text style={{color: 'rgba(0,0,0,.6)'}}>
+                  {introUser.friend_array.length > 1 ? 'friends' : 'friend'}
+                </Text>
+              </Text>
+            ) : (
+              <></>
+            )}
           </View>
         </View>
 
@@ -298,31 +307,8 @@ export default function DrawerContent(props) {
             onPress={() => navigatePress(5)}
             title="Edit information"
           />
-          <Button
-            containerStyle={{borderRadius: 0, marginTop: 10}}
-            buttonStyle={{paddingLeft: 5, backgroundColor: 'rgba(0,0,0,.3)'}}
-            icon={<FontAwesome name="camera" size={25} />}
-            iconContainerStyle={{}}
-            titleStyle={styles.btnInforTitle}
-            onPress={() => setisCameraOn(true)}
-            title="Open Camera"
-          />
         </DrawerContentScrollView>
 
-        <Modal
-          isVisible={isCameraOn}
-          hasBackdrop={false}
-          onBackdropPress={() => setisCameraOn(false)}
-          onSwipeCancel={() => setisCameraOn(true)}
-          onSwipeComplete={() => setisCameraOn(false)}
-          onBackButtonPress={() => setisCameraOn(false)}
-          animationOut="slideOutDown"
-          propagateSwipe={true}
-          // avoidKeyboard
-          hideModalContentWhileAnimating
-          style={{margin: 0}}>
-          <CameraComponent ref={cameraRef} />
-        </Modal>
         <Drawer.Section style={styles.bottomDrawerSection}>
           <DrawerItem
             icon={({color, size}) => (

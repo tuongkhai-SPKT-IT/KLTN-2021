@@ -65,39 +65,20 @@ const DetailMessenger = ({route, navigation}) => {
   const [message, setMessage] = useState('');
   const sendMessage = async () => {
     if (message.trim() === '') return;
+    // console.log(message.trimEnd());
+    // return;
     if (message) {
       const userAvatar = await AsyncStorage.getItem(keys.User_Avatar);
-      const today = new Date();
-      const date =
-        `0${today.getDate()}`.slice(-2) +
-        '/' +
-        `0${today.getMonth() + 1}`.slice(-2) +
-        '/' +
-        `${today.getFullYear()}`;
-      let hour = today.getHours();
-      let sun;
-      if (hour > 12) {
-        hour -= 12;
-        sun = 'PM';
-      } else {
-        if (hour >= 0) sun = 'AM';
-      }
-      const time =
-        `0${hour}`.slice(-2) +
-        ':' +
-        `0${today.getMinutes()}`.slice(-2) +
-        ':' +
-        `0${today.getSeconds()}`.slice(-2);
-      const when = date + ' ' + time + ' ' + sun;
-      SOCKET.emit('sendMessage', message, selfName, userAvatar, when);
-      setMessage('')
+      SOCKET.emit('sendMessage', message.trimEnd(), selfName, userAvatar, () => {
+        setMessage('');
+      });
     }
     if (message) {
       const token = await AsyncStorage.getItem(keys.User_Token);
       const route = 'chat/save-message';
       const param = {
         chat_group_id,
-        content: message,
+        content: message.trimEnd(),
       };
       const header = {
         Authorization: 'bearer' + token,
@@ -113,6 +94,7 @@ const DetailMessenger = ({route, navigation}) => {
   };
   useEffect(() => {
     SOCKET.on('message', async (message) => {
+      console.log(message.avatar);
       const messageText = {
         user: message.user,
         text: message.text,

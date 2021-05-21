@@ -54,7 +54,9 @@ export default function UpStatusScreen({navigation, route}) {
   }, []);
 
   const postStatus = async () => {
-    if (status || files.length > 0) {
+    // console.log(files, status);
+    // return;
+    if (status.length > 0 || files.length > 0) {
       const params = {
         caption: status,
         status_setting: option,
@@ -200,13 +202,21 @@ export default function UpStatusScreen({navigation, route}) {
                         styles.submitButton,
                         {
                           backgroundColor:
-                            status === '' ? '#EEEEEE' : '#1058B0',
+                            status.length > 0 || files.length > 0
+                              ? '#1058B0'
+                              : '#EEEEEE',
                         },
                       ]}
+                      disabled={
+                        status.length > 0 || files.length > 0 ? false : true
+                      }
                       onPress={() => postStatus()}>
                       <Text
                         style={{
-                          color: status !== '' ? '#f9f3f3' : '#bbbbbb',
+                          color:
+                            status.length > 0 || files.length > 0
+                              ? '#f9f3f3'
+                              : '#bbbbbb',
                         }}>
                         Đăng
                       </Text>
