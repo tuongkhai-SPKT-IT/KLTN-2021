@@ -22,7 +22,7 @@ import {SOCKET} from '../../config';
 import jwt_decode from 'jwt-decode';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function Notifications() {
+export default function Notifications({navigation}) {
   const [visible, setVisible] = useState(false);
   const OtherProfile = useSelector((state) => state.OtherProfile);
   const showModal = () => setVisible(true);

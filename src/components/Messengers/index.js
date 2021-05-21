@@ -9,17 +9,19 @@ import {SOCKET} from '../../config';
 const Stack = createStackNavigator();
 
 const Messengers = ({navigation, route}) => {
+  // console.log(route.params);
   return (
     <>
       <Stack.Navigator>
         <Stack.Screen
           name="SmallMessengers"
-          initialParams={route.params.tabPress ? {reload: true} : null}
-          component={SmallMessenger}
+          // initialParams={route.params.tabPress ? {reload: true} : null}
+
           options={{
             headerShown: false,
-          }}
-        />
+          }}>
+          {(props) => <SmallMessenger reset={route.params.resetTime} />}
+        </Stack.Screen>
       </Stack.Navigator>
     </>
   );

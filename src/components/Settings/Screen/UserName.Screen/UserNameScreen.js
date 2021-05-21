@@ -11,8 +11,8 @@ import CheckPassword from './CheckPassword';
 export default function UserNameScreen({navigation}) {
   const Setting = useSelector((state) => state.Setting);
   const renderUserName = Setting;
-  const [firstName, setFirstName] = useState(renderUserName.firstName);
-  const [lastName, setLastName] = useState(renderUserName.lastName);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [navigatePassword, setNavigatePassword] = useState(false);
   const backPassword = (e) => {
     setNavigatePassword(false);
@@ -24,27 +24,16 @@ export default function UserNameScreen({navigation}) {
     setNavigatePassword(true);
     navigation.setOptions({
       title: 'Preview your new name',
-      // headerLeft: (props) => <HeaderBackButton onPress={backPassword} />,
     });
-
-    // if (
-    //   firstName !== renderUserName.firstName ||
-    //   lastName !== renderUserName.lastName
-    // ) {
-    //   setNavigatePassword(true);
-    //   navigation.setOptions({
-    //     headerShown: false,
-    //   });
-    // } else e.preventDefault();
   };
   const cancelChange = (e) => {
     navigation.goBack();
   };
-  useEffect(() => {
-    if (renderUserName.firstName) setFirstName(renderUserName.firstName);
-    if (renderUserName.lastName) setLastName(renderUserName.lastName);
-  }, [renderUserName]);
-  const renderInputName = (title, value, setValue) => {
+  // useEffect(() => {
+  //   if (renderUserName.firstName) setFirstName(renderUserName.firstName);
+  //   if (renderUserName.lastName) setLastName(renderUserName.lastName);
+  // }, [renderUserName]);
+  const renderInputName = (title, value, setValue, placeholder) => {
     return (
       <>
         <Text style={styles.styles.titleInput}>{title}</Text>
@@ -53,7 +42,7 @@ export default function UserNameScreen({navigation}) {
             style={styles.styles.inputText}
             onChangeText={(e) => setValue(e)}
             value={value}
-            // placeholder={renderUserName.first_name}
+            placeholder={placeholder}
           />
         </View>
       </>
@@ -74,9 +63,19 @@ export default function UserNameScreen({navigation}) {
                 }}>
                 Your change will be updated on our server.
               </Text>
-              {renderInputName('First name', firstName, setFirstName)}
+              {renderInputName(
+                'First name',
+                firstName,
+                setFirstName,
+                renderUserName.firstName,
+              )}
               <View style={styles.styles.blockDevide} />
-              {renderInputName('Last name', lastName, setLastName)}
+              {renderInputName(
+                'Last name',
+                lastName,
+                setLastName,
+                renderUserName.lastName,
+              )}
               <View style={styles.styles.blockDevide} />
               <View>
                 <Button

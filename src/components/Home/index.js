@@ -30,6 +30,7 @@ import DrawerContent from './DrawerContent';
 import {LogBox} from 'react-native';
 import {useHistory} from 'react-router';
 import UpStatusScreen from '../ToolBar/UpStatusScreen';
+import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
 LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -90,6 +91,13 @@ const Home = () => {
         shifting={true}>
         <Tab.Screen
           name="Home"
+          // listeners={({navigation, route}) => ({
+          //   tabPress: (e) => {
+          //     e.preventDefault();
+          //     dispatch(clear_Home());
+          //     dispatch(ReloadHome());
+          //   },
+          // })}
           options={{
             tabBarIcon: () => {
               return (
@@ -118,6 +126,7 @@ const Home = () => {
               dispatch(Get_Group_Chat());
               navigation.navigate('Messengers', {
                 screen: 'SmallMessengers',
+                resetTime: true,
               });
             },
           })}

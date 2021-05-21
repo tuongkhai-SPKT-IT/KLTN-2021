@@ -6,9 +6,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const HeaderMessenger = (props) => {
   const navigation = useNavigation();
+  console.log(props);
   const goBackButtonChat = () => {
-    console.log(1);
-    navigation.navigate('Messengers', {screen: 'SmallMessengers'});
+    navigation.navigate('Messengers', {
+      screen: 'SmallMessengers',
+      resetTime: true,
+    });
     // props.navigation.goBack();
   };
   return (
@@ -40,7 +43,7 @@ const HeaderMessenger = (props) => {
           containerStyle={{borderWidth: 1.5, borderColor: 'black'}}
           rounded
           size="medium"
-          title={props.name[0]}
+          title={props.name}
           source={{uri: props.avatar}}
         />
         <View style={{padding: 5, justifyContent: 'center'}}>

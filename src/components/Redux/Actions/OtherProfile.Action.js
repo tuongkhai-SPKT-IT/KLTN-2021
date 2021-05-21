@@ -312,7 +312,7 @@ export const Accept_Friend = (userId) => {
                 title: 'Friend',
                 icon: 'user-friends',
               },
-              buttonMessage: {
+              buttonMessage: { 
                 title: 'Send a message',
                 icon: 'facebook-messenger',
               },
