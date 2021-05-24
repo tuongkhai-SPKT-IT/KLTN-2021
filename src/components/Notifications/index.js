@@ -21,6 +21,8 @@ import {useSelector} from 'react-redux';
 import {SOCKET} from '../../config';
 import jwt_decode from 'jwt-decode';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { getNotifications } from '../../services/user';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Notifications({navigation}) {
   const [visible, setVisible] = useState(false);
@@ -29,6 +31,17 @@ export default function Notifications({navigation}) {
   const hideModal = () => setVisible(false);
   const containerStyle = {backgroundColor: 'white', padding: 10};
   const _goBack = () => console.log('Went back');
+
+  const fetchNotifications = async () => {
+    const listNotifications = await getNotifications();
+    console.log(listNotifications)
+    return listNotifications;
+  }
+
+  useEffect(()=>{
+    const response = fetchNotifications();
+    console.log('response',response);
+  })
 
   const _handleSearch = () => console.log('Searching');
 

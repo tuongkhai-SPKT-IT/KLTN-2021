@@ -21,6 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
 import {SOCKET} from '../../config';
 import moment from 'moment';
+import { CreateNotification } from '../../services/user';
 
 export default function ViewLCS(props) {
   const [listLike, setListLike] = useState(props.likeList);
@@ -129,6 +130,17 @@ export default function ViewLCS(props) {
             console.log(err);
           });
       }, 2 * 1000);
+
+      setTimeout( async () =>{
+        let params = {
+          owner: props.userID,
+          type: 'status-like',
+          item: props.index
+        }
+
+        const notiResponse = await CreateNotification(params);
+
+      },1000)
     } else {
       const route = 'status/update-status';
       const param = {
