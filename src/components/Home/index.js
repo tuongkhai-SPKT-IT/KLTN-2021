@@ -31,6 +31,7 @@ import {LogBox} from 'react-native';
 import {useHistory} from 'react-router';
 import UpStatusScreen from '../ToolBar/UpStatusScreen';
 import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
+import { Fetch_Notification } from '../Redux/Actions/Notification.Action';
 LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -110,6 +111,11 @@ const Home = () => {
         />
         <Tab.Screen
           name="Notifications"
+          listeners={({navigation, route}) => ({
+            tabPress: (e) => {
+              dispatch(Fetch_Notification());
+            },
+          })}
           options={{
             tabBarIcon: () => {
               return <Entypo name="bell" color="#1877F2" size={26} />;

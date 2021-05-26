@@ -6,6 +6,8 @@ import Profile from './Profile.Reducer';
 import OtherProfile from './OtherProfile.Reducer';
 import ChatReducer from './Chat.Reducer';
 import Setting from './Setting.Reducer';
+import NotificationsReducer from './Notification.Reducer';
+
 const myReducer = combineReducers({
   login: LoginReducer,
   HomePage: HomeReducer,
@@ -14,5 +16,6 @@ const myReducer = combineReducers({
   OtherProfile: OtherProfile,
   ChatReducer: ChatReducer,
   Setting: Setting,
+  Notifications: NotificationsReducer,
 });
 export default myReducer;

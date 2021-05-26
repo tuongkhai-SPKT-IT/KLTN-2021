@@ -50,3 +50,6 @@ export const Change_Data_Sex = 'Change_Data_Sex';
 export const Change_Data_Dob = 'Change_Data_Dob';
 export const Clear_Store_Settings = 'Clear_Store_Settings';
 export const Change_Setting_Failed = 'Change_Setting_Failed';
+
+export const Fetch_Notifications_Success = 'Fetch_Notifications_Success';
+export const Fetch_Notifications_Failed = 'Fetch_Notifications_Failed';
