@@ -15,6 +15,7 @@ const IntroProfile = ({navigation}) => {
   const OtherProfile = useSelector((state) => state.OtherProfile);
   const [introUser, setIntroUser] = useState({});
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (OtherProfile.intro) setIntroUser(OtherProfile.intro);
   }, [OtherProfile.intro]);
@@ -41,113 +42,117 @@ const IntroProfile = ({navigation}) => {
     );
     //else return <></>;
   };
-
-  return (
-    <View>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-        }}>
-        <Fontisto name="email" size={25} color="black" />
-        <Text style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
-          {introUser.email}
-        </Text>
-      </View>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-        }}>
-        <Entypo name="old-phone" size={25} color="black" />
-        <Text style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
-          {introUser.phone}
-        </Text>
-      </View>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-        }}>
-        <FontAwesome5 name="birthday-cake" size={25} color="black" />
-        <Text
-          style={{
-            flex: 1,
-            fontSize: 20,
-            fontWeight: '900',
-            marginLeft: 5,
-            textAlignVertical: 'center',
-          }}>
-          {introUser.dOb}
-        </Text>
-      </View>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-        }}>
-        <Ionicons name="male-female-outline" size={25} color="black" />
-        <Text
-          style={{
-            flex: 1,
-            fontSize: 20,
-            fontWeight: '900',
-            marginLeft: 5,
-            textAlignVertical: 'center',
-          }}>
-          {introUser.sex === true && 'Nam'}
-          {introUser.sex === false && 'Nữ'}
-        </Text>
-      </View>
-      <View style={{borderTopWidth: 0.8}}>
-        <Text h3 h3Style={{padding: 15, paddingVertical: 0}}>
-          Bạn bè &nbsp;
-          {introUser.friend_array ? (
-            <Text
-              h4
-              style={{
-                fontSize: 20,
-                color: 'gray',
-                opacity: 0.99,
-                paddingLeft: 15,
-                fontWeight: 'normal',
-              }}>
-              {introUser.friend_array.length > 1
-                ? introUser.friend_array.length + ' friends'
-                : '1 friend'}
-            </Text>
-          ) : (
-            <Text
-              h4
-              style={{
-                fontSize: 20,
-                color: 'gray',
-                opacity: 0.99,
-                paddingLeft: 15,
-                fontWeight: 'normal',
-              }}>
-              0 friend
-            </Text>
-          )}
-        </Text>
+  if (introUser.dOb)
+    return (
+      <View>
         <View
           style={{
-            margin: 10,
+            padding: 10,
             flexDirection: 'row',
-            justifyContent: 'space-around',
+            alignItems: 'flex-end',
           }}>
-          {introUser.friend_array ? (
-            introUser.friend_array.map(blockFriend)
-          ) : (
-            <></>
-          )}
+          <Fontisto name="email" size={25} color="black" />
+          <Text
+            style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
+            {introUser.email}
+          </Text>
+        </View>
+        <View
+          style={{
+            padding: 10,
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+          }}>
+          <Entypo name="old-phone" size={25} color="black" />
+          <Text
+            style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
+            {introUser.phone}
+          </Text>
+        </View>
+        <View
+          style={{
+            padding: 10,
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+          }}>
+          <FontAwesome5 name="birthday-cake" size={25} color="black" />
+          <Text
+            style={{
+              flex: 1,
+              fontSize: 20,
+              fontWeight: '900',
+              marginLeft: 5,
+              textAlignVertical: 'center',
+            }}>
+            {introUser.dOb}
+          </Text>
+        </View>
+        <View
+          style={{
+            padding: 10,
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+          }}>
+          <Ionicons name="male-female-outline" size={25} color="black" />
+          <Text
+            style={{
+              flex: 1,
+              fontSize: 20,
+              fontWeight: '900',
+              marginLeft: 5,
+              textAlignVertical: 'center',
+            }}>
+            {introUser.sex === true && 'Nam'}
+            {introUser.sex === false && 'Nữ'}
+          </Text>
+        </View>
+        <View style={{borderTopWidth: 0.8}}>
+          <Text h3 h3Style={{padding: 15, paddingVertical: 0}}>
+            Bạn bè &nbsp;
+            {introUser.friend_array ? (
+              <Text
+                h4
+                style={{
+                  fontSize: 20,
+                  color: 'gray',
+                  opacity: 0.99,
+                  paddingLeft: 15,
+                  fontWeight: 'normal',
+                }}>
+                {introUser.friend_array.length > 1
+                  ? introUser.friend_array.length + ' friends'
+                  : '1 friend'}
+              </Text>
+            ) : (
+              <Text
+                h4
+                style={{
+                  fontSize: 20,
+                  color: 'gray',
+                  opacity: 0.99,
+                  paddingLeft: 15,
+                  fontWeight: 'normal',
+                }}>
+                0 friend
+              </Text>
+            )}
+          </Text>
+          <View
+            style={{
+              margin: 10,
+              justifyContent: 'space-around',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+            }}>
+            {introUser.friend_array ? (
+              introUser.friend_array.map(blockFriend)
+            ) : (
+              <></>
+            )}
+          </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  return <></>;
 };
 export default IntroProfile;

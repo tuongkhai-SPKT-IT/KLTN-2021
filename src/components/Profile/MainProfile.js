@@ -61,6 +61,7 @@ const mainProfile = ({navigation}) => {
   const clearStoreProfile = () => {
     dispatch(Clear_Store_Profile());
   };
+  
   const ButtonShowAll = () => {
     if (ProfileInfo.introUser)
       if (ProfileInfo.introUser.friend_array)

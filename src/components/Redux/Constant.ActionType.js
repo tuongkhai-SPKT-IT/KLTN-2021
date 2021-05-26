@@ -42,6 +42,7 @@ export const Pop_Arr_Previous = 'Pop_Arr_Previous';
 
 export const Get_Chat_List = 'Get_Chat_List';
 export const Clear_Chat_List = 'Clear_Chat_List';
+export const Search_Chat_List = 'Search_Chat_List';
 
 export const Fetch_Data_Setting = 'Fetch_Data_Setting';
 export const Change_Data_UserName = 'Change_Data_UserName';

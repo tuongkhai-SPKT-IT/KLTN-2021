@@ -86,6 +86,7 @@ const Home = () => {
     return (
       <Tab.Navigator
         activeColor="#1877F2"
+        initialRouteName="Profile"
         inactiveColor="#65676B"
         barStyle={{backgroundColor: '#ffff'}}
         shifting={true}>

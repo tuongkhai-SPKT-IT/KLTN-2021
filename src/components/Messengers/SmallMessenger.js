@@ -1,41 +1,60 @@
-import React, {useEffect, useState} from 'react';
-import {View, ScrollView, TouchableOpacity, Image} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  RefreshControl,
+  TextInput,
+} from 'react-native';
 import {Text} from 'react-native-elements';
 import {SafeAreaView} from 'react-navigation';
 import {Appbar} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {Clear_List_Chat, Get_Group_Chat} from '../Redux/Actions/Chat.Action';
-import {ActivityIndicator} from 'react-native';
+import {
+  Clear_List_Chat,
+  Get_Group_Chat,
+  Search_Chat_List,
+} from '../Redux/Actions/Chat.Action';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/core';
+import {styles} from './Styles';
 
 const SmallMessenger = (props) => {
-  // console.log();
+  // console.log(props);
   const navigation = useNavigation();
-
-  const _handleSearch = () => console.log('Searching');
+  const [inputVisible, setInputVisible] = useState(false);
+  const [isRefresh, setIsRefresh] = useState(false);
+  const [inputSearch, setInputSearch] = useState('');
+  const searchRef = useRef();
+  const _handleSearch = () => {
+    setInputVisible(!inputVisible);
+    setInputSearch('');
+  };
+  useEffect(() => {
+    if (searchRef.current) searchRef.current.focus();
+  }, [inputVisible]);
+  const onChangeSearch = (e) => {
+    setInputSearch(e);
+    if (e.length !== 0) {
+      dispatch(Search_Chat_List(e));
+    }
+  };
   const chatReducer = useSelector((state) => state.ChatReducer);
   const dispatch = useDispatch();
-  const [isNullMessBox, setIsNullMessBox] = useState(false);
+  // const [isNullMessBox, setIsNullMessBox] = useState(false);
   const getChatGroup = async () => {
     dispatch(Get_Group_Chat());
   };
-  useEffect(() => {
-    const renderNullBox = setInterval(() => {
-      if (chatReducer.ownChatGroup.length === 0) setIsNullMessBox(true);
-    }, 5000);
-    return () => {
-      clearInterval(renderNullBox);
-    };
-  }, [props.reset]);
 
   useEffect(() => {
     getChatGroup();
   }, []);
   const jumpToChatBox = (message) => {
     // e.prenventDefault();
-    dispatch(Clear_List_Chat());
-    dispatch(Get_Group_Chat());
+    // dispatch(Clear_List_Chat());
+    // dispatch(Get_Group_Chat());
     navigation.navigate('DetailMessages', {
       chat_group_id: message.room,
       avatar: message.avatar,
@@ -99,6 +118,18 @@ const SmallMessenger = (props) => {
       </TouchableOpacity>
     );
   };
+  const onRefresh = () => {
+    dispatch(Clear_List_Chat());
+    dispatch(Get_Group_Chat());
+    // setIsNullMessBox(false);
+    // setTimeout(() => {
+    //   if (chatReducer.ownChatGroup.length === 0) setIsNullMessBox(true);
+    // }, 5000);
+    navigation.navigate('Messengers', {
+      screen: 'SmallMessengers',
+      resetTime: true,
+    });
+  };
   // return <></>;
   if (chatReducer.ownChatGroup.length > 0) {
     const arrChatGroup = chatReducer.ownChatGroup;
@@ -110,20 +141,35 @@ const SmallMessenger = (props) => {
             style={{justifyContent: 'center', marginRight: 10}}>
             <Ionicons name="ios-menu-sharp" size={30} />
           </TouchableOpacity>
-          <Appbar.Content title="Messengers" />
-          <Appbar.Action icon="magnify" onPress={_handleSearch} />
+          {!inputVisible && <Appbar.Content title="Messengers" />}
+          {inputVisible && (
+            <TextInput
+              ref={searchRef}
+              onChangeText={(e) => onChangeSearch(e)}
+              placeholder="Tìm kiếm"
+              style={styles.inputSearch}
+              value={inputSearch}
+            />
+          )}
+          <Appbar.Action
+            icon={inputVisible ? 'close' : 'magnify'}
+            onPress={_handleSearch}
+          />
         </Appbar.Header>
 
-        <ScrollView>
-          {arrChatGroup.length > 0 && arrChatGroup.map(singleSmallMess)}
+        <ScrollView
+          refreshControl={
+            <RefreshControl onRefresh={onRefresh} refreshing={isRefresh} />
+          }
+          style={{width: '100%', height: '100%'}}
+          keyboardShouldPersistTaps="handled">
+          {arrChatGroup.map(singleSmallMess)}
         </ScrollView>
       </SafeAreaView>
     );
-  }
-
-  return (
-    <>
-      {isNullMessBox ? (
+  } else {
+    if (chatReducer.err_code === 'No messengers') {
+      return (
         <>
           <Appbar.Header style={{backgroundColor: '#fff'}}>
             <TouchableOpacity
@@ -147,16 +193,22 @@ const SmallMessenger = (props) => {
             </Text>
           </View>
         </>
-      ) : (
+      );
+    }
+
+    return (
+      <View
+        style={{
+          position: 'relative',
+          height: '100%',
+        }}>
         <View
           style={{
-            justifyContent: 'center',
-            alignContent: 'center',
             width: 150,
             height: 150,
             zIndex: 999,
             position: 'absolute',
-            top: '30%',
+            top: '50%',
             alignSelf: 'center',
           }}>
           <ActivityIndicator size="large" color="black" />
@@ -170,8 +222,8 @@ const SmallMessenger = (props) => {
             Loading
           </Text>
         </View>
-      )}
-    </>
-  );
+      </View>
+    );
+  }
 };
 export default SmallMessenger;

@@ -281,7 +281,7 @@ export const Cancel_Friend = (userId) => {
       dispatch({type: types.Clear_Store_Other});
     }
   };
-};
+}; 
 
 export const Accept_Friend = (userId) => {
   return async (dispatch) => {
@@ -312,7 +312,7 @@ export const Accept_Friend = (userId) => {
                 title: 'Friend',
                 icon: 'user-friends',
               },
-              buttonMessage: { 
+              buttonMessage: {
                 title: 'Send a message',
                 icon: 'facebook-messenger',
               },
@@ -374,6 +374,16 @@ export const navigate_To_Other = (userId) => {
   };
 };
 export const Back_From_Other = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({type: types.Pop_Arr_Previous});
+    } catch (error) {
+      dispatch({type: types.Clear_Store_Other});
+    }
+  };
+};
+
+export const Delete_Friend = (userId) => {
   return async (dispatch) => {
     try {
       dispatch({type: types.Pop_Arr_Previous});

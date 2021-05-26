@@ -105,7 +105,7 @@ export default function DrawerContent(props) {
         }
         AsyncStorage.clear();
         // const test = await AsyncStorage.getItem(keys.User_Token);
-        history.push('/');
+        history.push('/Login');
         console.log(history.location); //= '/';
       })
       .catch((err) => {
