@@ -23,9 +23,6 @@ export async function PostStatus(statusParams, formData) {
     'Content-Type': 'multipart/form-data',
     // Accept: 'application/x-www-form-urlencoded',
   };
-  console.log(header);
-
-  // return;
 
   var api = new API();
   await api

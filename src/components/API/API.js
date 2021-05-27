@@ -4,6 +4,7 @@ import axios from 'axios';
 class API {
   constructor() {
     this.domain = 'http://api.facebook-kltn.alphawolf.io/api/';
+    // this.domain = 'http://192.168.1.148:8000/api/';
     // alert(ENV.API_URL)
   }
   onCallAPI = (method, url, data = {}, params = {}, headers = {}) => {
