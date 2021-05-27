@@ -204,6 +204,30 @@ export default function ViewLCS(props) {
                   scrollRef.current.scrollToEnd();
                 }, 1 * 100);
               }
+
+              //push notification
+              let notificationData = {
+                current_user_name: userInfo.current.user_ProLink,
+                status_id: props.index,
+                owner_id: props.userID, //owner of status
+                content: `${userInfo.current.user_name} commented on your status`,
+                current_user_avatar: userInfo.current.user_avatar,
+                moment: moment().fromNow(),
+              };
+              SOCKET.emit('client-liked-status', notificationData);
+
+              setTimeout( async () =>{
+                let params = {
+                  owner: props.userID,
+                  type: 'status-comment',
+                  item: props.index
+                }
+        
+                const {status, message} = await CreateNotification(params);
+                if(!status){
+                  console.log('errors when create notification: ',message);
+                }
+              },1000)
             }
           }}
           icon={
