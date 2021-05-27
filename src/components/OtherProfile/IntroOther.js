@@ -15,6 +15,7 @@ const IntroProfile = ({navigation}) => {
   const OtherProfile = useSelector((state) => state.OtherProfile);
   const [introUser, setIntroUser] = useState({});
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (OtherProfile.intro) setIntroUser(OtherProfile.intro);
   }, [OtherProfile.intro]);
@@ -41,7 +42,6 @@ const IntroProfile = ({navigation}) => {
     );
     //else return <></>;
   };
-
   return (
     <View>
       <View
@@ -137,8 +137,9 @@ const IntroProfile = ({navigation}) => {
         <View
           style={{
             margin: 10,
-            flexDirection: 'row',
             justifyContent: 'space-around',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
           }}>
           {introUser.friend_array ? (
             introUser.friend_array.map(blockFriend)

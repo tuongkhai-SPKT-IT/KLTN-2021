@@ -6,9 +6,7 @@ export const Get_IntroUser = () => {
   return async (dispatch) => {
     try {
       const val = await AsyncStorage.getItem(storeKeys.User_Token);
-      const avatar = await AsyncStorage.getItem(storeKeys.User_Avatar);
-      const name = await AsyncStorage.getItem(storeKeys.User_Name);
-      const cover = await AsyncStorage.getItem(storeKeys.User_Cover);
+    
       const params = {
         type_search: '1',
         token: val,

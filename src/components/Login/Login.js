@@ -47,7 +47,10 @@ const Login = ({navigation}) => {
       return;
     }
     if (Account && Password) {
-      const info = {user: Account.account, password: Password.password};
+      const info = {
+        user: Account.account.trimEnd(),
+        password: Password.password,
+      };
       dispatch(Login_Request(info));
     }
   };

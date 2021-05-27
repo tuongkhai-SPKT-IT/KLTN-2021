@@ -23,12 +23,7 @@ const IntroProfile = (props) => {
   useEffect(() => {
     if (ProfileInfo.introUser) setIntroUser(ProfileInfo.introUser);
   }, [ProfileInfo.introUser]);
-  // const showFriend = (friends) => {
-  //   if (friends) {
-  //     const slice = friends.slice(0, 3);
-  //     console.log(slice.length);
-  //   }
-  // };
+
   const dispatch = useDispatch();
   const blockFriend = (friend, i) => {
     // const slice = friends.slice(0, 3);
@@ -53,89 +48,92 @@ const IntroProfile = (props) => {
       </TouchableOpacity>
     );
   };
-
   return (
-    <>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-        }}>
-        <Fontisto name="email" size={25} color="black" />
-        <Text style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
-          {introUser.email}
-        </Text>
-      </View>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-        }}>
-        <Entypo name="old-phone" size={25} color="black" />
-        <Text style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
-          {introUser.phone}
-        </Text>
-      </View>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-        }}>
-        <FontAwesome5 name="birthday-cake" size={25} color="black" />
-        <Text
+    <View style={{flex: 1}}>
+      <View>
+        <View
           style={{
-            flex: 1,
-            fontSize: 20,
-            fontWeight: '900',
-            marginLeft: 5,
-            textAlignVertical: 'center',
+            padding: 10,
+            flexDirection: 'row',
+            alignItems: 'flex-end',
           }}>
-          {introUser.dOb}
-        </Text>
-      </View>
-      <View
-        style={{
-          padding: 10,
-          flexDirection: 'row',
-          alignItems: 'flex-end',
-        }}>
-        <Ionicons name="male-female-outline" size={25} color="black" />
-        <Text
+          <Fontisto name="email" size={25} color="black" />
+          <Text
+            style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
+            {introUser.email}
+          </Text>
+        </View>
+        <View
           style={{
-            flex: 1,
-            fontSize: 20,
-            fontWeight: '900',
-            marginLeft: 5,
-            textAlignVertical: 'center',
+            padding: 10,
+            flexDirection: 'row',
+            alignItems: 'flex-end',
           }}>
-          {introUser.sex === true && 'Nam'}
-          {introUser.sex === false && 'Nữ'}
-        </Text>
+          <Entypo name="old-phone" size={25} color="black" />
+          <Text
+            style={{flex: 1, fontSize: 20, fontWeight: '900', marginLeft: 5}}>
+            {introUser.phone}
+          </Text>
+        </View>
+        <View
+          style={{
+            padding: 10,
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+          }}>
+          <FontAwesome5 name="birthday-cake" size={25} color="black" />
+          <Text
+            style={{
+              flex: 1,
+              fontSize: 20,
+              fontWeight: '900',
+              marginLeft: 5,
+              textAlignVertical: 'center',
+            }}>
+            {introUser.dOb}
+          </Text>
+        </View>
+        <View
+          style={{
+            padding: 10,
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+          }}>
+          <Ionicons name="male-female-outline" size={25} color="black" />
+          <Text
+            style={{
+              flex: 1,
+              fontSize: 20,
+              fontWeight: '900',
+              marginLeft: 5,
+              textAlignVertical: 'center',
+            }}>
+            {introUser.sex === true && 'Nam'}
+            {introUser.sex === false && 'Nữ'}
+          </Text>
+        </View>
+        <Button
+          buttonStyle={{
+            backgroundColor: 'rgba(0,0,0,.09555)',
+            marginVertical: 10,
+            zIndex: 999,
+          }}
+          containerStyle={{width: '100%'}}
+          icon={
+            <Ionicons
+              name="ios-settings-outline"
+              size={20}
+              color="#000"
+              style={{marginHorizontal: 5}}
+            />
+          }
+          onPress={() => {
+            navigation.navigate('Settings');
+          }}
+          title="Edit Information Details"
+          titleStyle={{color: 'black'}}
+        />
       </View>
-      <Button
-        buttonStyle={{
-          backgroundColor: 'rgba(0,0,0,.09555)',
-          marginVertical: 10,
-          zIndex: 999,
-        }}
-        containerStyle={{width: '100%'}}
-        icon={
-          <Ionicons
-            name="ios-settings-outline"
-            size={20}
-            color="#000"
-            style={{marginHorizontal: 5}}
-          />
-        }
-        onPress={() => {
-          navigation.navigate('Settings');
-        }}
-        title="Edit Information Details"
-        titleStyle={{color: 'black'}}
-      />
       <View style={{borderTopWidth: 0.8}}>
         <Text h3 h3Style={{padding: 15, paddingVertical: 0}}>
           Bạn bè &nbsp;
@@ -183,7 +181,7 @@ const IntroProfile = (props) => {
           )}
         </View>
       </View>
-    </>
+    </View>
   );
 };
 export default IntroProfile;

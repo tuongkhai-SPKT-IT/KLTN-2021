@@ -68,7 +68,7 @@ const App = () => {
 
               <Route path="/Login" exact component={Login} />
               <Route exact path="/">
-                {logged ? <Redirect to="/Home" /> : <Redirect to="/Login" />}
+                {logged ? <Redirect to="/Home" /> : <Login />}
               </Route>
             </NavigationContainer>
           </PaperProvider>

@@ -1,12 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import ToolBar from '../ToolBar';
 import ContentStatus from '../ContentStatus';
 import {useDispatch, useSelector} from 'react-redux';
 import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
 import HeaderApp from '../HeaderApp';
-import {Text, View, StyleSheet, RefreshControl} from 'react-native';
-import {ActivityIndicator} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  RefreshControl,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 
 const HomePage = ({navigation}) => {
   const dispatch = useDispatch();
@@ -18,19 +23,19 @@ const HomePage = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    dispatch(clear_Home());
+    // dispatch(clear_Home());
     dispatch(ReloadHome());
 
-    if (storeState.srcData.length > 0) setRefreshing(false);
     // setTimeout(() => {}, 2000);
   };
+  useEffect(() => {
+    if (storeState.srcData.length > 0) setRefreshing(false);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 3000);
+  }, [storeState.srcData]);
   const showstatus = () => {
     const {srcData} = storeState;
-    // return (
-    //   <View style={{backgroundColor: 'rgba(0,0,0,.3)'}}>
-    //     <ContentStatus srcData={item} />
-    //   </View>
-    // );
 
     if (srcData.length > 0) {
       {
@@ -43,89 +48,50 @@ const HomePage = ({navigation}) => {
           );
         });
       }
-    }
-    if (srcData.length === 0) {
+    } else {
       return (
-        <Text style={{padding: 20, fontSize: 20, textAlign: 'center'}}>
-          There doesn't have any news in your newsfeed! Post your first status
-          now!
-        </Text>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignContent: 'center',
+            width: 150,
+            height: 150,
+            zIndex: 999,
+            position: 'absolute',
+            top: '30%',
+            alignSelf: 'center',
+          }}>
+          <ActivityIndicator size="large" color="black" />
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: 'black',
+            }}>
+            Loading
+          </Text>
+        </View>
       );
     }
-    return (
-      <View
-        style={{
-          justifyContent: 'center',
-          alignContent: 'center',
-          width: 150,
-          height: 150,
-          zIndex: 999,
-          position: 'absolute',
-          top: '30%',
-          alignSelf: 'center',
-        }}>
-        <ActivityIndicator size="large" color="black" />
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: 18,
-            fontWeight: 'bold',
-            color: 'black',
-          }}>
-          Loading
-        </Text>
-      </View>
-    );
   };
 
-  // const statusList = () => {
-  //   const {srcData} = storeState;
-  //   if (srcData.length > 0) {
-  //     return (
-  //       <FlatList
-  //         data={srcData}
-  //         keyExtractor={(status) => status.id}
-  //         renderItem={showstatus}
-  //       />
-  //     );
-  //   }
-  // };
-  // const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
-  //   const paddingToBottom = 150;
-  //   return (
-  //     layoutMeasurement.height + contentOffset.y >=
-  //     contentSize.height - paddingToBottom
-  //   );
-  // };
   return (
     <>
-      <View style={styles.containerHeader}>
-        <HeaderApp />
-      </View>
-      <View style={styles.container}>
-        <View style={styles.containerBody}>
-          <ScrollView style={styles.scrollView}>
-            <ToolBar />
-            <View style={styles.divider} />
-            {/* {statusList()} */}
-            <ScrollView
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-              keyboardDismissMode="on-drag"
-              keyboardShouldPersistTaps="handled"
-              // onScroll={({nativeEvent}) => {
-              //   if (isCloseToBottom(nativeEvent)) {
-              //     console.log(1);
-              //   }
-              // }}
-            >
-              {showstatus()}
-            </ScrollView>
-          </ScrollView>
-        </View>
-      </View>
-      {/* <ToolBar/> */}
+      <HeaderApp style={{padding: 10, backgroundColor: 'white'}} />
+
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        <ToolBar />
+
+        <View style={styles.divider} />
+
+        <View>{showstatus()}</View>
+      </ScrollView>
     </>
   );
 };

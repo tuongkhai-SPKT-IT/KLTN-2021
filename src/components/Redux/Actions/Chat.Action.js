@@ -45,3 +45,14 @@ export const Clear_List_Chat = () => {
     }
   };
 };
+
+export const Search_Chat_List = (e) => {
+  return async (dispatch) => {
+    try {
+      dispatch({type: types.Search_Chat_List, term: e});
+    } catch (err) {
+      alert(err);
+      dispatch({type: types.Clear_Chat_List});
+    }
+  };
+};

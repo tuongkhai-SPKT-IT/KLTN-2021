@@ -3,11 +3,15 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {Avatar} from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useDispatch} from 'react-redux';
+import {Clear_List_Chat, Get_Group_Chat} from '../../Redux/Actions/Chat.Action';
 
 const HeaderMessenger = (props) => {
   const navigation = useNavigation();
-  console.log(props);
+  const dispatch = useDispatch();
+
   const goBackButtonChat = () => {
+    dispatch(Get_Group_Chat());
     navigation.navigate('Messengers', {
       screen: 'SmallMessengers',
       resetTime: true,
@@ -33,7 +37,7 @@ const HeaderMessenger = (props) => {
         }}>
         <AntDesign name="arrowleft" size={20} color="rgba(0,0,0,.5)" />
       </TouchableOpacity>
-      <View
+      <TouchableOpacity
         style={{
           padding: 5,
           flexDirection: 'row',
@@ -56,7 +60,7 @@ const HeaderMessenger = (props) => {
             {props.name}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

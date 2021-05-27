@@ -55,22 +55,28 @@ const OtherProfile = ({route, navigation}) => {
     const [searchContent, setSearchContent] = useState('');
 
     const onPressFriendsButton = () => {
-      if (relationShip) createRoom();
-      else {
+      if (relationShip) {
+        createRoom();
+        setLoading(true);
+      } else {
         // fasle button to là friends, true button to là messenger
         if (buttonFriend.title === 'Requested') {
-          setLoading(true);
           dispatch(Cancel_Friend(route.params.userId));
         }
         if (buttonFriend.title === 'Confirm') {
           setVisiblePopup(true);
         }
         if (buttonFriend.title === 'Add friend') {
-          setLoading(true);
           dispatch(call_Add_Friend(route.params.userId));
         }
       }
     };
+    useEffect(() => {
+      const {buttonFriend, relationShip, buttonMessage} = OtherProfile;
+      if (buttonFriend || relationShip || buttonMessage) {
+        setLoading(false);
+      }
+    }, [OtherProfile]);
     const onRefresh = () => {
       setRefreshing(true);
       dispatch(Clear_Store_Other());
@@ -166,8 +172,11 @@ const OtherProfile = ({route, navigation}) => {
                     color="black" //"#050505"
                     size={30}
                   />
-                }
-                onPress={() => dispatch(Accept_Friend(route.params.userId))}
+                } 
+                onPress={() => {
+                  dispatch(Accept_Friend(route.params.userId));
+                  setVisiblePopup(false);
+                }}
                 //dispatch(Accept_Friend(route.params.userId))
                 title={'Confirm'}
                 titleStyle={{color: 'black'}}
@@ -277,7 +286,7 @@ const OtherProfile = ({route, navigation}) => {
               />
               <IntroOther navigation={navigation} />
 
-              <View
+              <View 
                 style={{
                   paddingBottom: 10,
                   borderBottomWidth: 0.8,

@@ -9,12 +9,13 @@ import {useNavigation} from '@react-navigation/core';
 import {navigate_To_Other} from '../Redux/Actions/OtherProfile.Action';
 // import {Clear_Store_Other} from '../Redux/Actions/OtherProfile.Action';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useDispatch} from 'react-redux';
 export default function index(props) {
   const [isVisibleSearchModal, setIsVisibleSearchModal] = useState(false);
   const [searchContent, setSearchContent] = useState('');
   const [usersList, setUsersList] = useState([]);
   const navigation = useNavigation();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const handleOnChangeSearchBar = (query) => {
     setSearchContent(query);
     if (searchContent) {
@@ -82,7 +83,7 @@ export default function index(props) {
   };
   // const navigation = useNavigation();
   return (
-    <>
+    <View style={props.style ? props.style : {}}>
       <View style={styles.row}>
         <TouchableOpacity
           onPress={() => navigation.toggleDrawer()}
@@ -90,7 +91,7 @@ export default function index(props) {
           <Ionicons name="ios-menu-sharp" size={30} />
         </TouchableOpacity>
         <View style={styles.appName}>
-          <Text style={styles.appName}>facebook</Text>
+          <Text style={styles.appName}>Facebook</Text>
         </View>
         <TouchableOpacity
           style={styles.button}
@@ -122,6 +123,7 @@ export default function index(props) {
                 }}
               />
               <Searchbar
+                autoFocus
                 placeholder="Search"
                 style={styles.searchBox}
                 value={searchContent}
@@ -129,6 +131,7 @@ export default function index(props) {
               />
             </Appbar.Header>
             <FlatList
+              keyboardShouldPersistTaps="handled"
               data={usersList}
               keyExtractor={(item) => item.user_id}
               renderItem={searchList}
@@ -136,7 +139,7 @@ export default function index(props) {
           </View>
         </View>
       </Modal>
-    </>
+    </View>
   );
 }
 

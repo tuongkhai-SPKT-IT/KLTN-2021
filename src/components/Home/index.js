@@ -1,6 +1,13 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, StatusBar} from 'react-native';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  TouchableOpacity,
+  LogBox,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AppBar from '../AppBar';
 import {SafeAreaView} from 'react-navigation';
@@ -24,14 +31,13 @@ import {
   Get_IntroUser,
   Get_StatusProfile,
 } from '../Redux/Actions/ProfileUser.Action';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/core';
 import DrawerContent from './DrawerContent';
-import {LogBox} from 'react-native';
 import {useHistory} from 'react-router';
 import UpStatusScreen from '../ToolBar/UpStatusScreen';
 import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
-import { Fetch_Notification } from '../Redux/Actions/Notification.Action';
+import {Fetch_Notification} from '../Redux/Actions/Notification.Action';
+import {useNavigation} from '@react-navigation/core';
+
 LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -43,13 +49,14 @@ const Home = () => {
     const [activeHomeTab, setActiveHomeTab] = useState(true);
     const [activeNotiTab, setActiveNotiTab] = useState(false);
     const [activeProfileTab, setActiveProfileTab] = useState(false);
-
+    const navigation = useNavigation();
     const dispatch = useDispatch();
     const storeState = useSelector((state) => state.HomePage);
 
     const notificationTitle = (data) => {
       return (
-        <View
+        <TouchableOpacity
+          onPress={() => console.log(data)}
           style={{
             width: '100%',
             height: '100%',
@@ -68,7 +75,7 @@ const Home = () => {
             <Text>{data.content}</Text>
             <Text>{data.moment}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     };
     const history = useHistory();
@@ -87,18 +94,17 @@ const Home = () => {
     return (
       <Tab.Navigator
         activeColor="#1877F2"
+        initialRouteName="Home"
         inactiveColor="#65676B"
         barStyle={{backgroundColor: '#ffff'}}
         shifting={true}>
         <Tab.Screen
           name="Home"
-          // listeners={({navigation, route}) => ({
-          //   tabPress: (e) => {
-          //     e.preventDefault();
-          //     dispatch(clear_Home());
-          //     dispatch(ReloadHome());
-          //   },
-          // })}
+          listeners={({navigation, route}) => ({
+            tabPress: (e) => {
+              dispatch(ReloadHome());
+            },
+          })}
           options={{
             tabBarIcon: () => {
               return (
@@ -127,13 +133,13 @@ const Home = () => {
           name="Messengers"
           listeners={({navigation, route}) => ({
             tabPress: (e) => {
-              e.preventDefault();
+              // e.preventDefault();
               dispatch(Clear_List_Chat());
               dispatch(Get_Group_Chat());
-              navigation.navigate('Messengers', {
-                screen: 'SmallMessengers',
-                resetTime: true,
-              });
+              // navigation.navigate('Messengers', {
+              //   screen: 'SmallMessengers',
+              //   resetTime: true,
+              // });
             },
           })}
           keyboardHidesTabBar={true}
