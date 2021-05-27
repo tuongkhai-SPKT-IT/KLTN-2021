@@ -55,7 +55,6 @@ export async function getNotifications() {
         .then((res) => {
             if (res.data.error_code !== 0) {
                 response.message = res.data.message;
-                console.log(res.data.message);
             } else {
                 response.status = true;
                 response.message = res.data.message;
@@ -93,7 +92,6 @@ export async function CreateNotification(data) {
         .then((res) => {
             if (res.data.error_code !== 0) {
                 response.message = res.data.message;
-                console.log(res.data.message);
             } else {
                 response.status = true;
                 response.message = res.data.message;
