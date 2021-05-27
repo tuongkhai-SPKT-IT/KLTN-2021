@@ -70,7 +70,8 @@ export default function ViewLCS(props) {
       setListLike(props.likeList);
       setLikeNumber(props.likeList.length);
     }
-    if (props.liked) setLiked(props.liked);
+    if (props.liked === true) setLiked(true);
+    if (props.liked === false) setLiked(false);
   }, [props]);
   //for testing
   const makeid = (length) => {

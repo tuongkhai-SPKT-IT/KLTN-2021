@@ -40,7 +40,6 @@ const HomePage = ({navigation}) => {
     if (srcData.length > 0) {
       {
         return srcData.map((stt, i) => {
-          console.log(i, stt.who_liked_status);
           return (
             <View key={i}>
               <ContentStatus profilePage={false} srcData={stt} />

@@ -22,7 +22,6 @@ export const ReloadHome = () => {
               if (res.data.error_code !== 0) {
                 alert(res.data.message);
               } else {
-                console.log(res.data.data);
                 dispatch({
                   type: types.ReloadHome_Success,
                   data: res.data.data,

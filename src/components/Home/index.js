@@ -1,6 +1,13 @@
 import 'react-native-gesture-handler';
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, StatusBar} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  TouchableOpacity,
+  LogBox,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AppBar from '../AppBar';
 import {SafeAreaView} from 'react-navigation';
@@ -25,11 +32,12 @@ import {
   Get_StatusProfile,
 } from '../Redux/Actions/ProfileUser.Action';
 import DrawerContent from './DrawerContent';
-import {LogBox} from 'react-native';
 import {useHistory} from 'react-router';
 import UpStatusScreen from '../ToolBar/UpStatusScreen';
 import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
 import {Fetch_Notification} from '../Redux/Actions/Notification.Action';
+import {useNavigation} from '@react-navigation/core';
+
 LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -41,13 +49,14 @@ const Home = () => {
     const [activeHomeTab, setActiveHomeTab] = useState(true);
     const [activeNotiTab, setActiveNotiTab] = useState(false);
     const [activeProfileTab, setActiveProfileTab] = useState(false);
-
+    const navigation = useNavigation();
     const dispatch = useDispatch();
     const storeState = useSelector((state) => state.HomePage);
 
     const notificationTitle = (data) => {
       return (
-        <View
+        <TouchableOpacity
+          onPress={() => console.log(data)}
           style={{
             width: '100%',
             height: '100%',
@@ -66,7 +75,7 @@ const Home = () => {
             <Text>{data.content}</Text>
             <Text>{data.moment}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       );
     };
     const history = useHistory();

@@ -23,7 +23,6 @@ import jwt_decode from 'jwt-decode';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import {
-  Clear_Notification,
   Fetch_Notification,
 } from '../Redux/Actions/Notification.Action';
 
@@ -83,7 +82,6 @@ export default function Notifications({navigation}) {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = (e) => {
     setRefreshing(true);
-    dispatch(Clear_Notification());
     dispatch(Fetch_Notification());
     setTimeout(() => {
       setRefreshing(false);
