@@ -37,7 +37,7 @@ const HeaderMessenger = (props) => {
         }}>
         <AntDesign name="arrowleft" size={20} color="rgba(0,0,0,.5)" />
       </TouchableOpacity>
-      <View
+      <TouchableOpacity
         style={{
           padding: 5,
           flexDirection: 'row',
@@ -60,7 +60,7 @@ const HeaderMessenger = (props) => {
             {props.name}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

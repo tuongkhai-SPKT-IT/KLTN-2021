@@ -119,7 +119,7 @@ const SmallMessenger = (props) => {
     );
   };
   const onRefresh = () => {
-    dispatch(Clear_List_Chat());
+    // dispatch(Clear_List_Chat());
     dispatch(Get_Group_Chat());
     // setIsNullMessBox(false);
     // setTimeout(() => {

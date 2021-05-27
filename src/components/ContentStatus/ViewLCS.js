@@ -21,11 +21,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
 import {SOCKET} from '../../config';
 import moment from 'moment';
-import { CreateNotification } from '../../services/user';
+import {CreateNotification} from '../../services/user';
 
 export default function ViewLCS(props) {
   const [listLike, setListLike] = useState(props.likeList);
-  const [likeNumber, setLikeNumber] = useState(props.likeNumber);
+  const [likeNumber, setLikeNumber] = useState(props.likeList.length);
   const scrollRef = useRef(null);
   const textComment = useRef(null);
   const userInfo = useRef({});
@@ -64,7 +64,14 @@ export default function ViewLCS(props) {
       }
     });
   }, []);
-
+  useEffect(() => {
+    if (props.listComment) setListComment(props.listComment);
+    if (props.likeList) {
+      setListLike(props.likeList);
+      setLikeNumber(props.likeList.length);
+    }
+    if (props.liked) setLiked(props.liked);
+  }, [props]);
   //for testing
   const makeid = (length) => {
     var result = [];
@@ -129,18 +136,17 @@ export default function ViewLCS(props) {
           .catch((err) => {
             console.log(err);
           });
-      }, 2 * 1000);
+      }, 1 * 1000);
 
-      setTimeout( async () =>{
+      setTimeout(async () => {
         let params = {
           owner: props.userID,
           type: 'status-like',
-          item: props.index
-        }
+          item: props.index,
+        };
 
         const notiResponse = await CreateNotification(params);
-
-      },1000)
+      }, 1000);
     } else {
       const route = 'status/update-status';
       const param = {
@@ -263,7 +269,7 @@ export default function ViewLCS(props) {
     }
     if (list.length <= 2)
       listWho = listWho.substring(0, listWho.lastIndexOf(','));
-    return test;
+    return listWho;
   };
 
   const handleOnScroll = (event) => {

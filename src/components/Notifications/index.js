@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {
-  ScrollView,
   Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import {
   Appbar,
@@ -17,13 +17,15 @@ import {
   Colors,
 } from 'react-native-paper';
 import {SafeAreaView} from 'react-navigation';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {SOCKET} from '../../config';
 import jwt_decode from 'jwt-decode';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getNotifications } from '../../services/user';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
+import {
+  Clear_Notification,
+  Fetch_Notification,
+} from '../Redux/Actions/Notification.Action';
 
 export default function Notifications({navigation}) {
   const [visible, setVisible] = useState(false);
@@ -37,9 +39,9 @@ export default function Notifications({navigation}) {
   const containerStyle = {backgroundColor: 'white', padding: 10};
   const _goBack = () => console.log('Went back');
 
-  useEffect(()=>{
+  useEffect(() => {
     setListNotifications(Notifications.notifications);
-  }, [Notifications.notifications])
+  }, [Notifications.notifications]);
 
   const _handleSearch = () => console.log('Searching');
 
@@ -53,12 +55,12 @@ export default function Notifications({navigation}) {
   });
 
   const renderItem = ({item}) => {
-    const timeRange = moment(item.created_at, "YYYYMMDDHIS").fromNow();
+    const timeRange = moment(item.created_at, 'YYYYMMDDHIS').fromNow();
     return (
       <List.Item
         style={{backgroundColor: '#fff', marginTop: 10}}
         title={item.content}
-        description= {`${timeRange}.`}
+        description={`${timeRange}.`}
         left={() => (
           <Avatar.Image
             size={45}
@@ -71,12 +73,27 @@ export default function Notifications({navigation}) {
           <IconButton {...props} icon="dots-vertical" onPress={showModal} />
         )}
         onPress={() => {
-          console.log(listNotifications)
+          console.log(item);
         }}
       />
     );
   };
-
+  const dispatch = useDispatch();
+  const Notification = useSelector((state) => state.Notifications);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = (e) => {
+    setRefreshing(true);
+    dispatch(Clear_Notification());
+    dispatch(Fetch_Notification());
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 5000);
+  };
+  useEffect(() => {
+    if (Notification.notifications) {
+      setRefreshing(false);
+    }
+  }, [Notification]);
   return (
     <SafeAreaView style={styles.container}>
       <Appbar.Header style={{backgroundColor: '#fff'}}>
@@ -88,13 +105,16 @@ export default function Notifications({navigation}) {
         <Appbar.Content title="Notifications" />
         <Appbar.Action icon="magnify" onPress={_handleSearch} />
       </Appbar.Header>
-      {listNotifications.length > 0 &&
+      {listNotifications.length > 0 && (
         <FlatList
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           data={listNotifications}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
         />
-      }
+      )}
       <Portal>
         <Modal
           visible={visible}

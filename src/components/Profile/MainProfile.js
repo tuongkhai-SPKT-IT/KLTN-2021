@@ -61,7 +61,7 @@ const mainProfile = ({navigation}) => {
   const clearStoreProfile = () => {
     dispatch(Clear_Store_Profile());
   };
-  
+
   const ButtonShowAll = () => {
     if (ProfileInfo.introUser)
       if (ProfileInfo.introUser.friend_array)
@@ -91,9 +91,11 @@ const mainProfile = ({navigation}) => {
               backgroundColor: '#fff',
               padding: 10,
             }}>
-            <HeaderApp navigation={navigation} />
+            <HeaderApp />
           </View>
           <ScrollView
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
@@ -140,9 +142,10 @@ const mainProfile = ({navigation}) => {
                 height: 20,
                 width: '100%',
                 opacity: 0.6,
-              }}></View>
+              }}
+            />
             {showstatus()}
-            <View style={styles.divider} />
+            <View style={{height: 52}} />
           </ScrollView>
         </View>
 

@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View, StatusBar} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AppBar from '../AppBar';
@@ -24,14 +24,12 @@ import {
   Get_IntroUser,
   Get_StatusProfile,
 } from '../Redux/Actions/ProfileUser.Action';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useNavigation} from '@react-navigation/core';
 import DrawerContent from './DrawerContent';
 import {LogBox} from 'react-native';
 import {useHistory} from 'react-router';
 import UpStatusScreen from '../ToolBar/UpStatusScreen';
 import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
-import { Fetch_Notification } from '../Redux/Actions/Notification.Action';
+import {Fetch_Notification} from '../Redux/Actions/Notification.Action';
 LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -87,19 +85,17 @@ const Home = () => {
     return (
       <Tab.Navigator
         activeColor="#1877F2"
-        initialRouteName="Profile"
+        initialRouteName="Home"
         inactiveColor="#65676B"
         barStyle={{backgroundColor: '#ffff'}}
         shifting={true}>
         <Tab.Screen
           name="Home"
-          // listeners={({navigation, route}) => ({
-          //   tabPress: (e) => {
-          //     e.preventDefault();
-          //     dispatch(clear_Home());
-          //     dispatch(ReloadHome());
-          //   },
-          // })}
+          listeners={({navigation, route}) => ({
+            tabPress: (e) => {
+              dispatch(ReloadHome());
+            },
+          })}
           options={{
             tabBarIcon: () => {
               return (
@@ -128,13 +124,13 @@ const Home = () => {
           name="Messengers"
           listeners={({navigation, route}) => ({
             tabPress: (e) => {
-              e.preventDefault();
+              // e.preventDefault();
               dispatch(Clear_List_Chat());
               dispatch(Get_Group_Chat());
-              navigation.navigate('Messengers', {
-                screen: 'SmallMessengers',
-                resetTime: true,
-              });
+              // navigation.navigate('Messengers', {
+              //   screen: 'SmallMessengers',
+              //   resetTime: true,
+              // });
             },
           })}
           keyboardHidesTabBar={true}
