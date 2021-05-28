@@ -6,6 +6,7 @@ import {
   DevSettings,
   Pressable,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import HeaderOther from './HeaderOther';
 import Modal from 'react-native-modal';
@@ -24,13 +25,13 @@ import {
   Accept_Friend,
   Switch_TO_Messenger,
   Back_From_Other,
+  Delete_Friend,
 } from '../Redux/Actions/OtherProfile.Action';
 import ContentStatus from '../ContentStatus';
 import {ActivityIndicator} from 'react-native';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import HeaderScreen from './HeaderScreen';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Appbar, Searchbar} from 'react-native-paper';
 const OtherProfile = ({route, navigation}) => {
   const Stack = createStackNavigator();
@@ -62,27 +63,40 @@ const OtherProfile = ({route, navigation}) => {
         // fasle button to là friends, true button to là messenger
         if (buttonFriend.title === 'Requested') {
           dispatch(Cancel_Friend(route.params.userId));
+          refreshThis();
         }
         if (buttonFriend.title === 'Confirm') {
           setVisiblePopup(true);
         }
         if (buttonFriend.title === 'Add friend') {
           dispatch(call_Add_Friend(route.params.userId));
+          refreshThis();
         }
       }
     };
+    const createTwoButtonAlert = () =>
+      Alert.alert('Warning', 'Bạn có chắc muốn xoá ', [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {text: 'OK', style: {color: 'blue'}, onPress: () => unfriend()},
+      ]);
     useEffect(() => {
       const {buttonFriend, relationShip, buttonMessage} = OtherProfile;
       if (buttonFriend || relationShip || buttonMessage) {
         setLoading(false);
       }
     }, [OtherProfile]);
-    const onRefresh = () => {
-      setRefreshing(true);
+    const refreshThis = () => {
       dispatch(Clear_Store_Other());
       dispatch(Get_Intro_Other(route.params.userId));
       dispatch(Get_Status_Other(route.params.userId));
       dispatch(Check_Relationship(route.params.userId));
+    };
+    const onRefresh = () => {
+      setRefreshing(true);
+      refreshThis();
       if (
         buttonFriend !== undefined &&
         buttonMessage !== undefined &&
@@ -116,6 +130,10 @@ const OtherProfile = ({route, navigation}) => {
         });
       }
     }, [OtherProfile]);
+    const unfriend = () => {
+      dispatch(Delete_Friend(route.params.userId));
+      refreshThis();
+    };
     const createRoom = () => {
       dispatch(Switch_TO_Messenger(route.params.userId));
     };
@@ -172,10 +190,16 @@ const OtherProfile = ({route, navigation}) => {
                     color="black" //"#050505"
                     size={30}
                   />
-                } 
+                }
                 onPress={() => {
                   dispatch(Accept_Friend(route.params.userId));
-                  setVisiblePopup(false);
+                  setTimeout(() => {
+                    refreshThis();
+                  }, 1000);
+                  console.log(OtherProfile);
+                  setTimeout(() => {
+                    setVisiblePopup(false);
+                  }, 100);
                 }}
                 //dispatch(Accept_Friend(route.params.userId))
                 title={'Confirm'}
@@ -196,7 +220,11 @@ const OtherProfile = ({route, navigation}) => {
                     size={30}
                   />
                 }
-                onPress={() => alert('cancel')}
+                onPress={() => {
+                  dispatch(Cancel_Friend(route.params.userId));
+                  setVisiblePopup(false);
+                  refreshThis();
+                }}
                 // dispatch(Cancel_Friend(route.params.userId))
                 title={'Delete Request'}
                 titleStyle={{color: 'black'}}
@@ -273,7 +301,7 @@ const OtherProfile = ({route, navigation}) => {
                     )
                   }
                   onPress={() =>
-                    relationShip ? alert('Unfriends friends') : createRoom()
+                    relationShip ? createTwoButtonAlert() : createRoom()
                   }
                 />
               </View>
@@ -286,7 +314,7 @@ const OtherProfile = ({route, navigation}) => {
               />
               <IntroOther navigation={navigation} />
 
-              <View 
+              <View
                 style={{
                   paddingBottom: 10,
                   borderBottomWidth: 0.8,

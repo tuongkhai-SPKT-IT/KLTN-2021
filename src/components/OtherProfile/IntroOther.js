@@ -118,7 +118,7 @@ const IntroProfile = ({navigation}) => {
               }}>
               {introUser.friend_array.length > 1
                 ? introUser.friend_array.length + ' friends'
-                : '1 friend'}
+                : introUser.friend_array.length + ' friend'}
             </Text>
           ) : (
             <Text

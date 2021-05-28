@@ -86,6 +86,7 @@ const Home = () => {
           avatar: data.current_user_avatar,
           content: data.content,
           moment: data.moment,
+          StatusId: data.status_id,
         }),
         type: 'default',
         color: 'black',

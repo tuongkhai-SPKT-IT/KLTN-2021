@@ -136,7 +136,7 @@ const IntroProfile = (props) => {
       </View>
       <View style={{borderTopWidth: 0.8}}>
         <Text h3 h3Style={{padding: 15, paddingVertical: 0}}>
-          Bạn bè &nbsp;
+          Bạn bè&nbsp;
           {introUser.friend_array ? (
             <Text
               h4
@@ -149,7 +149,7 @@ const IntroProfile = (props) => {
               }}>
               {introUser.friend_array.length > 1
                 ? introUser.friend_array.length + ' friends'
-                : '1 friend'}
+                : introUser.friend_array.length + ' friend'}
             </Text>
           ) : (
             <Text

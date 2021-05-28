@@ -30,7 +30,6 @@ var OtherProfile = (state = initState, action) => {
     case keys.Add_Friend:
     case keys.Cancel_Friend: {
       const {buttonFriend, relationShip, buttonMessage} = action;
-      console.log(buttonFriend, relationShip, buttonMessage);
       return {
         ...state,
         buttonFriend: buttonFriend,
@@ -85,12 +84,11 @@ var OtherProfile = (state = initState, action) => {
     }
     case keys.Clear_Store_Other: {
       return {
-        ...state,
         intro: {},
         status: [],
         err_code: '',
         chat_room_id: '',
-        // arrPrevious: [],
+        arrPrevious: [...state.arrPrevious],
       };
     }
     default:
