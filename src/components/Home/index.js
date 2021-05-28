@@ -37,6 +37,7 @@ import UpStatusScreen from '../ToolBar/UpStatusScreen';
 import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
 import {Fetch_Notification} from '../Redux/Actions/Notification.Action';
 import {useNavigation} from '@react-navigation/core';
+import StatusScreen from './Status.Screen';
 
 LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
@@ -215,6 +216,13 @@ const Home = () => {
         <Stack.Screen
           name="subToolBar"
           component={UpStatusScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="statusScreen"
+          component={StatusScreen}
           options={{
             headerShown: false,
           }}
