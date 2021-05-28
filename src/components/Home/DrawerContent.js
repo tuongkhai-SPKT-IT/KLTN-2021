@@ -42,7 +42,7 @@ export default function DrawerContent(props) {
     setTabDropDown(false);
     setInfoDropDown(false);
     if (type === 1) {
-      props.navigation.jumpTo('Home');
+      props.navigation.navigate('Home');
       props.navigation.closeDrawer();
     }
     if (type === 2) {
@@ -53,11 +53,11 @@ export default function DrawerContent(props) {
       props.navigation.closeDrawer();
     }
     if (type === 3) {
-      props.navigation.jumpTo('Notifications');
+      props.navigation.navigate('Notifications');
       props.navigation.closeDrawer();
     }
     if (type === 4) {
-      props.navigation.jumpTo('Profile');
+      props.navigation.navigate('Profile');
       props.navigation.closeDrawer();
     }
     if (type === 5) {

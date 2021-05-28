@@ -20,6 +20,7 @@ export const Get_Intro_Other = (userId) => {
           if (res.data.error_code !== 0) {
             alert(res.data.message);
           } else {
+            console.log(res.data.data);
             dispatch({
               type: types.Get_IntroOther_Success,
               data: res.data.data,
@@ -281,15 +282,12 @@ export const Cancel_Friend = (userId) => {
       dispatch({type: types.Clear_Store_Other});
     }
   };
-}; 
+};
 
 export const Accept_Friend = (userId) => {
   return async (dispatch) => {
     try {
-      let token = '';
-      await AsyncStorage.getItem(keys.User_Token).then((val) => {
-        if (val) token = val;
-      });
+      const token = await AsyncStorage.getItem(keys.User_Token);
       const param = {
         friend_id: userId,
         update_type: 3,
@@ -318,6 +316,24 @@ export const Accept_Friend = (userId) => {
               },
               relationShip: true,
             });
+            const route1 = 'request/delete-request-profile';
+            const param1 = {
+              friend_id: userId,
+            };
+            const header1 = {
+              Authorization: 'bearer' + token,
+            };
+            const api1 = new API();
+            api1
+              .onCallAPI('post', route1, {}, param1, header1)
+              .then((res) => {
+                if (res.data.error_code !== 0) {
+                  alert(res.data.message);
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }
         })
         .catch((err) => {
@@ -386,7 +402,38 @@ export const Back_From_Other = () => {
 export const Delete_Friend = (userId) => {
   return async (dispatch) => {
     try {
-      dispatch({type: types.Pop_Arr_Previous});
+      const token = await AsyncStorage.getItem(keys.User_Token);
+      const route = 'request/unfriend';
+      const param = {
+        friend_id: userId,
+      };
+      const header = {
+        Authorization: 'bearer' + token,
+      };
+      const api = new API();
+      api
+        .onCallAPI('post', route, {}, param, header)
+        .then((res) => {
+          if (res.data.error_code !== 0) {
+            alert(res.data.message);
+          } else {
+            dispatch({
+              type: types.Cancel_Friend,
+              buttonFriend: {
+                title: 'Add friend',
+                icon: 'user-plus',
+              },
+              buttonMessage: {
+                title: 'Send a message',
+                icon: 'facebook-messenger',
+              },
+              relationShip: false,
+            });
+          }
+        })
+        .catch((err) => {
+          alert(err);
+        });
     } catch (error) {
       dispatch({type: types.Clear_Store_Other});
     }

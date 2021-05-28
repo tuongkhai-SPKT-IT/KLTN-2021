@@ -35,6 +35,7 @@ export const checkRelationship_Failed = 'checkRelationship_Failed';
 export const Add_Friend = 'Add_Friend';
 export const Accept_Friend = 'Accept_Friend';
 export const Cancel_Friend = 'Cancel_Friend';
+export const Delete_Request = 'Delete_Request';
 export const Delete_Friend = 'Delete_Friend';
 
 export const Push_Arr_Previous = 'Push_Arr_Previous';
@@ -54,4 +55,4 @@ export const Change_Setting_Failed = 'Change_Setting_Failed';
 
 export const Fetch_Notifications_Success = 'Fetch_Notifications_Success';
 export const Fetch_Notifications_Failed = 'Fetch_Notifications_Failed';
-export const Clear_Notification = 'Clear_Notification'
+export const Clear_Notification = 'Clear_Notification';
