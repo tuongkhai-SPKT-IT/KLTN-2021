@@ -3,7 +3,7 @@ import {StyleSheet, Text, ScrollView} from 'react-native';
 import ContentStatus from '../ContentStatus';
 
 export default function StatusScreen({navigation, route}) {
-  console.log(route.params);
+ 
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
