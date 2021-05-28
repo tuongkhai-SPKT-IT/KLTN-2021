@@ -102,3 +102,39 @@ export async function CreateNotification(data) {
         });
     return response;
 }
+
+export async function getUserRooms() {
+    let response = {
+        status: false,
+        message: '',
+        data: null
+    };
+    let token = await AsyncStorage.getItem(storeKeys.User_Token);
+
+    let params = {
+        token: token,
+    };
+
+    const route = 'user/rooms';
+    const header = {
+        Authorization: 'bearer' + token,
+        'Content-Type': 'multipart/form-data',
+    };
+
+    var api = new API();
+    await api
+        .onCallAPI('get', route, {}, params, header)
+        .then((res) => {
+            if (res.data.error_code !== 0) {
+                response.message = res.data.message;
+            } else {
+                response.status = true;
+                response.message = res.data.message;
+                response.data = res.data.data;
+            }
+        })
+        .catch((err) => {
+            console.log('error: ', err);
+        });
+    return response;
+}

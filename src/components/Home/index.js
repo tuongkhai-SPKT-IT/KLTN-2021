@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -38,6 +38,9 @@ import {clear_Home, ReloadHome} from '../Redux/Actions/Home.Action';
 import {Fetch_Notification} from '../Redux/Actions/Notification.Action';
 import {useNavigation} from '@react-navigation/core';
 import StatusScreen from './Status.Screen';
+import * as myConst from '../Constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getUserRooms} from '../../services/user';
 
 LogBox.ignoreLogs(['Reanimated 2']);
 const Tab = createMaterialBottomTabNavigator();
@@ -53,6 +56,45 @@ const Home = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const storeState = useSelector((state) => state.HomePage);
+
+    useEffect(() => {
+      AsyncStorage.getItem(myConst.User_Token).then(async (value) => {
+        if (value) {
+          let userNoSign = null;
+          await AsyncStorage.getItem(myConst.User_ProfLink).then((val) => {
+            if(val){
+              userNoSign = val
+            }
+          });
+         
+          if (userNoSign) {
+            const { data, status, message } = await getUserRooms();
+            if (status) {
+              if (data.length > 0) {
+                data.map((item) => {
+                  let userAccessData = {
+                    name: userNoSign,
+                    room: item
+                  }
+
+                  SOCKET.emit("user-access", userAccessData, (err) => {
+                    if (err) {
+                      alert('Internal Server Errors! Please try later.');
+                      console.log('user access errors: ', err);
+                    }
+                  });
+                  return;
+                })
+              }
+            } else {
+              alert('Internal Server Errors! Please try later.');
+              console.log(message);
+            }
+          }
+        }
+      });
+    },[]);
+  
 
     const notificationTitle = (data) => {
       return (
