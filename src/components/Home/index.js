@@ -62,29 +62,30 @@ const Home = () => {
         if (value) {
           let userNoSign = null;
           await AsyncStorage.getItem(myConst.User_ProfLink).then((val) => {
-            if(val){
-              userNoSign = val
+            if (val) {
+              userNoSign = val;
             }
           });
-         
+
           if (userNoSign) {
-            const { data, status, message } = await getUserRooms();
+            const {data, status, message} = await getUserRooms();
             if (status) {
               if (data.length > 0) {
+                console.log(data);
                 data.map((item) => {
                   let userAccessData = {
                     name: userNoSign,
-                    room: item
-                  }
+                    room: item,
+                  };
 
-                  SOCKET.emit("user-access", userAccessData, (err) => {
+                  SOCKET.emit('user-access', userAccessData, (err) => {
                     if (err) {
                       alert('Internal Server Errors! Please try later.');
                       console.log('user access errors: ', err);
                     }
                   });
                   return;
-                })
+                });
               }
             } else {
               alert('Internal Server Errors! Please try later.');
@@ -93,13 +94,14 @@ const Home = () => {
           }
         }
       });
-    },[]);
-  
+    }, []);
 
     const notificationTitle = (data) => {
       return (
         <TouchableOpacity
-          onPress={() => console.log(data)}
+          onPress={() =>
+            navigation.navigate('statusScreen', {statusId: data.StatusId})
+          }
           style={{
             width: '100%',
             height: '100%',
@@ -134,6 +136,7 @@ const Home = () => {
         type: 'default',
         color: 'black',
       });
+      console.log(data);
     });
     return (
       <Tab.Navigator
@@ -266,7 +269,7 @@ const Home = () => {
           name="statusScreen"
           component={StatusScreen}
           options={{
-            headerShown: false,
+            title: false,
           }}
         />
       </Stack.Navigator>

@@ -50,13 +50,8 @@ export default function Notifications({navigation}) {
       'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmZhY2Vib29rLWtsdG4uYWxwaGF3b2xmLmlvL2FwaS91c2VyL2xvZy1pbiIsImlhdCI6MTYxNzI5NTYwMiwibmJmIjoxNjE3Mjk1NjAyLCJqdGkiOiJKU25zbFNqWE4yZFpBSmhVIiwic3ViIjoiNjA1MzM4M2ZmY2Y5ZTk2YzJlMjI5OGM1IiwicHJ2IjoiMzg1MmIyMTg1MDEzNTZkMzNjNjEyOTJiNzVmMmFkNzU3Mjk4NmExNyIsInVzZXJfbmFtZSI6Ilx1MDExMFx1MWVkNyBUXHUwMWIwXHUxZWRkbmcgS2hcdTFlYTNpIiwidXNlcl9pZCI6IjYwNTMzODNmZmNmOWU5NmMyZTIyOThjNCIsInVzZXJfZnVsbF9uYW1lIjoiXHUwMTEwXHUxZWQ3IFRcdTAxYjBcdTFlZGRuZyBLaFx1MWVhM2kiLCJwaG9uZSI6IjA1ODU1MTE5NTUiLCJlbWFpbCI6ImRvdHVvbmdraGFpMTkxOTk5QGdtYWlsLmNvbSIsInNleCI6IjEifQ.hYaNha5IrWSoHlM1TyT2Bdp_PcDaTvRXEz1iYdiQGNM',
     );
   });
-  useEffect(() => {
-    if (ProfileInfo.statusUser.length === 0) {
-      dispatch(Get_StatusProfile());
-    }
-  }, [ProfileInfo.statusUser]);
+
   const renderItem = ({item}) => {
-    const data = ProfileInfo.statusUser.find((x) => x.id === item.item);
     const timeRange = moment(item.created_at, 'YYYYMMDDHIS').fromNow();
     return (
       <List.Item
@@ -76,7 +71,7 @@ export default function Notifications({navigation}) {
         )}
         onPress={() => {
           navigation.navigate('statusScreen', {
-            srcData: data,
+            statusId: item.item,
           });
         }}
       />
