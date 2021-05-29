@@ -90,9 +90,12 @@ const OtherProfile = ({route, navigation}) => {
     }, [OtherProfile]);
     const refreshThis = () => {
       dispatch(Clear_Store_Other());
-      dispatch(Get_Intro_Other(route.params.userId));
-      dispatch(Get_Status_Other(route.params.userId));
-      dispatch(Check_Relationship(route.params.userId));
+      setTimeout(() => {
+        console.log('state tong:', OtherProfile);
+        dispatch(Get_Intro_Other(route.params.userId));
+        dispatch(Get_Status_Other(route.params.userId));
+        dispatch(Check_Relationship(route.params.userId));
+      }, 100);
     };
     const onRefresh = () => {
       setRefreshing(true);

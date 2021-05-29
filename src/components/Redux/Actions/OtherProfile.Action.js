@@ -20,7 +20,6 @@ export const Get_Intro_Other = (userId) => {
           if (res.data.error_code !== 0) {
             alert(res.data.message);
           } else {
-            console.log(res.data.data);
             dispatch({
               type: types.Get_IntroOther_Success,
               data: res.data.data,
@@ -186,7 +185,7 @@ export const Get_Status_Other = (userId) => {
 };
 
 export const Clear_Store_Other = () => {
-  return async (dispatch) => {
+  return (dispatch) => {
     try {
       dispatch({type: types.Clear_Store_Other});
     } catch (error) {

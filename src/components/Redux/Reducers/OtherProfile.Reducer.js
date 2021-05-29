@@ -28,27 +28,18 @@ var OtherProfile = (state = initState, action) => {
       };
     }
     case keys.Add_Friend:
-    case keys.Cancel_Friend: {
-      const {buttonFriend, relationShip, buttonMessage} = action;
-      return {
-        ...state,
-        buttonFriend: buttonFriend,
-        buttonMessage: buttonMessage,
-        err_code: '',
-        relationShip: relationShip,
-      };
-    }
+    case keys.Cancel_Friend:
     case keys.Delete_Friend: {
       const {buttonFriend, relationShip, buttonMessage} = action;
-      console.log(buttonFriend, relationShip, buttonMessage);
       return {
         ...state,
         buttonFriend: buttonFriend,
-        relationShip: relationShip,
         buttonMessage: buttonMessage,
         err_code: '',
+        relationShip: relationShip,
       };
     }
+
     case keys.Get_IntroOther_Success: {
       const {data} = action;
       return {...state, intro: data, err_code: ''};
